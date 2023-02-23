@@ -1,17 +1,16 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <GlobalChat></GlobalChat>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import '@/assets/tailwind.css';
+import GlobalChat from './components/GlobalChat.vue';
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    GlobalChat,
   }
 }
 </script>
