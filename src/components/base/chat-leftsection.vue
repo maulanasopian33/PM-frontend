@@ -122,7 +122,9 @@
         <!-- contact -->
         <div class="contacts p-2 flex-1 overflow-y-scroll">
             <!-- normal contact -->
-            <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="maulana sopian" msg="loremipsum" time="just now"></ContactNormal>
+            <p class="text-left px-4">Workspace</p>
+            <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="Teknikal Support" msg="loremipsum" time="just now"></ContactNormal>
+            <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="sopian" msg="loremipsum" time="just now"></ContactNormal>
             <!-- normal contact -->
             <!-- unread contact -->
             <ContactUnread avatar="https://randomuser.me/api/portraits/women/61.jpg" name="maulana sopian" msg="loremipsum" time="just now"></ContactUnread>

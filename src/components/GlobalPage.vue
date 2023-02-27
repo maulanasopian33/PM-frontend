@@ -7,6 +7,7 @@
             <div class="bg-yellow-500 w-3 h-3 rounded-full mr-2"></div>
             <div class="bg-green-500 w-3 h-3 rounded-full mr-2"></div>
         </div>
+        <router-link :to="pesan">Home</router-link> 
       <!-- Top header -->
         <main class="flex-grow flex flex-row min-h-0">
           <!-- Left Section -->
@@ -76,7 +77,12 @@
 import ChatLeftsection from './base/chat-leftsection.vue';
 import Chatroom from './base/chatroom.vue';
   export default {
-    name: 'GlobalChat',
+    name: 'GlobalPage',
+    data(){
+      return{
+			    pesan :  '/',
+		    }
+    },
     components : {
     ChatLeftsection,
     Chatroom,
