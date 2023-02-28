@@ -7,14 +7,15 @@
             <div class="bg-yellow-500 w-3 h-3 rounded-full mr-2"></div>
             <div class="bg-green-500 w-3 h-3 rounded-full mr-2"></div>
         </div>
-        <router-link :to="pesan">Home</router-link> 
+        <!-- <router-link :to="pesan">Home</router-link>  -->
       <!-- Top header -->
         <main class="flex-grow flex flex-row min-h-0">
           <!-- Left Section -->
           <ChatLeftsection></ChatLeftsection>
           <!-- left Section -->
           <!-- Main Section / chatroom -->
-          <Chatroom></Chatroom>
+          <!-- <dashboardtask></dashboardtask> -->
+          <!-- <Chatroom></Chatroom> -->
           <!-- Main Section / chatroom -->
         </main>
     </div>
@@ -75,6 +76,7 @@
 </style>
 <script>
 import ChatLeftsection from './base/chat-leftsection.vue';
+import dashboardtask from './base/dashboardTask.vue';
 import Chatroom from './base/chatroom.vue';
   export default {
     name: 'GlobalPage',
@@ -84,10 +86,14 @@ import Chatroom from './base/chatroom.vue';
 		    }
     },
     components : {
-    ChatLeftsection,
-    Chatroom,
-    Chatroom
-},
+          ChatLeftsection,
+          Chatroom,
+          Chatroom,
+          dashboardtask
+      },
+    mounted(){
+      console.log('dsadas',this.$route.params);
+    },
     props: {
       msg: String
     }

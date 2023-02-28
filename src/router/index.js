@@ -1,4 +1,7 @@
-import GlobalPage from '@/components/GlobalPage.vue'
+import GlobalChatVue from '@/components/GlobalChat copy.vue'
+import GlobalPage from '@/components/GlobalPages.vue'
+import Workspace from '@/components/'
+import loginVue from '@/components/login.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
@@ -6,9 +9,19 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: GlobalPage
+  },
+  {
+    path: '/:workspace',
+    name: 'home',
+    component: workspace
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: loginVue
   },
   {
     path: '/chat/:id',
