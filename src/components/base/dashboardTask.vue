@@ -220,10 +220,13 @@
 <script>
     export default {
         name : 'dashboardtask',
+        props: ['name','detail','avatar'],
         data() {
             return {
-                name : 'Teknikal Support',
-                detail : 'antmediahost.com'
+                name : '',
+                detail : '',
+                avatar : ''
+
             }
         }
     }

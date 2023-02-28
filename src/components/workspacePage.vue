@@ -14,7 +14,7 @@
             <ChatLeftsection></ChatLeftsection>
             <!-- left Section -->
             <!-- Main Section / chatroom -->
-            <dashboardtask></dashboardtask>
+            <dashboardtask :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
             <!-- <Chatroom></Chatroom> -->
             <!-- Main Section / chatroom -->
           </main>

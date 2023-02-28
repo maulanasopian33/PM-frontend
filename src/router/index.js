@@ -1,6 +1,6 @@
 import GlobalChatVue from '@/components/GlobalChat copy.vue'
 import GlobalPage from '@/components/GlobalPages.vue'
-import Workspace from '@/components/'
+import Workspace from '@/components/workspacePage.vue'
 import loginVue from '@/components/login.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -16,7 +16,7 @@ const routes = [
   {
     path: '/:workspace',
     name: 'home',
-    component: workspace
+    component: Workspace
   },
   {
     path: '/login',
