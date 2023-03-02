@@ -82,9 +82,8 @@ import axios from 'axios'
         },
         methods: {
             getstatus(){
-                if(this.$cookies.get("login") === null){
-                }else{
-                    this.$router.push('/')
+                if(this.$cookies.get("login") !== null){
+                    this.$router.push('/dashboard')
                 }
             },
             postlogin(){

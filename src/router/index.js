@@ -11,12 +11,17 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: GlobalPage
+    redirect: '/login'
   },
   {
-    path: '/:workspace',
-    name: 'home',
+    path: '/dashboard/:workspace',
+    name: 'dashboard by id',
     component: Workspace
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: GlobalPage
   },
   {
     path: '/login',

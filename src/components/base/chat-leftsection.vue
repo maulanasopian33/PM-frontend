@@ -122,26 +122,72 @@
         <!-- contact -->
         <div class="contacts p-2 flex-1 overflow-y-scroll">
             <!-- normal contact -->
-            <p class="text-left px-4">Workspace</p>
-            <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="Teknikal Support" msg="loremipsum" time="just now"></ContactNormal>
-            <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="sopian" msg="loremipsum" time="just now"></ContactNormal>
+            <p class="text-left px-4 hidden md:block group-hover:block">Workspace</p>
+            <!-- <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="Teknikal Support" msg="loremipsum" time="just now"></ContactNormal> -->
+            <ContactNormal v-for="data in wokspacedata" :avatar='"http://localhost:8000"+data.avatar' :name="data.name" msg="loremipsum" time="just now"></ContactNormal>
+            
             <!-- normal contact -->
             <!-- unread contact -->
-            <ContactUnread avatar="https://randomuser.me/api/portraits/women/61.jpg" name="maulana sopian" msg="loremipsum" time="just now"></ContactUnread>
-            <ContactUnread avatar="https://randomuser.me/api/portraits/women/61.jpg" name="maulana sopian" msg="loremipsum" time="just now"></ContactUnread>
+
+            <NewWorkspace v-if="admin" @parsing="parsingdata($event)"></NewWorkspace>
         </div>
         <!-- contact -->
     </section>
 </template>
 
 <script>
+import axios from 'axios';
 import ContactNormal from '../parsial/chat/contact-normal.vue';
 import ContactUnread from '../parsial/chat/contact-unread.vue';
+import NewWorkspace from '../parsial/chat/new-workspace.vue';
     export default {
         name: 'chat-leftsection',
+        data() {
+            return {
+                modalshow : false,
+                admin : false,
+                url : 'http://localhost:8000/api/whois',
+                wokspacedata : [],
+            }
+        },
         components : {
             ContactNormal,
             ContactUnread,
-        }
+            NewWorkspace
+        },
+        mounted() {
+            this.getdatauser();
+            this.getworkspace();
+        },
+        methods: {
+            getworkspace(){
+                axios.get('http://localhost:8000/api/get-workspace',{
+                    headers: {
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`
+                    },
+                    }).then(({data}) => {
+                        this.wokspacedata = data;
+
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+            },
+            getdatauser(){
+                axios.get(this.url,{
+                    headers: {
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`
+                    },
+                    }).then(({data}) => {
+                        console.log(data.name)
+                        this.admin = data.admin
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+            },
+            parsingdata(data){
+                this.$emit("parsing", data);
+                this.modalshow = data 
+            }
+        },
     }
 </script>
