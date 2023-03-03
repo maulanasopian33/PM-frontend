@@ -96,7 +96,7 @@ import axios from 'axios'
                         // console.log(data.status)
                         if(data.status){
                             this.$cookies.set("login",data.data.token)
-                            this.$router.push('/')
+                            this.$router.push('/dashboard')
                         }
                     })
             }

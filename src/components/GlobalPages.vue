@@ -41,12 +41,7 @@
         <main class="flex-grow flex flex-row min-h-0">
           <!-- Left Section -->
           <ChatLeftsection @parsing="show = $event"></ChatLeftsection>
-          
-          <!-- left Section -->
-          <!-- Main Section / chatroom -->
-          <!-- <dashboardtask></dashboardtask> -->
-          <!-- <Chatroom></Chatroom> -->
-          <!-- Main Section / chatroom -->
+          <!-- <dashboardtask :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask> -->
         </main>
     </div>
 </div>

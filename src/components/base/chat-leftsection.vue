@@ -1,6 +1,6 @@
 <template>
     <section
-        class="flex flex-col flex-none overflow-auto w-24 hover:w-64 group lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
+        class="flex flex-col flex-none overflow-auto w-10 hover:w-64 group lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
         <div class="header p-4 flex flex-row justify-between items-center flex-none">
             <!-- brand icon -->
             <div class="w-16 h-16 relative flex flex-shrink-0" style="filter: invert(100%);">

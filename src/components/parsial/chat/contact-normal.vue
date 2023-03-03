@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="name">
+    <router-link :to="'/dashboard/'+name">
         <div class="flex justify-between items-center p-3 hover:bg-gray-800 rounded-lg relative">
             <div class="w-16 h-16 relative flex flex-shrink-0">
                 <img class="shadow-md rounded-full w-full h-full object-cover"
