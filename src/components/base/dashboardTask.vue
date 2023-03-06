@@ -6,12 +6,12 @@
                 <!-- avatar -->
                 <div class="w-12 h-12 mr-4 relative flex flex-shrink-0">
                     <img class="shadow-md rounded-full w-full h-full object-cover"
-                        src="https://via.placeholder.com/150/0000FF/808080?Text=logo" alt="" />
+                        :src="avatar" alt="" />
                 </div>
                 <!-- avatar -->
                 <!-- contact info -->
                 <div class="text-sm text-left">
-                    <p class="font-bold text-base">{{ name }}</p>
+                    <p class="font-bold text-base">{{ names }}</p>
                     <p class="font-light">{{ detail }}</p>
                 </div>
                 <!-- contact info -->
@@ -46,171 +46,114 @@
                         <h3 class="w-1/2 text-2xl">Created</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
-                    <router-link :to="name">
-                        <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                            <div class="relative flex h-16 w-16 flex-shrink-0">
-                                <img class="h-full w-full rounded-full object-cover shadow-md" :src="avatar" alt="" />
-                            </div>
-                            <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
-                                <h3 class="text-left text-lg">{{ name }}</h3>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <div class="flex w-full">
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                    <div v-for="task in created" :key="task.id_task">
+                        <router-link :to="task.name">
+                            <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                                <div class="relative flex h-16 w-16 flex-shrink-0">
+                                    <img class="h-full w-full rounded-full object-cover shadow-md" :src="'http://localhost:8000'+task.avatar" alt="" />
+                                </div>
+                                <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                    <h3 class="text-left text-lg">{{ task.name }}</h3>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <div class="flex w-full">
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                        </div>
+                                        <!-- <div class="min-w-0">
+    
+                            <p class="truncate">{{ msg }}</p>
+                        </div> -->
+    
+                                        <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
                                     </div>
-                                    <!-- <div class="min-w-0">
-
-                        <p class="truncate">{{ msg }}</p>
-                    </div> -->
-
-                                    <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
                                 </div>
                             </div>
-                        </div>
-                    </router-link>
+                        </router-link>
+                    </div>
                 </div>
                 <div class="rounded-lg mx-2 my-1 border border-2 border-gray-800 p-5 w-full md:w-1/3">
                     <div class="flex">
                         <h3 class="w-1/2 text-xl">On Progress</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
-                    <router-link :to="name">
-                        <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                            <div class="relative flex h-16 w-16 flex-shrink-0">
-                                <img class="h-full w-full rounded-full object-cover shadow-md" :src="avatar" alt="" />
-                            </div>
-                            <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
-                                <h3 class="text-left text-lg">{{ name }}</h3>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <div class="flex w-full">
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                    <div v-for="task in OnProgress" :key="task.id_task">
+                        <router-link :to="task.name">
+                            <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                                <div class="relative flex h-16 w-16 flex-shrink-0">
+                                    <img class="h-full w-full rounded-full object-cover shadow-md" :src="'http://localhost:8000'+task.avatar" alt="" />
+                                </div>
+                                <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                    <h3 class="text-left text-lg">{{ task.name }}</h3>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <div class="flex w-full">
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                        </div>
+                                        <!-- <div class="min-w-0">
+    
+                            <p class="truncate">{{ msg }}</p>
+                        </div> -->
+    
+                                        <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
                                     </div>
-                                    <!-- <div class="min-w-0">
-
-                        <p class="truncate">{{ msg }}</p>
-                    </div> -->
-
-                                    <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
                                 </div>
                             </div>
-                        </div>
-                    </router-link>
+                        </router-link>
+                    </div>
                 </div>
                 <div class="rounded-lg mx-2 my-1 p-5 w-full md:w-1/3 border border-2 border-gray-800">
                     <div class="flex">
                         <h3 class="w-1/2 text-2xl">Finished</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
-                    <router-link :to="name">
-                        <div
-                            class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                            <div class="relative flex h-16 w-16 flex-shrink-0">
-                                <img class="h-full w-full rounded-full object-cover shadow-md" :src="avatar" alt="" />
-                            </div>
-                            <div class="ml-4 mr-6 hidden min-w-0 flex-auto group-hover:block md:block">
-                                <h3 class="text-left text-lg">{{ name }}</h3>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <div class="flex w-full">
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                    <div v-for="task in finished" :key="task.id_task">
+                        <router-link :to="task.name">
+                            <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                                <div class="relative flex h-16 w-16 flex-shrink-0">
+                                    <img class="h-full w-full rounded-full object-cover shadow-md" :src="'http://localhost:8000'+task.avatar" alt="" />
+                                </div>
+                                <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                    <h3 class="text-left text-lg">{{ task.name }}</h3>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <div class="flex w-full">
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
+                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
+                                        </div>
+                                        <!-- <div class="min-w-0">
+    
+                            <p class="truncate">{{ msg }}</p>
+                        </div> -->
+    
+                                        <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
                                     </div>
-                                    <!-- <div class="min-w-0">
-
-                        <p class="truncate">{{ msg }}</p>
-                    </div> -->
-
-                                    <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
                                 </div>
                             </div>
-                        </div>
-                    </router-link>
-                    <router-link :to="name">
-                        <div
-                            class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                            <div class="relative flex h-16 w-16 flex-shrink-0">
-                                <img class="h-full w-full rounded-full object-cover shadow-md" :src="avatar" alt="" />
-                            </div>
-                            <div class="ml-4 mr-6 hidden min-w-0 flex-auto group-hover:block md:block">
-                                <h3 class="text-left text-lg">{{ name }}</h3>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <div class="flex w-full">
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                    </div>
-                                    <!-- <div class="min-w-0">
-
-                        <p class="truncate">{{ msg }}</p>
-                    </div> -->
-
-                                    <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
-                                </div>
-                            </div>
-                        </div>
-                    </router-link>
-                    <router-link :to="name">
-                        <div
-                            class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                            <div class="relative flex h-16 w-16 flex-shrink-0">
-                                <img class="h-full w-full rounded-full object-cover shadow-md" :src="avatar" alt="" />
-                            </div>
-                            <div class="ml-4 mr-6 hidden min-w-0 flex-auto group-hover:block md:block">
-                                <h3 class="text-left text-lg">{{ name }}</h3>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <div class="flex w-full">
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                            src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                    </div>
-                                    <!-- <div class="min-w-0">
-
-                        <p class="truncate">{{ msg }}</p>
-                    </div> -->
-
-                                    <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
-                                </div>
-                            </div>
-                        </div>
-                    </router-link>
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -218,16 +161,70 @@
 </template>
 
 <script>
+import axios from 'axios';
     export default {
         name : 'dashboardtask',
-        props: ['name','detail','avatar'],
+        props: [
+            'name'
+        ],
+        watch: { 
+            name: function(newVal, oldVal) { // watch it
+                this.detaildata();
+                this.gettask();
+            }
+        },
         data() {
             return {
-                name : '',
-                detail : '',
-                avatar : ''
+                names : '',
+                detail : 'antmediahost.com',
+                avatar : '',
+                tasks   : [],
+                created : [],
+                OnProgress : [],
+                finished : []
 
             }
-        }
+        },
+        mounted() {
+            this.detaildata();
+            this.gettask();
+        },
+        methods: {
+            detaildata(){
+                let decode = atob(this.name);
+                let splitdetail = decode.split(','); 
+                this.names = splitdetail[0].toString();
+                this.avatar = splitdetail[1];
+            },
+            gettask(){
+                axios.get('http://localhost:8000/api/task/workspace/'+this.names,{
+                    headers: {
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`
+                    },
+                    }).then(({data}) => {
+                        this.tasks = data.data;
+                        this.created = [];
+                        this.OnProgress = [];
+                        this.finished = [];
+                        this.tasks.forEach((item, index) => {
+                            switch(item.status){
+                                case 'created' :
+                                    this.created.push(item)
+                                    break;
+                                case 'OnProgress' :
+                                    this.OnProgress.push(item)
+                                    break;
+                                case 'finished' :
+                                    this.finished.push(item)
+                                    break;
+                            }
+                        });
+                        // console.log(data.data)
+
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+            },
+        },
     }
 </script>

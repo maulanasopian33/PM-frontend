@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="'/dashboard/'+name">
+    <router-link :to="'/dashboard/'+encoder(name+','+avatar)">
         <div class="flex justify-between items-center p-3 hover:bg-gray-800 rounded-lg relative">
             <div class="w-16 h-16 relative flex flex-shrink-0">
                 <img class="shadow-md rounded-full w-full h-full object-cover"
@@ -35,6 +35,12 @@
 <script>
     export default {
         name: 'contact-normal',
-        props: ['name','msg','time','avatar']
+        props: ['name','msg','time','avatar'],
+        methods: {
+            encoder(msg){
+                var encode = btoa(msg); 
+                return encode
+            }
+        },
     }
 </script>

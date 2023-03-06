@@ -9,7 +9,7 @@
             </div>
             <!-- brand icon -->
             <!-- Title app -->
-            <p class="text-md font-bold hidden md:block group-hover:block">Messenger</p>
+            <p class="text-md font-bold hidden md:block group-hover:block">Project Manager</p>
             <!-- title app -->
             <!-- create new message -->
             <a href="#"
