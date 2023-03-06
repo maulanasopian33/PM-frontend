@@ -30,8 +30,8 @@
     </div>
     <!-- end modal create workspace -->
         <!-- modal create task -->
-    <div v-if="createTask" class=" w-full h-auto bg-opacity-30 bg-white fixed z-30 flex items-center justify-center">
-      <div class="w-2/4 bg-[#2a2a2c] h-4/5 text-gray-300 rounded-lg p-10 text-left">
+    <div v-if="createTask" class=" w-full h-full bg-opacity-30 bg-white fixed z-30 flex items-center justify-center">
+      <div class="w-2/4 bg-[#2a2a2c] h-auto text-gray-300 rounded-lg p-10 text-left">
         <div class="flex justify-between">
           <h2 class="text-lg text-left">Create Task</h2>
           <span @click="createTask = false" class="cursor-pointer">
@@ -52,11 +52,10 @@
           class="my-2 border-0 px-3 py-2 mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
         <label for="" class="mb-3 text-left">Priority</label>
         <div class="inline-block relative w-full">
-          <select
-            class="block appearance-none mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
-            <option>High</option>
-            <option>Medium</option>
-            <option>Low</option>
+          <select  v-model="priority" class="block appearance-none mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -66,25 +65,25 @@
         <div class="flex flex-wrap gap-4">
           <div class="w-5/12">
             <label for="name" class="text-white text-sm leading-tight tracking-normal">Start Date</label>
-            <input type="date" id="name"
+            <input v-model="startdate" type="date" id="name"
               class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border"
               placeholder="James" />
           </div>
           <div class="w-5/12">
             <label for="name" class="text-white text-sm leading-tight tracking-normal">Due Date</label>
-            <input type="date" id="name"
+            <input type="date" v-model="duedate" id="name"
               class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border"
               placeholder="James" />
           </div>
         </div>
         <label for="" class="mb-3 text-left">Assigment</label>
-        <input v-model="name_task" type="text"
+        <input v-model="assigment" type="text"
           class="my-2 border-0 px-3 py-2 mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
         <label for="" class="mb-3 text-left">Deskripsi</label>
-        <textarea v-model="in_deskripsi"
+        <textarea v-model="deskripsi"
           class="my-2 border-0 px-3 py-2 mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border"
           placeholder="Deskripsi"></textarea>
-        <button @click="saveworkspace()" class="mt-2 bg-gray-300 text-black text-sm px-8 py-2 rounded">Create
+        <button @click="savetask()" class="mt-2 bg-gray-300 text-black text-sm px-8 py-2 rounded">Create
           Workspace</button>
       </div>
     </div>
@@ -179,7 +178,15 @@ import Chatroom from './base/chatroom.vue';
           createTask : true,
           in_deskripsi : '',
           in_team : '',
-          in_workspace_name : ''
+          in_workspace_name : '',
+          name_task : '',
+          priority : '',
+          startdate : '',
+          duedate : '',
+          assigment : '',
+          deskripsi : ''
+
+
 		    }
     },
     components : {
@@ -204,6 +211,31 @@ import Chatroom from './base/chatroom.vue';
         formData.append("assigment", this.in_team);
         // formData.append("deskripsi", this.in_deskripsi);
         axios.post(this.url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${this.$cookies.get("login")}`
+        },
+        }).then((response) => {
+          console.log(response)
+          this.$router.go()
+        }).catch((error) => {
+          console.log(error)
+        });
+        // console.log(formData)
+      },
+      savetask(){
+        this.createTask = false;
+        let formData = new FormData();
+        formData.append("name", this.name_task);
+        // formData.append("priority", this.priority);
+        formData.append("start_date", this.startdate);
+        formData.append("due_date", this.duedate);
+        formData.append("status", 'created');
+        formData.append("assigment", this.assigment);
+        // formData.append("deskripsi", this.deskripsi);
+        formData.append("workspace", this.name);
+        console.log(formData)
+        axios.post('http://localhost:8000/api/task', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.$cookies.get("login")}`
