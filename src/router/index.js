@@ -2,6 +2,7 @@ import GlobalChatVue from '@/components/GlobalChat copy.vue'
 import GlobalPage from '@/components/GlobalPages.vue'
 import Workspace from '@/components/workspacePage.vue'
 import loginVue from '@/components/login.vue'
+import detailworkspace from '@/components/detailtaskpage.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueSimpleAlert from "vue-simple-alert";
@@ -19,6 +20,11 @@ const routes = [
     path: '/dashboard/:workspace',
     name: 'dashboard by id',
     component: Workspace
+  },
+  {
+    path: '/detail/:workspace',
+    name: 'detail workspace',
+    component: detailworkspace
   },
   {
     path: '/dashboard',

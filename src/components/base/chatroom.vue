@@ -1,5 +1,5 @@
 <template>
-    <section class="flex flex-col flex-auto border-l border-gray-800">
+    <section class="flex flex-col flex-auto border-l h-full border-gray-800">
         <!-- chat header -->
         <div class="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div class="flex">
