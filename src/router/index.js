@@ -4,7 +4,9 @@ import Workspace from '@/components/workspacePage.vue'
 import loginVue from '@/components/login.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueSimpleAlert from "vue-simple-alert";
 
+Vue.use(VueSimpleAlert);
 Vue.use(VueRouter)
 
 const routes = [

@@ -155,6 +155,9 @@ import NewWorkspace from '../parsial/chat/new-workspace.vue';
             ContactUnread,
             NewWorkspace
         },
+        created() {
+            this.$root.$refs.A = this;
+        },
         mounted() {
             this.getdatauser();
             this.getworkspace();
@@ -169,7 +172,13 @@ import NewWorkspace from '../parsial/chat/new-workspace.vue';
                         this.wokspacedata = data;
 
                     }).catch((error) => {
-                        console.log(error)
+                        console.log(error.response.status)
+                        switch(error.response.status){
+                            case 401 :
+                                this.$cookies.remove("login")
+                                this.$router.push('/login')
+                            break;
+                        }
                     });
             },
             getdatauser(){
@@ -178,10 +187,10 @@ import NewWorkspace from '../parsial/chat/new-workspace.vue';
                         "Authorization": `Bearer ${this.$cookies.get("login")}`
                     },
                     }).then(({data}) => {
-                        console.log(data.name)
+                        
                         this.admin = data.admin
                     }).catch((error) => {
-                        console.log(error)
+                        // console.log(error)
                     });
             },
             parsingdata(data){

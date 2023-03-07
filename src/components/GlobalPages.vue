@@ -137,6 +137,7 @@ import Chatroom from './base/chatroom.vue';
         formData.append("avatar", this.avatar);
         formData.append("name", this.in_workspace_name);
         formData.append("assigment", this.in_team);
+        formData.append("deskripsi", this.in_workspace_name);
         // formData.append("deskripsi", this.in_deskripsi);
         axios.post(this.url, formData, {
         headers: {
@@ -144,7 +145,8 @@ import Chatroom from './base/chatroom.vue';
           "Authorization": `Bearer ${this.$cookies.get("login")}`
         },
         }).then((response) => {
-          console.log(response)
+          // console.log(response)
+          this.$router.go(this.$router.currentRoute)
         }).catch((error) => {
           console.log(error)
         });

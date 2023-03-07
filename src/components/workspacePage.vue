@@ -77,14 +77,35 @@
           </div>
         </div>
         <label for="" class="mb-3 text-left">Assigment</label>
-        <input v-model="assigment" type="text"
-          class="my-2 border-0 px-3 py-2 mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
+        <div class="flex mt-1 relative bg-white overflow-x-scroll rounded-md shadow-sm focus:outline-none focus:shadow-outline border border-gray-300">
+        <div v-for="(tag, index) in emailDomains" v-bind:key="index" class="flex-grow-0 text-gray-700 text-center my-1 ml-1">
+          <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold bg-indigo-500 hover:bg-indigo-300 text-white hover:text-black cursor-pointer">
+            {{ tag }}
+            <button
+              type="button"
+              class="flex-shrink-0 -mr-0.5 ml-1.5 inline-flex hover:bg-indigo-400 p-1 rounded-full"
+              v-on:click="removeTag(index)"
+            >
+              <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
+              </svg>
+            </button>
+          </span>
+        </div>
+        <div class="flex-grow text-gray-700 text-center">
+          <select class="w-full h-full rounded-lg py-2 pl-2 pr-4 block appearance-none leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 outline-none" @change="processTagsOnKeyUpEvent($event.target.value)">
+            <option v-for="team in teams" :value="team.name" :key="team.id">{{ team.name }}</option>
+          </select>
+        </div>
+      </div>
+      
+        <!-- <input v-model="assigment" type="text"
+          class="my-2 border-0 px-3 py-2 mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border"> -->
         <label for="" class="mb-3 text-left">Deskripsi</label>
         <textarea v-model="deskripsi"
           class="my-2 border-0 px-3 py-2 mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border"
           placeholder="Deskripsi"></textarea>
-        <button @click="savetask()" class="mt-2 bg-gray-300 text-black text-sm px-8 py-2 rounded">Create
-          Workspace</button>
+        <button @click="savetask()" class="mt-2 bg-gray-300 text-black text-sm px-8 py-2 rounded">Create Task</button>
       </div>
     </div>
     <!-- end modal create task -->
@@ -100,7 +121,7 @@
         <main class="flex-grow flex flex-row min-h-0">
           <!-- Left Section -->
           <ChatLeftsection @parsing="show = $event"></ChatLeftsection>
-          <dashboardtask :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
+          <dashboardtask @parsingdata="createTask = $event" :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
         </main>
     </div>
 </div>
@@ -175,8 +196,9 @@ import Chatroom from './base/chatroom.vue';
           url : 'http://localhost:8000/api/add-workspace',
           avatar: null,
           show: false,
-          createTask : true,
+          createTask : false,
           in_deskripsi : '',
+          id  : '',
           in_team : '',
           in_workspace_name : '',
           name_task : '',
@@ -184,56 +206,120 @@ import Chatroom from './base/chatroom.vue';
           startdate : '',
           duedate : '',
           assigment : '',
-          deskripsi : ''
-
-
+          deskripsi : '',
+          emailDomain: '',
+          emailDomains: [],
+          teams : []
 		    }
     },
     components : {
           ChatLeftsection,
           Chatroom,
           Chatroom,
-          dashboardtask
+          dashboardtask,
       },
     props: {
       msg: String
     },
+    mounted() {
+      this.getdatauser();
+      this.getdatateam();
+    },
     methods: {
+          sanitizeTag(value) {
+      return value.replace(/<[^>]*>?/gm, '').trim();
+    },
+    addIfUnique(array, value) {
+      return [...new Set(array).add(value)];
+    },
+    processTagsOnKeyUpEvent(value) {
+      if (this.emailDomains.length < 20) {
+        this.emailDomain = this.sanitizeTag(value);
+
+        if (value.length > 0) {
+          this.revertTag();
+            let tags = [value];
+            tags.forEach((tag) => {
+              if (tag.length > 0) {
+                this.emailDomains = this.addIfUnique(this.emailDomains, tag);
+              }
+            });
+        }
+      } else {
+        this.revertTag();
+      }
+    },
+    removeTag(index) {
+      this.emailDomains.splice(index, 1);
+    },
+    revertTag() {
+      this.emailDomain = '';
+    },
+      getdatauser(){
+          axios.get('http://localhost:8000/api/whois',{
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+              }).then(({data}) => {
+                  
+                  this.id = data.id
+              }).catch((error) => {
+                  // console.log(error)
+              });
+      },
+      getdatateam(){
+          axios.get('http://localhost:8000/api/get-team',{
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+              }).then(({data}) => {
+                  console.log(data.data)
+                  this.teams = data.data
+              }).catch((error) => {
+                  // console.log(error)
+              });
+      },
       selectFile(){
         let fileInputElement = this.$refs.file
         fileInputElement.click();
       },
       saveworkspace(){
+        // this.$root.$refs.A.getworkspace();
         this.show = false;
         let formData = new FormData();
         formData.append("avatar", this.avatar);
         formData.append("name", this.in_workspace_name);
         formData.append("assigment", this.in_team);
-        // formData.append("deskripsi", this.in_deskripsi);
+        formData.append("deskripsi", this.in_workspace_name);
         axios.post(this.url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.$cookies.get("login")}`
         },
         }).then((response) => {
-          console.log(response)
-          this.$router.go()
+          console.log(this.avatar);
+          this.$router.push('/dashboard/'+this.encoder(this.in_workspace_name+',http://localhost:8000/uploads/image/'+this.avatar.name))
         }).catch((error) => {
           console.log(error)
+          // this.$alert("", 'Success create workspace','success');
         });
         // console.log(formData)
       },
       savetask(){
+        // console.log(this.emailDomains.toString());
+        let decode = atob(this.$route.params.workspace);
+        let splitdetail = decode.split(','); 
+        let names = splitdetail[0].toString();
         this.createTask = false;
         let formData = new FormData();
         formData.append("name", this.name_task);
-        // formData.append("priority", this.priority);
+        formData.append("priority", this.priority);
         formData.append("start_date", this.startdate);
         formData.append("due_date", this.duedate);
         formData.append("status", 'created');
-        formData.append("assigment", this.assigment);
-        // formData.append("deskripsi", this.deskripsi);
-        formData.append("workspace", this.name);
+        formData.append("assigment", this.id+','+this.emailDomains.toString());
+        formData.append("deskripsi", this.deskripsi);
+        formData.append("workspace", names);
         console.log(formData)
         axios.post('http://localhost:8000/api/task', formData, {
         headers: {
@@ -241,15 +327,18 @@ import Chatroom from './base/chatroom.vue';
           "Authorization": `Bearer ${this.$cookies.get("login")}`
         },
         }).then((response) => {
-          console.log(response)
+          // console.log(response)
           this.$router.go()
         }).catch((error) => {
           console.log(error)
         });
-        // console.log(formData)
       },
       parsingdata(data){
           this.show = data
+      },
+      encoder(msg){
+          var encode = btoa(msg); 
+          return encode
       },
       onFilePicked () {
         this.avatar = this.$refs.file.files[0];

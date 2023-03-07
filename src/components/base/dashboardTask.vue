@@ -38,7 +38,7 @@
         </div>
         <div class="chat-body md:p-4 flex-1 overflow-y-scroll">
             <div class="text-end w-full px-4">
-                <a href="" class="bg-orange-500 px-5 py-3 rounded-full">Add Task</a>
+                <span @click="createtask()" class="bg-orange-500 cursor-pointer px-5 py-3 rounded-full">Add Task</span>
             </div>
             <div class="md:py-10 md:px-5 md:flex">
                 <div class="rounded-lg mx-2 my-1 border border-2 border-gray-800 p-5 w-full md:w-1/3">
@@ -49,30 +49,11 @@
                     <div v-for="task in created" :key="task.id_task">
                         <router-link :to="task.name">
                             <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                                <div class="relative flex h-16 w-16 flex-shrink-0">
-                                    <img class="h-full w-full rounded-full object-cover shadow-md" :src="'http://localhost:8000'+task.avatar" alt="" />
-                                </div>
+                                
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
                                     <h3 class="text-left text-lg">{{ task.name }}</h3>
                                     <div class="flex items-center text-sm text-gray-600">
-                                        <div class="flex w-full">
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        </div>
-                                        <!-- <div class="min-w-0">
-    
-                            <p class="truncate">{{ msg }}</p>
-                        </div> -->
-    
-                                        <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
+                                        <p class="truncate">{{ task.deskripsi }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -87,30 +68,11 @@
                     <div v-for="task in OnProgress" :key="task.id_task">
                         <router-link :to="task.name">
                             <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                                <div class="relative flex h-16 w-16 flex-shrink-0">
-                                    <img class="h-full w-full rounded-full object-cover shadow-md" :src="'http://localhost:8000'+task.avatar" alt="" />
-                                </div>
+                                
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
                                     <h3 class="text-left text-lg">{{ task.name }}</h3>
                                     <div class="flex items-center text-sm text-gray-600">
-                                        <div class="flex w-full">
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        </div>
-                                        <!-- <div class="min-w-0">
-    
-                            <p class="truncate">{{ msg }}</p>
-                        </div> -->
-    
-                                        <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
+                                        <p class="truncate">{{ task.deskripsi }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -125,30 +87,11 @@
                     <div v-for="task in finished" :key="task.id_task">
                         <router-link :to="task.name">
                             <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                                <div class="relative flex h-16 w-16 flex-shrink-0">
-                                    <img class="h-full w-full rounded-full object-cover shadow-md" :src="'http://localhost:8000'+task.avatar" alt="" />
-                                </div>
+                                
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
                                     <h3 class="text-left text-lg">{{ task.name }}</h3>
                                     <div class="flex items-center text-sm text-gray-600">
-                                        <div class="flex w-full">
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                            <img class="h-w-5 border-1 -mx-1 w-5 rounded-full border-white shadow-md"
-                                                src="https://randomuser.me/api/portraits/men/22.jpg" alt="User2" />
-                                        </div>
-                                        <!-- <div class="min-w-0">
-    
-                            <p class="truncate">{{ msg }}</p>
-                        </div> -->
-    
-                                        <!-- <p class="ml-2 whitespace-no-wrap">{{ time }}</p> -->
+                                        <p class="truncate">{{ task.deskripsi }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -178,6 +121,7 @@ import axios from 'axios';
                 names : '',
                 detail : 'antmediahost.com',
                 avatar : '',
+                id : '',
                 tasks   : [],
                 created : [],
                 OnProgress : [],
@@ -186,15 +130,31 @@ import axios from 'axios';
             }
         },
         mounted() {
+            this.getdatauser();
             this.detaildata();
             this.gettask();
         },
         methods: {
+            createtask(){
+                this.$emit("parsingdata", true);
+            },
             detaildata(){
                 let decode = atob(this.name);
                 let splitdetail = decode.split(','); 
                 this.names = splitdetail[0].toString();
                 this.avatar = splitdetail[1];
+            },
+            getdatauser(){
+                axios.get('http://localhost:8000/api/whois',{
+                    headers: {
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`
+                    },
+                    }).then(({data}) => {
+                        
+                        this.id = data.id
+                    }).catch((error) => {
+                        // console.log(error)
+                    });
             },
             gettask(){
                 axios.get('http://localhost:8000/api/task/workspace/'+this.names,{

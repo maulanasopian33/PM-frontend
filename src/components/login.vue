@@ -95,6 +95,7 @@ import axios from 'axios'
                     .then(({data}) => {
                         // console.log(data.status)
                         if(data.status){
+                            this.$alert("", 'Success','Berhasil Login');
                             this.$cookies.set("login",data.data.token)
                             this.$router.push('/dashboard')
                         }
