@@ -1,0 +1,48 @@
+/* @import "fonts.scss"; */
+
+[theme="Pallet12"] {
+  --app-background-color: #d4d8f0 !important;
+  --app-title-color: #232946!important;
+  --app-subtitle-color: #232946!important;
+  --app-card-color: #fffffe;
+  --app-card-tagbg: #232946;
+  --app-card-Headline: #232946;
+  --app-card-p: #232946;
+  --app-highlight: #eebbc3;
+
+}
+
+.app-background {
+  background-color: var(--app-background-color) !important;
+}
+
+.app-title {
+  color: var(--app-title-color);
+}
+
+.app-subtitle {
+  color: var(--app-subtitle-color);
+}
+.app-card-color {
+  color: var(--app-card-color);
+}
+.app-card-tag-bg {
+  background-color: var(--app-card-tagbg);
+}
+.app-card-title {
+  color: var(--app-card-Headline);
+}
+.app-card-p {
+  color: var(--app-card-p);
+}
+.app-highlight {
+  color: var(--app-highlight);
+}
+
+
+.change-theme-box {
+  cursor: pointer;
+  color: var(--app-subtitle-color);
+  font-size: 1em;
+  font-weight: normal;
+}

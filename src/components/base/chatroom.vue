@@ -6,18 +6,18 @@
                 <!-- avatar -->
                 <div class="w-12 h-12 mr-4 relative flex flex-shrink-0">
                     <img class="shadow-md rounded-full w-full h-full object-cover"
-                        src="https://randomuser.me/api/portraits/women/33.jpg" alt="" />
+                        :src="avatar" alt="" />
                 </div>
                 <!-- avatar -->
                 <!-- contact info -->
                 <div class="text-sm text-left">
-                    <p class="font-bold text-base">{{ name }}</p>
-                    <p class="font-light">{{ time }}</p>
+                    <p class="font-bold text-base">Diskusi {{ name }}</p>
+                    <p class="font-light">{{ divisi }}</p>
                 </div>
                 <!-- contact info -->
             </div>
 
-            <div class="flex">
+            <!-- <div class="flex">
                 <a href="#" class="block rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2">
                     <svg viewBox="0 0 20 20" class="w-full h-full fill-current text-blue-500">
                         <path
@@ -37,7 +37,7 @@
                     </svg>
 
                 </a>
-            </div>
+            </div> -->
         </div>
         <!-- chat header -->
         <!-- chat body -->
@@ -118,11 +118,10 @@ import ChatSystem from '../parsial/chat/chat-system.vue';
 import ChatTime from '../parsial/chat/chat-time.vue';
     export default {
     name: "chatroom",
+    props : ['name', 'avatar','divisi'],
     components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem },
     data(){
         return{
-            name : 'Teknikal Support',
-            time : 'Just Now'
         }
     }
 }

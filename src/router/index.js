@@ -5,8 +5,9 @@ import loginVue from '@/components/login.vue'
 import detailworkspace from '@/components/detailtaskpage.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VueSimpleAlert from "vue-simple-alert";
-
+import VueSimpleAlert from "vue-simple-alert"
+import HomeViewVue from '@/views/AboutView.vue'
+import '@/css/style.css'
 Vue.use(VueSimpleAlert);
 Vue.use(VueRouter)
 
@@ -16,6 +17,13 @@ const routes = [
     name: 'home',
     redirect: '/login'
   },
+  
+  {
+    path: '/multi',
+    name: 'multi',
+    component : HomeViewVue
+  },
+
   {
     path: '/dashboard/:workspace',
     name: 'dashboard by id',
@@ -24,7 +32,8 @@ const routes = [
   {
     path: '/detail/:workspace',
     name: 'detail workspace',
-    component: detailworkspace
+    component: detailworkspace,
+    props: true
   },
   {
     path: '/dashboard',

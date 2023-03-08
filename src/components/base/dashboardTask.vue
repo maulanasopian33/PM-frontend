@@ -47,7 +47,7 @@
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
                     <div v-for="task in created" :key="task.id_task">
-                        <router-link :to="'/detail/'+task.name">
+                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name)">
                             <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
                                 
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
@@ -135,6 +135,10 @@ import axios from 'axios';
             this.gettask();
         },
         methods: {
+            encoder(msg){
+                var encode = btoa(msg); 
+                return encode
+            },
             createtask(){
                 this.$emit("parsingdata", true);
             },

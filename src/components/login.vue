@@ -1,7 +1,11 @@
 <template>
-    <!-- Container -->
-    <div class="flex flex-wrap min-h-screen w-full content-center justify-center bg-gray-800 py-10">
+        <!-- Container -->
+    <div class="app-background flex flex-wrap min-h-screen w-full content-center justify-center py-10">
+        <vue-multiple-themes
+      :defaultTheme="'Pallet12'"
+      >
 
+    </vue-multiple-themes>
         <!-- Login component -->
         <div class="flex shadow-md">
             <!-- Login form -->
@@ -34,7 +38,7 @@
 
                         <div class="mb-3">
                             <button
-                                class="mb-1.5 block w-full text-center text-white bg-purple-700 hover:bg-purple-900 px-2 py-1.5 rounded-md">Sign
+                                class="mb-1.5 block w-full text-center text-white app-card-tag-bg hover:bg-purple-900 px-2 py-1.5 rounded-md">Sign
                                 in</button>
                         </div>
                     </form>
@@ -66,6 +70,7 @@
 </template>
 
 <script>
+  import VueMultipleThemes from "vue-multiple-themes";
 import axios from 'axios'
     export default {
         name : 'login',
@@ -76,6 +81,9 @@ import axios from 'axios'
                     password : ''
                 }
             }
+        },
+        components : {
+            VueMultipleThemes,
         },
         mounted(){
             this.getstatus();
