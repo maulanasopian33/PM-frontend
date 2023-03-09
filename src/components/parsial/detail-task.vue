@@ -33,7 +33,7 @@
             <!-- input new todo -->
             <div class="flex">
               <input v-model="statustask" type="checkbox" value="1" class="w-5 rounded" >
-              <input  v-model="nameTask" :value="nameTask" type="text" class="ml-4 bg-gray-800 rounded-md text-white px-2 py-2 text-sm w-10/12" placeholder="new to do">
+              <input  v-model="nameTask" type="text" class="ml-4 bg-gray-800 rounded-md text-white px-2 py-2 text-sm w-10/12" placeholder="new to do">
               
               <button class="ml-4 w-2/12" @click="pushtask()">
                 <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -102,6 +102,8 @@
 import axios 
 from 'axios';
 import { process } from 'ipaddr.js';
+import Echo from "laravel-echo"
+import Pusher from "pusher-js"
 import chatroom from '../base/chatroom.vue';
 export default {
     name : 'detailtask',
@@ -122,12 +124,30 @@ export default {
         detailduedate : '',
         detail_idtask : '',
         statustask : 0,
+        message : []
       }
     },
     mounted() {
       this.decoder()
     },
+    created() {
+      
+  	},
     methods: {
+      getchat(){
+        window.Echo = new Echo({
+          broadcaster: 'pusher',
+          cluster :  'ap1',
+          key: '94e6a87800b6adf547b1' //Add your pusher key here
+        });
+        let channel = 'chat-'+this.nameTask
+        window.Echo.channel(channel).listen('chat', (e) => {
+          this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+          // this.pesan.push({
+          // 	message: e.message,
+          // });
+        });
+      },
       todochange(event,name){
         console.log(event.target.checked)
         let formData = new FormData();
@@ -180,6 +200,7 @@ export default {
               this.taskdeskripsi = data.data[0].deskripsi
 
               this.gettodos()
+              this.getchat()
               // this.assigmentdata = detaildata.assigment.split(',')
               // this.todo = data.data
           }).catch((error) => {
@@ -200,7 +221,7 @@ export default {
         }).then((response) => {
           this.todo.push({name : this.nameTask, status : this.statustask})
           this.$alert("", 'Success Create','success');
-          this.nameTask = ''
+          this.nameTasks = ''
         }).catch((error) => {
           console.log(error)
           this.$alert(error.message,'Error!','error');

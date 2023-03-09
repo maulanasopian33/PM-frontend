@@ -36,19 +36,19 @@
                 </a>
             </div>
         </div>
-        <div class="chat-body md:p-4 flex-1 overflow-y-scroll">
+        <div class="chat-body md:p-4 pt-10 flex-1 overflow-y-scroll">
             <div class="text-end w-full px-4">
                 <span @click="createtask()" class="bg-orange-500 cursor-pointer px-5 py-3 rounded-full">Add Task</span>
             </div>
             <div class="md:py-10 md:px-5 md:flex">
-                <div class="rounded-lg mx-2 my-1 border border-2 border-gray-800 p-5 w-full md:w-1/3">
+                <div class="rounded-lg md:mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
                     <div class="flex">
                         <h3 class="w-1/2 text-2xl">Created</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
                     <div v-for="task in created" :key="task.id_task">
                         <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name)">
-                            <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                            <div class="relative my-2 flex items-center justify-between rounded-lg border w-full border-gray-400 p-3 hover:bg-gray-800">
                                 
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
                                     <h3 class="text-left text-lg">{{ task.name }}</h3>
@@ -60,7 +60,7 @@
                         </router-link>
                     </div>
                 </div>
-                <div class="rounded-lg mx-2 my-1 border border-2 border-gray-800 p-5 w-full md:w-1/3">
+                <div class="rounded-lg mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
                     <div class="flex">
                         <h3 class="w-1/2 text-xl">On Progress</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
@@ -79,7 +79,7 @@
                         </router-link>
                     </div>
                 </div>
-                <div class="rounded-lg mx-2 my-1 p-5 w-full md:w-1/3 border border-2 border-gray-800">
+                <div class="rounded-lg mx-2 my-1 p-5 w-full md:w-1/3 border-2 border-gray-800">
                     <div class="flex">
                         <h3 class="w-1/2 text-2xl">Finished</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>

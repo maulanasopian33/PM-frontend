@@ -182,16 +182,17 @@ import DetailTask from './parsial/detail-task.vue';
               });
       },
       getdatateam(){
-          axios.get('http://localhost:8000/api/get-team',{
-              headers: {
-                  "Authorization": `Bearer ${this.$cookies.get("login")}`
-              },
-              }).then(({data}) => {
-                  console.log(data.data)
-                  this.teams = data.data
-              }).catch((error) => {
-                  // console.log(error)
-              });
+        console.log(process.env.URL_BASE_API);
+          // axios.get('http://localhost:8000/api/get-team',{
+          //     headers: {
+          //         "Authorization": `Bearer ${this.$cookies.get("login")}`
+          //     },
+          //     }).then(({data}) => {
+          //         console.log(data.data)
+          //         this.teams = data.data
+          //     }).catch((error) => {
+          //         // console.log(error)
+          //     });
       },
       selectFile(){
         let fileInputElement = this.$refs.file

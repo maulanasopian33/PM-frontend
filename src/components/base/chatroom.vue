@@ -42,13 +42,16 @@
         <!-- chat header -->
         <!-- chat body -->
         <div class="chat-body p-4 flex-1 overflow-y-scroll">
-            <ChatLeftNormal msg="test ini pesannya" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
-            <ChatLeftNormal msg="test ini pesannya" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+            <!-- <ChatLeftNormal  avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal> -->
+            <!-- <ChatLeftNormal msg="test ini pesannya" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
             <ChatLeftimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftimg>
-            <ChatTime time="jdasjdjas"></ChatTime>
-            <ChatRightNormal msg="dmsadmmasmdmasdma"></ChatRightNormal>
-            <ChatSystem msg="mmsdamsdmasmdmmsadma"></ChatSystem>
-            <ChatRightimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya"></ChatRightimg>
+            <ChatTime time="jdasjdjas"></ChatTime> -->
+            <div v-for="item in message">
+                <ChatRightNormal  v-if="item.from === myname" :msg="item.msg"></ChatRightNormal>
+                <ChatLeftNormal v-if="item.from !== myname" :msg="item.msg" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+            </div>
+            <!-- <ChatSystem msg="mmsdamsdmasmdmmsadma"></ChatSystem> -->
+            <!-- <ChatRightimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya"></ChatRightimg> -->
         </div>
         <!-- chat body -->
         <!-- chat footer -->
@@ -86,7 +89,7 @@
                     <label>
                         <input
                             class="rounded-full py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
-                            type="text" value="" placeholder="Aa" />
+                            type="text" v-on:keyup.enter="sendmsg()" v-model="txtchat" placeholder="Aa" />
                         <button type="button"
                             class="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none block text-blue-600 hover:text-blue-700 w-6 h-6">
                             <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
@@ -96,7 +99,7 @@
                         </button>
                     </label>
                 </div>
-                <button type="button"
+                <button  @click="sendmsg()"  type="button"
                     class="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-6 h-6">
                     <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
                         <path
@@ -116,13 +119,71 @@ import ChatRightimg from '../parsial/chat/chat-rightimg.vue';
 import ChatRightNormal from '../parsial/chat/chat-rightNormal.vue';
 import ChatSystem from '../parsial/chat/chat-system.vue';
 import ChatTime from '../parsial/chat/chat-time.vue';
+import Echo from "laravel-echo"
+import axios from 'axios'
     export default {
     name: "chatroom",
     props : ['name', 'avatar','divisi'],
     components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem },
     data(){
         return{
+            message : [],
+            txtchat : '',
+            myname : ''
         }
-    }
+    },
+    created() {
+        this.getdatauser()
+        setTimeout(() => {
+            this.getchat()
+        }, 3000);
+    },
+    methods: {
+        getdatauser(){
+          axios.get('http://localhost:8000/api/whois',{
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+              }).then(({data}) => {
+                  
+                  this.myname = data.name
+              }).catch((error) => {
+                  // console.log(error)
+              });
+        },
+        sendmsg(){
+            let formData = new FormData();
+            formData.append("msg", this.txtchat);
+            formData.append("from", this.myname);
+            formData.append("reply", false);
+            formData.append("time", 'sad');
+            formData.append("type", 'normal');
+            console.log(formData)
+            axios.post('http://localhost:8000/api/chat/'+this.name, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${this.$cookies.get("login")}`
+            },
+            }).then((response) => {
+                console.log('send message :',response)
+            }).catch((error) => {
+                console.log(error)
+            });
+        },
+        getchat(){
+        window.Echo = new Echo({
+          broadcaster: 'pusher',
+          cluster :  'ap1',
+          key: '94e6a87800b6adf547b1' //Add your pusher key here
+        });
+        let channel = 'chat-'+this.name
+        window.Echo.channel(channel).listen('chat', (e) => {
+          this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+          // this.pesan.push({
+          // 	message: e.message,
+          // });
+        });
+      },
+    },
 }
 </script>

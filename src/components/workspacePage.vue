@@ -2,7 +2,7 @@
   <div class="h-screen w-full flex antialiased text-gray-200 bg-gray-900 overflow-hidden">
     <!-- modal create workspace -->
     <div v-if="show" class=" w-full h-full bg-opacity-30 bg-white fixed z-30 flex items-center justify-center">
-      <div class="w-2/4 bg-[#2a2a2c] h-4/5 text-gray-300 rounded-lg p-10 text-left">
+      <div class=" w-full md:w-2/4 bg-[#2a2a2c] h-4/5 text-gray-300 rounded-lg p-10 text-left">
         <div class="flex justify-between">
           <h2 class="text-lg text-left">Create Workspace</h2>
           <span @click="show = false" class="cursor-pointer">
@@ -31,7 +31,7 @@
     <!-- end modal create workspace -->
         <!-- modal create task -->
     <div v-if="createTask" class=" w-full h-full bg-opacity-30 bg-white fixed z-30 flex items-center justify-center">
-      <div class="w-2/4 bg-[#2a2a2c] h-auto text-gray-300 rounded-lg p-10 text-left">
+      <div class="w-full md:w-2/4 bg-[#2a2a2c] h-auto text-gray-300 rounded-lg p-10 text-left">
         <div class="flex justify-between">
           <h2 class="text-lg text-left">Create Task</h2>
           <span @click="createTask = false" class="cursor-pointer">
@@ -118,10 +118,10 @@
         </div>
         <!-- <router-link :to="pesan">Home</router-link>  -->
       <!-- Top header -->
-        <main class="flex-grow flex flex-row min-h-0">
+        <main class="flex-grow flex flex-row min-h-0 w-screen">
           <!-- Left Section -->
-          <ChatLeftsection @parsing="show = $event"></ChatLeftsection>
-          <dashboardtask @parsingdata="createTask = $event" :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
+          <ChatLeftsection class="md:w-1/4 hidden md:block" @parsing="show = $event"></ChatLeftsection>
+          <dashboardtask class="md:w-2/4 w-full" @parsingdata="createTask = $event" :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
         </main>
     </div>
 </div>
