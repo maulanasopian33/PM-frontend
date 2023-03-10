@@ -188,7 +188,9 @@ import axios from 'axios';
 import ChatLeftsection from './base/chat-leftsection.vue';
 import dashboardtask from './base/dashboardTask.vue';
 import Chatroom from './base/chatroom.vue';
+import workspace from '@/plugin/workspace';
   export default {
+    mixins : [workspace],
     name: 'workspacepage',
     data(){
       return{
@@ -297,8 +299,9 @@ import Chatroom from './base/chatroom.vue';
           "Authorization": `Bearer ${this.$cookies.get("login")}`
         },
         }).then((response) => {
-          console.log(this.avatar);
-          this.$router.push('/dashboard/'+this.encoder(this.in_workspace_name+',http://localhost:8000/uploads/image/'+this.avatar.name))
+          // console.log(this.avatar);
+          this.getworkspace()
+          // this.$router.push('/dashboard/'+this.encoder(this.in_workspace_name+',http://localhost:8000/uploads/image/'+this.avatar.name))
         }).catch((error) => {
           console.log(error)
           // this.$alert("", 'Success create workspace','success');

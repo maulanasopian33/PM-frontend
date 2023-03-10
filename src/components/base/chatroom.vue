@@ -48,7 +48,8 @@
             <ChatTime time="jdasjdjas"></ChatTime> -->
             <div v-for="item in message">
                 <ChatRightNormal  v-if="item.from === myname" :msg="item.msg"></ChatRightNormal>
-                <ChatLeftNormal v-if="item.from !== myname" :msg="item.msg" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+                <ChatSystem v-if="item.from === 'system'" :msg="item.msg"></ChatSystem>
+                <ChatLeftNormal v-if="item.from !== myname && item.from !== 'system'" :msg="item.msg" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
             </div>
             <!-- <ChatSystem msg="mmsdamsdmasmdmmsadma"></ChatSystem> -->
             <!-- <ChatRightimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya"></ChatRightimg> -->
@@ -119,9 +120,12 @@ import ChatRightimg from '../parsial/chat/chat-rightimg.vue';
 import ChatRightNormal from '../parsial/chat/chat-rightNormal.vue';
 import ChatSystem from '../parsial/chat/chat-system.vue';
 import ChatTime from '../parsial/chat/chat-time.vue';
+import myfirst from '@/MyFirstPlugin.js'
 import Echo from "laravel-echo"
+import Pusher from "pusher-js"
 import axios from 'axios'
     export default {
+        mixins : [myfirst],
     name: "chatroom",
     props : ['name', 'avatar','divisi'],
     components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem },
@@ -133,6 +137,7 @@ import axios from 'axios'
         }
     },
     created() {
+        this.displayMessage()
         this.getdatauser()
         setTimeout(() => {
             this.getchat()
@@ -165,7 +170,8 @@ import axios from 'axios'
                 "Authorization": `Bearer ${this.$cookies.get("login")}`
             },
             }).then((response) => {
-                console.log('send message :',response)
+                // console.log('send message :',response)
+                this.txtchat = ''
             }).catch((error) => {
                 console.log(error)
             });

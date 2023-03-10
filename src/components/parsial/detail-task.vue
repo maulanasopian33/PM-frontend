@@ -99,11 +99,9 @@
 </template>
 
 <script>
-import axios 
-from 'axios';
+import axios from 'axios';
 import { process } from 'ipaddr.js';
 import Echo from "laravel-echo"
-import Pusher from "pusher-js"
 import chatroom from '../base/chatroom.vue';
 export default {
     name : 'detailtask',
@@ -115,6 +113,7 @@ export default {
       return {
         todo : [],
         nameTask : '',
+        me : '',
         avatar : '',
         nameworkspace : '',
         taskname : '',
@@ -129,6 +128,7 @@ export default {
     },
     mounted() {
       this.decoder()
+      this.getdatauser()
     },
     created() {
       
@@ -140,14 +140,35 @@ export default {
           cluster :  'ap1',
           key: '94e6a87800b6adf547b1' //Add your pusher key here
         });
-        let channel = 'chat-'+this.nameTask
+        let channel = 'chat-'+this.taskname
         window.Echo.channel(channel).listen('chat', (e) => {
-          this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+          // this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+          this.gettodos()
           // this.pesan.push({
           // 	message: e.message,
           // });
         });
       },
+      sendmsg(msg,from,time,type){
+            let formData = new FormData();
+            formData.append("msg", msg);
+            formData.append("from", from);
+            formData.append("reply", false);
+            formData.append("time", time);
+            formData.append("type", type);
+            console.log(formData)
+            axios.post('http://localhost:8000/api/chat/'+this.taskname, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${this.$cookies.get("login")}`
+            },
+            }).then((response) => {
+                // console.log('send message :',response)
+                return true;
+            }).catch((error) => {
+                console.log(error)
+            });
+          },
       todochange(event,name){
         console.log(event.target.checked)
         let formData = new FormData();
@@ -159,6 +180,14 @@ export default {
             },
             }).then(({data}) => {
                 // this.todo.splice(item, 1)
+                let msg = '';
+                if(event.target.checked){
+                  msg = this.me + ' mengubah status todo ' +name+' selesai'
+                }else{
+                  msg = this.me + ' mengubah status todo ' +name+' belum selesai'
+                }
+                this.nameTasks = ''
+                this.sendmsg(msg,'system','aaa','notif')
                 this.$alert("", 'updated','success');
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error');
@@ -172,6 +201,9 @@ export default {
             },
             }).then(({data}) => {
                 this.todo.splice(item, 1)
+                let msg = this.me + ' menghapus todo ' +this.todo[index].name
+                this.nameTasks = ''
+                this.sendmsg(msg,'system','aaa','notif')
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error');
             });
@@ -184,7 +216,20 @@ export default {
         this.avatar = splitdetail[1].toString();
         // this.parsingtaskname = splitdetail[2].toString();
         this.getdatatask(splitdetail[2].toString())
+        this.getchat()
         // this.avatar = splitdetail[1];
+      },
+      getdatauser(){
+          axios.get('http://localhost:8000/api/whois',{
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+              }).then(({data}) => {
+                  
+                  this.me = data.name
+              }).catch((error) => {
+                  // console.log(error)
+              });
       },
       getdatatask(data){
         axios.get('http://localhost:8000/api/task/bytask/'+data,{
@@ -221,7 +266,9 @@ export default {
         }).then((response) => {
           this.todo.push({name : this.nameTask, status : this.statustask})
           this.$alert("", 'Success Create','success');
+          let msg = this.me + ' membuat todo baru untuk task ' +this.taskname
           this.nameTasks = ''
+          this.sendmsg(msg,'system','aaa','notif')
         }).catch((error) => {
           console.log(error)
           this.$alert(error.message,'Error!','error');

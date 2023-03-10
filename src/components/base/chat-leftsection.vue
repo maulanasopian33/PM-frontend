@@ -140,7 +140,9 @@ import axios from 'axios';
 import ContactNormal from '../parsial/chat/contact-normal.vue';
 import ContactUnread from '../parsial/chat/contact-unread.vue';
 import NewWorkspace from '../parsial/chat/new-workspace.vue';
+import workspace from '@/plugin/workspace';
     export default {
+        mixins : [workspace],
         name: 'chat-leftsection',
         data() {
             return {
@@ -163,24 +165,6 @@ import NewWorkspace from '../parsial/chat/new-workspace.vue';
             this.getworkspace();
         },
         methods: {
-            getworkspace(){
-                axios.get('http://localhost:8000/api/get-workspace',{
-                    headers: {
-                        "Authorization": `Bearer ${this.$cookies.get("login")}`
-                    },
-                    }).then(({data}) => {
-                        this.wokspacedata = data;
-
-                    }).catch((error) => {
-                        console.log(error.response.status)
-                        switch(error.response.status){
-                            case 401 :
-                                this.$cookies.remove("login")
-                                this.$router.push('/login')
-                            break;
-                        }
-                    });
-            },
             getdatauser(){
                 axios.get(this.url,{
                     headers: {
