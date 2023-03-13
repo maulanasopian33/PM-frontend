@@ -127,7 +127,7 @@ import axios from 'axios'
     export default {
         mixins : [myfirst],
     name: "chatroom",
-    props : ['name', 'avatar','divisi'],
+    props : ['name', 'avatar','divisi', 'id_task'],
     components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem },
     data(){
         return{
@@ -182,7 +182,7 @@ import axios from 'axios'
           cluster :  'ap1',
           key: '94e6a87800b6adf547b1' //Add your pusher key here
         });
-        let channel = 'chat-'+this.name
+        let channel = 'chat-'+this.id_task
         window.Echo.channel(channel).listen('chat', (e) => {
           this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
           // this.pesan.push({

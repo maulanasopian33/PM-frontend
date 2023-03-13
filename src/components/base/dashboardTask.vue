@@ -47,7 +47,7 @@
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
                     <div v-for="task in created" :key="task.id_task">
-                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name)">
+                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
                             <div class="relative my-2 flex items-center justify-between rounded-lg border w-full border-gray-400 p-3 hover:bg-gray-800">
                                 
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
@@ -66,7 +66,7 @@
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
                     <div v-for="task in OnProgress" :key="task.id_task">
-                        <router-link :to="'/detail/'+task.name">
+                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
                             <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
                                 
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
@@ -85,7 +85,7 @@
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
                     <div v-for="task in finished" :key="task.id_task">
-                        <router-link :to="task.name">
+                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
                             <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
                                 
                                 <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
@@ -147,6 +147,7 @@ import axios from 'axios';
                 let splitdetail = decode.split(','); 
                 this.names = splitdetail[0].toString();
                 this.avatar = splitdetail[1];
+
             },
             getdatauser(){
                 axios.get('http://localhost:8000/api/whois',{

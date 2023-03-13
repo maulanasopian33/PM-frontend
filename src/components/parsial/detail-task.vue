@@ -1,7 +1,7 @@
 <template>
     <div class="w-full md:flex">
       <div class="md:w-1/2 w-full flex-none">
-        <chatroom :name="taskname" :avatar="avatar" :divisi="nameworkspace"></chatroom>
+        <chatroom :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
       </div>
       <div class="md:w-1/2 w-full bg-gray-900 text-white p-10 px-5 overflow-y-scroll border-l-2 border-gray-600">
 
@@ -140,7 +140,7 @@ export default {
           cluster :  'ap1',
           key: '94e6a87800b6adf547b1' //Add your pusher key here
         });
-        let channel = 'chat-'+this.taskname
+        let channel = 'chat-'+this.detail_idtask
         window.Echo.channel(channel).listen('chat', (e) => {
           // this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
           this.gettodos()
@@ -157,7 +157,7 @@ export default {
             formData.append("time", time);
             formData.append("type", type);
             console.log(formData)
-            axios.post('http://localhost:8000/api/chat/'+this.taskname, formData, {
+            axios.post('http://localhost:8000/api/chat/'+this.detail_idtask, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
                 "Authorization": `Bearer ${this.$cookies.get("login")}`

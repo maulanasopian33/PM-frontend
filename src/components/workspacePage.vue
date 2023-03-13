@@ -201,6 +201,7 @@ import workspace from '@/plugin/workspace';
           createTask : false,
           in_deskripsi : '',
           id  : '',
+          myname : '',
           in_team : '',
           in_workspace_name : '',
           name_task : '',
@@ -263,7 +264,7 @@ import workspace from '@/plugin/workspace';
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
               }).then(({data}) => {
-                  
+                  this.myname = data.name
                   this.id = data.id
               }).catch((error) => {
                   // console.log(error)
@@ -275,8 +276,8 @@ import workspace from '@/plugin/workspace';
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
               }).then(({data}) => {
-                  console.log(data.data)
-                  this.teams = data.data
+                  // console.log('datateam',data.data)
+                  this.teams = data.data;
               }).catch((error) => {
                   // console.log(error)
               });
@@ -304,37 +305,43 @@ import workspace from '@/plugin/workspace';
           // this.$router.push('/dashboard/'+this.encoder(this.in_workspace_name+',http://localhost:8000/uploads/image/'+this.avatar.name))
         }).catch((error) => {
           console.log(error)
-          // this.$alert("", 'Success create workspace','success');
+          this.$alert("", error,'error');
         });
         // console.log(formData)
       },
       savetask(){
-        // console.log(this.emailDomains.toString());
-        let decode = atob(this.$route.params.workspace);
-        let splitdetail = decode.split(','); 
-        let names = splitdetail[0].toString();
-        this.createTask = false;
-        let formData = new FormData();
-        formData.append("name", this.name_task);
-        formData.append("priority", this.priority);
-        formData.append("start_date", this.startdate);
-        formData.append("due_date", this.duedate);
-        formData.append("status", 'created');
-        formData.append("assigment", this.id+','+this.emailDomains.toString());
-        formData.append("deskripsi", this.deskripsi);
-        formData.append("workspace", names);
-        console.log(formData)
-        axios.post('http://localhost:8000/api/task', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Authorization": `Bearer ${this.$cookies.get("login")}`
-        },
-        }).then((response) => {
-          // console.log(response)
-          this.$router.go()
-        }).catch((error) => {
-          console.log(error)
+        let data = [];
+        this.emailDomains.forEach((item) => {
+          data.push(this.teams.filter(function(e){
+            return e.name == item
+          })[0].id)
         });
+        console.log(data)
+        // let decode = atob(this.$route.params.workspace);
+        // let splitdetail = decode.split(','); 
+        // let names = splitdetail[0].toString();
+        // this.createTask = false;
+        // let formData = new FormData();
+        // formData.append("name", this.name_task);
+        // formData.append("priority", this.priority);
+        // formData.append("start_date", this.startdate);
+        // formData.append("due_date", this.duedate);
+        // formData.append("status", 'created');
+        // formData.append("assigment", this.id+','+data.toString());
+        // formData.append("deskripsi", this.deskripsi);
+        // formData.append("workspace", names);
+        // console.log(formData)
+        // axios.post('http://localhost:8000/api/task', formData, {
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        //   "Authorization": `Bearer ${this.$cookies.get("login")}`
+        // },
+        // }).then((response) => {
+        //   // console.log(response)
+        //   this.$router.go()
+        // }).catch((error) => {
+        //   this.$alert("", error,'error');
+        // });
       },
       parsingdata(data){
           this.show = data
