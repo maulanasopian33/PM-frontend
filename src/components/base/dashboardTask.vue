@@ -46,18 +46,22 @@
                         <h3 class="w-1/2 text-2xl">Created</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
+                    <div class="h-full" @drop="onDrop($event, 1)" @dragover.prevent @dragenter.prevent >
                     <div v-for="task in created" :key="task.id_task">
-                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
-                            <div class="relative my-2 flex items-center justify-between rounded-lg border w-full border-gray-400 p-3 hover:bg-gray-800">
-                                
-                                <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
-                                    <h3 class="text-left text-lg">{{ task.name }}</h3>
-                                    <div class="flex items-center text-sm text-gray-600">
-                                        <p class="truncate">{{ task.deskripsi }}</p>
+                        <div draggable @dragstart="startDrag($event, task, 1)">
+                            <router-link class="drag-el" :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
+                                <div class="relative my-2 flex items-center justify-between rounded-lg border w-full border-gray-400 p-3 hover:bg-gray-800">
+                                    
+                                    <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                        <h3 class="text-left text-lg">{{ task.name }}</h3>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <p class="truncate">{{ task.deskripsi }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </router-link>
+                            </router-link>
+                        </div>
+                    </div>
                     </div>
                 </div>
                 <div class="rounded-lg mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
@@ -65,18 +69,22 @@
                         <h3 class="w-1/2 text-xl">On Progress</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
-                    <div v-for="task in OnProgress" :key="task.id_task">
-                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
-                            <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                                
-                                <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
-                                    <h3 class="text-left text-lg">{{ task.name }}</h3>
-                                    <div class="flex items-center text-sm text-gray-600">
-                                        <p class="truncate">{{ task.deskripsi }}</p>
+                    <div class="h-full" @drop="onDrop($event, 2)" @dragover.prevent @dragenter.prevent>
+                        <div v-for="task in OnProgress" :key="task.id_task">
+                            <div draggable @dragstart="startDrag($event, task, 2)">
+                                <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
+                                    <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                                        
+                                        <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                            <h3 class="text-left text-lg">{{ task.name }}</h3>
+                                            <div class="flex items-center text-sm text-gray-600">
+                                                <p class="truncate">{{ task.deskripsi }}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </router-link>
                             </div>
-                        </router-link>
+                        </div>
                     </div>
                 </div>
                 <div class="rounded-lg mx-2 my-1 p-5 w-full md:w-1/3 border-2 border-gray-800">
@@ -84,18 +92,22 @@
                         <h3 class="w-1/2 text-2xl">Finished</h3>
                         <h3 class="w-1/2 text-right">2/3</h3>
                     </div>
-                    <div v-for="task in finished" :key="task.id_task">
-                        <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
-                            <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
-                                
-                                <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
-                                    <h3 class="text-left text-lg">{{ task.name }}</h3>
-                                    <div class="flex items-center text-sm text-gray-600">
-                                        <p class="truncate">{{ task.deskripsi }}</p>
+                    <div class="h-full" @drop="onDrop($event, 3)" @dragover.prevent @dragenter.prevent>
+                        <div v-for="task in finished" :key="task.id_task">
+                            <div draggable @dragstart="startDrag($event, task, 2)">
+                                <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
+                                    <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                                        
+                                        <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                            <h3 class="text-left text-lg">{{ task.name }}</h3>
+                                            <div class="flex items-center text-sm text-gray-600">
+                                                <p class="truncate">{{ task.deskripsi }}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </router-link>
                             </div>
-                        </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,6 +147,56 @@ import axios from 'axios';
             this.gettask();
         },
         methods: {
+            // drag & drop
+            startDrag(evt, item, pos) {
+                evt.dataTransfer.dropEffect = 'move'
+                evt.dataTransfer.effectAllowed = 'move'
+                evt.dataTransfer.setData('itemID', item.id_task)
+                evt.dataTransfer.setData('pos', pos)
+            },
+            onDrop(evt, to) {
+                const itemID = evt.dataTransfer.getData('itemID')
+                let poss = this.tasks.findIndex(function(e){
+                    return e.id_task == itemID
+                })
+                switch(to){
+                    case 1 :
+                        this.tasks[poss].status = 'created'
+                        this.filter(this.tasks)
+                        this.updatestatustask(itemID,'created')
+                        break;
+                    case 2 :
+                        this.tasks[poss].status = 'OnProgress'
+                        this.filter(this.tasks)
+                        this.updatestatustask(itemID,'OnProgress')
+                        break;
+                    case 3 :
+                        this.tasks[poss].status = 'finished'
+                        this.filter(this.tasks)
+                        this.updatestatustask(itemID,'finished')
+                        break;
+                }
+            },
+            // end
+            updatestatustask(id, status){
+                let formData = new FormData();
+                formData.append("status", status);
+                axios.post("http://localhost:8000/api/task/"+id, formData, {
+                    headers: {
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`
+                    },
+                }).then((response) => {
+                    // console.log(response);
+                    if(response.data.status){
+                        this.$alert("", 'Success updated', 'success');
+                    }else{
+                        this.$alert(response.data.message, 'Error!', 'error');
+                    }
+                }).catch((error) => {
+                    // console.log(error)
+                    this.$alert(error.message, 'Error!', 'error');
+                });
+            },
             encoder(msg){
                 var encode = btoa(msg); 
                 return encode
@@ -168,28 +230,32 @@ import axios from 'axios';
                     },
                     }).then(({data}) => {
                         this.tasks = data.data;
-                        this.created = [];
-                        this.OnProgress = [];
-                        this.finished = [];
-                        this.tasks.forEach((item, index) => {
-                            switch(item.status){
-                                case 'created' :
-                                    this.created.push(item)
-                                    break;
-                                case 'OnProgress' :
-                                    this.OnProgress.push(item)
-                                    break;
-                                case 'finished' :
-                                    this.finished.push(item)
-                                    break;
-                            }
-                        });
+                        
+                        this.filter(this.tasks)
                         // console.log(data.data)
 
                     }).catch((error) => {
                         console.log(error)
                     });
             },
+            filter(data){
+                this.created = [];
+                this.OnProgress = [];
+                this.finished = [];
+                data.forEach((item, index) => {
+                    switch(item.status){
+                        case 'created' :
+                            this.created.push(item)
+                            break;
+                        case 'OnProgress' :
+                            this.OnProgress.push(item)
+                            break;
+                        case 'finished' :
+                            this.finished.push(item)
+                            break;
+                    }
+                });
+            }
         },
     }
 </script>

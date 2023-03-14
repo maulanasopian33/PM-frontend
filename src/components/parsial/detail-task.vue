@@ -3,7 +3,7 @@
       <div class="md:w-1/2 w-full flex-none">
         <chatroom :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
       </div>
-      <div class="md:w-1/2 w-full bg-gray-900 text-white p-10 px-5 overflow-y-scroll border-l-2 border-gray-600">
+      <div class="md:w-1/2 w-full bg-gray-900 text-white p-10 px-5 border-l-2 border-gray-600">
 
         <div class="flex">
           <h2 class="text-2xl font-bold px-3 py-1">{{ taskname }}</h2>
@@ -31,9 +31,9 @@
           <div class=" bg-gray-800 rounded-md text-white w-full h-auto  p-2">
             
             <!-- input new todo -->
-            <div class="flex">
+            <div class="flex p-2">
               <input v-model="statustask" type="checkbox" value="1" class="w-5 rounded" >
-              <input  v-model="nameTask" type="text" class="ml-4 bg-gray-800 rounded-md text-white px-2 py-2 text-sm w-10/12" placeholder="new to do">
+              <input v-on:keyup.enter="pushtask()"  v-model="nameTask" type="text" class="ml-4 bg-gray-800 rounded-md text-white px-2 py-2 text-sm w-10/12" placeholder="new to do">
               
               <button class="ml-4 w-2/12" @click="pushtask()">
                 <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,9 +54,9 @@
               </button>
             </div>
             <!-- todo item -->
-            <div class="flex py-2 overflow-x-scroll" v-for="(item, index) in todo">
+            <div class="flex p-2" v-for="(item, index) in todo">
               <input @change="todochange($event,item.name)" :checked="item.status" type="checkbox" class="w-5 rounded" name="" id="">
-              <span :class="'ml-4 bg-gray-800 rounded-md text-white px-2 py-2 text-sm w-10/12'+ [item.status ? ' line-through' : '']">{{ item.name }}</span>
+              <span :class="'break-all ml-4 bg-gray-800 rounded-md text-white px-2 py-2 text-sm w-10/12'+ [item.status ? ' line-through' : '']">{{ item.name }}</span>
               <input hidden :value="item.name" type="text" class="ml-4 bg-gray-800 rounded-md text-white px-2 py-2 text-sm w-10/12" placeholder="new task">
               <!-- <input type="text" class="px-2 py-2 text-sm w-2/4" disabled :value="item.name"> -->
               <button class="ml-4 w-2/12" @click="deletetodo(item.name,index)">
@@ -150,27 +150,30 @@ export default {
         });
       },
       sendmsg(msg,from,time,type){
-            let formData = new FormData();
-            formData.append("msg", msg);
-            formData.append("from", from);
-            formData.append("reply", false);
-            formData.append("time", time);
-            formData.append("type", type);
-            console.log(formData)
-            axios.post('http://localhost:8000/api/chat/'+this.detail_idtask, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${this.$cookies.get("login")}`
-            },
-            }).then((response) => {
-                // console.log('send message :',response)
-                return true;
+            let form = JSON.stringify({
+                msg     : msg,
+                from    : from,
+                reply   : false,
+                time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
+                type    : type
+            })
+            var config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'http://localhost:8000/api/chat/'+this.detail_idtask,
+                headers: { 
+                    "Authorization": `Bearer ${this.$cookies.get("login")}`,
+                    "Content-Type": "application/json"
+                },
+                data : form
+                };
+            axios(config).then((response) => {
+                this.txtchat = ''
             }).catch((error) => {
-                console.log(error)
+                this.$alert(error.message,'Error!','error');
             });
           },
       todochange(event,name){
-        console.log(event.target.checked)
         let formData = new FormData();
         formData.append("status", Number(event.target.checked));
         formData.append("name", name);
@@ -194,15 +197,14 @@ export default {
             });
       },
       deletetodo(item,index){
-        this.$confirm('are you sure to delete '+this.todo[index].name,"Are you sure?",'question').then(() => {
+        this.$confirm('are you sure to delete '+item,"Are you sure?",'question').then(() => {
           axios.delete('http://localhost:8000/api/todo/'+item,{
             headers: {
                 "Authorization": `Bearer ${this.$cookies.get("login")}`
             },
             }).then(({data}) => {
-                this.todo.splice(item, 1)
-                let msg = this.me + ' menghapus todo ' +this.todo[index].name
-                this.nameTasks = ''
+                this.todo.splice(index, 1)
+                let msg = this.me + ' menghapus todo ' +item
                 this.sendmsg(msg,'system','aaa','notif')
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error');
@@ -238,7 +240,8 @@ export default {
           },
           }).then(({data}) => {
               this.taskname = data.data[0].name;
-              this.taskassigment = data.data[0].assigment.split(',');
+              // this.taskassigment = data.data[0].assigment.split(',');
+              this.getassigment(data.data[0].assigment.split(','))
               this.detailpriority = data.data[0].priority
               this.detailduedate = data.data[0].due_date.split(' ')[0]
               this.detail_idtask = data.data[0].id_task
@@ -252,8 +255,28 @@ export default {
               // console.log(error)
           });
       },
+      getassigment(items){
+        axios.get('http://localhost:8000/api/get-team',{
+          headers: {
+              "Authorization": `Bearer ${this.$cookies.get("login")}`
+          },
+          }).then(({data}) => {
+              // console.log('datateam',data.data)
+              // this.assigment = data.data.filter(function(e){
+              //   return e.name !== selfdata
+              // });
+              let datas = [];
+              items.forEach((item) => {
+                datas.push(data.data.filter(function(e){
+                  return e.id == item
+                })[0].name)
+              });
+              this.taskassigment = datas
+          }).catch((error) => {
+              // console.log(error)
+          });
+      },
       pushtask(){
-        console.log(+this.statustask)
         let formData = new FormData();
         formData.append("id_task", this.detail_idtask);
         formData.append("name", this.nameTask);
@@ -267,7 +290,8 @@ export default {
           this.todo.push({name : this.nameTask, status : this.statustask})
           this.$alert("", 'Success Create','success');
           let msg = this.me + ' membuat todo baru untuk task ' +this.taskname
-          this.nameTasks = ''
+          this.nameTask = ''
+          this.statustask = false
           this.sendmsg(msg,'system','aaa','notif')
         }).catch((error) => {
           console.log(error)

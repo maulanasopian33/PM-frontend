@@ -9,8 +9,11 @@
         <!-- avatar chat -->
         <div class="messages text-sm text-gray-700 grid grid-flow-row gap-2">
             <div class="flex items-center group">
-                <p class="px-6 py-3 rounded-t-full rounded-r-full bg-gray-800 max-w-xs lg:max-w-md text-gray-200">
-                    {{ msg }}</p>
+                <div class="px-6 py-3 rounded-t-full rounded-r-full bg-gray-800 max-w-xs lg:max-w-md text-gray-200">
+                    <p class="text-xs text-blue-700 text-left">{{ from }}</p>
+                    <p class="text-md break-all text-left ">
+                        {{ msg }}</p>
+                </div>
                 <button type="button"
                     class="hidden group-hover:block flex flex-shrink-0 focus:outline-none mx-2 block rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-700 bg-gray-800 w-8 h-8 p-2">
                     <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
@@ -41,6 +44,6 @@ C15.786,7.8,14.8,8.785,14.8,10s0.986,2.2,2.201,2.2S19.2,11.215,19.2,10S18.216,7.
 <script>
 export default {
     name: 'chatLeftNormal',
-    props : ['msg','avatar']
+    props : ['msg','avatar','from']
 }
 </script>

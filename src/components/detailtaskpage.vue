@@ -136,13 +136,19 @@ import DetailTask from './parsial/detail-task.vue';
           DetailTask
       },
     mounted() {
+      this.getstatus();
       this.getdatauser();
       this.getdatateam();
     },
     methods: {
-          sanitizeTag(value) {
-      return value.replace(/<[^>]*>?/gm, '').trim();
-    },
+      getstatus() {
+          if (this.$cookies.get("login") === null) {
+            this.$router.push('/login')
+          }
+        },
+        sanitizeTag(value) {
+          return value.replace(/<[^>]*>?/gm, '').trim();
+        },
     addIfUnique(array, value) {
       return [...new Set(array).add(value)];
     },
@@ -182,7 +188,6 @@ import DetailTask from './parsial/detail-task.vue';
               });
       },
       getdatateam(){
-        console.log(process.env.URL_BASE_API);
           // axios.get('http://localhost:8000/api/get-team',{
           //     headers: {
           //         "Authorization": `Bearer ${this.$cookies.get("login")}`

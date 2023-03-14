@@ -226,12 +226,16 @@ import workspace from '@/plugin/workspace';
     },
     mounted() {
       this.getdatauser();
-      this.getdatateam();
     },
     methods: {
-          sanitizeTag(value) {
-      return value.replace(/<[^>]*>?/gm, '').trim();
-    },
+      getstatus() {
+          if (this.$cookies.get("login") == null) {
+            this.$router.push('/login')
+          }
+        },
+        sanitizeTag(value) {
+          return value.replace(/<[^>]*>?/gm, '').trim();
+        },
     addIfUnique(array, value) {
       return [...new Set(array).add(value)];
     },
@@ -266,6 +270,7 @@ import workspace from '@/plugin/workspace';
               }).then(({data}) => {
                   this.myname = data.name
                   this.id = data.id
+                  this.getdatateam()
               }).catch((error) => {
                   // console.log(error)
               });
@@ -277,7 +282,10 @@ import workspace from '@/plugin/workspace';
               },
               }).then(({data}) => {
                   // console.log('datateam',data.data)
-                  this.teams = data.data;
+                  let selfdata = this.myname
+                  this.teams = data.data.filter(function(e){
+                    return e.name !== selfdata
+                  });
               }).catch((error) => {
                   // console.log(error)
               });
@@ -316,32 +324,31 @@ import workspace from '@/plugin/workspace';
             return e.name == item
           })[0].id)
         });
-        console.log(data)
-        // let decode = atob(this.$route.params.workspace);
-        // let splitdetail = decode.split(','); 
-        // let names = splitdetail[0].toString();
-        // this.createTask = false;
-        // let formData = new FormData();
-        // formData.append("name", this.name_task);
-        // formData.append("priority", this.priority);
-        // formData.append("start_date", this.startdate);
-        // formData.append("due_date", this.duedate);
-        // formData.append("status", 'created');
-        // formData.append("assigment", this.id+','+data.toString());
-        // formData.append("deskripsi", this.deskripsi);
-        // formData.append("workspace", names);
-        // console.log(formData)
-        // axios.post('http://localhost:8000/api/task', formData, {
-        // headers: {
-        //   "Content-Type": "multipart/form-data",
-        //   "Authorization": `Bearer ${this.$cookies.get("login")}`
-        // },
-        // }).then((response) => {
-        //   // console.log(response)
-        //   this.$router.go()
-        // }).catch((error) => {
-        //   this.$alert("", error,'error');
-        // });
+        let decode = atob(this.$route.params.workspace);
+        let splitdetail = decode.split(','); 
+        let names = splitdetail[0].toString();
+        this.createTask = false;
+        let formData = new FormData();
+        formData.append("name", this.name_task);
+        formData.append("priority", this.priority);
+        formData.append("start_date", this.startdate);
+        formData.append("due_date", this.duedate);
+        formData.append("status", 'created');
+        formData.append("assigment", this.id+','+data.toString());
+        formData.append("deskripsi", this.deskripsi);
+        formData.append("workspace", names);
+        console.log(formData)
+        axios.post('http://localhost:8000/api/task', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${this.$cookies.get("login")}`
+        },
+        }).then((response) => {
+          // console.log(response)
+          this.$router.go()
+        }).catch((error) => {
+          this.$alert("", error,'error');
+        });
       },
       parsingdata(data){
           this.show = data

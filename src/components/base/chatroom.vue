@@ -47,9 +47,9 @@
             <ChatLeftimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftimg>
             <ChatTime time="jdasjdjas"></ChatTime> -->
             <div v-for="item in message">
-                <ChatRightNormal  v-if="item.from === myname" :msg="item.msg"></ChatRightNormal>
-                <ChatSystem v-if="item.from === 'system'" :msg="item.msg"></ChatSystem>
-                <ChatLeftNormal v-if="item.from !== myname && item.from !== 'system'" :msg="item.msg" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+                <ChatRightNormal  v-if="item.from === myname" :msg="item.message"></ChatRightNormal>
+                <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
+                <ChatLeftNormal v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
             </div>
             <!-- <ChatSystem msg="mmsdamsdmasmdmmsadma"></ChatSystem> -->
             <!-- <ChatRightimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya"></ChatRightimg> -->
@@ -140,6 +140,7 @@ import axios from 'axios'
         this.displayMessage()
         this.getdatauser()
         setTimeout(() => {
+            this.listenchat()
             this.getchat()
         }, 3000);
     },
@@ -157,39 +158,53 @@ import axios from 'axios'
               });
         },
         sendmsg(){
-            let formData = new FormData();
-            formData.append("msg", this.txtchat);
-            formData.append("from", this.myname);
-            formData.append("reply", false);
-            formData.append("time", 'sad');
-            formData.append("type", 'normal');
-            console.log(formData)
-            axios.post('http://localhost:8000/api/chat/'+this.name, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${this.$cookies.get("login")}`
-            },
-            }).then((response) => {
-                // console.log('send message :',response)
+            let form = JSON.stringify({
+                msg     : this.txtchat,
+                from    : this.myname,
+                reply   : false,
+                time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
+                type    : 'normal'
+            })
+            var config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'http://localhost:8000/api/chat/'+this.id_task,
+                headers: { 
+                    "Authorization": `Bearer ${this.$cookies.get("login")}`,
+                    "Content-Type": "application/json"
+                },
+                data : form
+                };
+            axios(config).then((response) => {
+                console.log('send message :',response)
                 this.txtchat = ''
             }).catch((error) => {
                 console.log(error)
             });
         },
+        listenchat(){
+            window.Echo = new Echo({
+                broadcaster: 'pusher',
+                cluster :  'ap1',
+                key: '94e6a87800b6adf547b1' //Add your pusher key here
+            });
+            let channel = 'chat-'+this.id_task
+            window.Echo.channel(channel).listen('chat', (e) => {
+            this.message.push({from : e.msg.from, message : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+            });
+        },
         getchat(){
-        window.Echo = new Echo({
-          broadcaster: 'pusher',
-          cluster :  'ap1',
-          key: '94e6a87800b6adf547b1' //Add your pusher key here
-        });
-        let channel = 'chat-'+this.id_task
-        window.Echo.channel(channel).listen('chat', (e) => {
-          this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
-          // this.pesan.push({
-          // 	message: e.message,
-          // });
-        });
-      },
+            axios.get('http://localhost:8000/api/chat/'+this.id_task,{
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+              }).then(({data}) => {
+                this.message = data.data
+                  console.log(data.data)
+              }).catch((error) => {
+                  // console.log(error)
+              });
+        }
     },
 }
 </script>
