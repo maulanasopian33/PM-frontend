@@ -181,7 +181,7 @@ import axios from 'axios';
             updatestatustask(id, status){
                 let formData = new FormData();
                 formData.append("status", status);
-                axios.post("http://localhost:8000/api/task/"+id, formData, {
+                axios.post(process.env.VUE_APP_BASE+"/task/"+id, formData, {
                     headers: {
                         "Authorization": `Bearer ${this.$cookies.get("login")}`
                     },
@@ -212,7 +212,7 @@ import axios from 'axios';
 
             },
             getdatauser(){
-                axios.get('http://localhost:8000/api/whois',{
+                axios.get(process.env.VUE_APP_BASE+'/whois',{
                     headers: {
                         "Authorization": `Bearer ${this.$cookies.get("login")}`
                     },
@@ -224,7 +224,7 @@ import axios from 'axios';
                     });
             },
             gettask(){
-                axios.get('http://localhost:8000/api/task/workspace/'+this.names,{
+                axios.get(process.env.VUE_APP_BASE+'/task/workspace/'+this.names,{
                     headers: {
                         "Authorization": `Bearer ${this.$cookies.get("login")}`
                     },

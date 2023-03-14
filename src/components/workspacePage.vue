@@ -195,7 +195,6 @@ import workspace from '@/plugin/workspace';
     data(){
       return{
 			    pesan :  '/',
-          url : 'http://localhost:8000/api/add-workspace',
           avatar: null,
           show: false,
           createTask : false,
@@ -226,6 +225,7 @@ import workspace from '@/plugin/workspace';
     },
     mounted() {
       this.getdatauser();
+      console.log(process.env.VUE_APP_BASE)
     },
     methods: {
       getstatus() {
@@ -263,7 +263,7 @@ import workspace from '@/plugin/workspace';
       this.emailDomain = '';
     },
       getdatauser(){
-          axios.get('http://localhost:8000/api/whois',{
+          axios.get(process.env.VUE_APP_BASE+'/whois',{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
@@ -276,7 +276,7 @@ import workspace from '@/plugin/workspace';
               });
       },
       getdatateam(){
-          axios.get('http://localhost:8000/api/get-team',{
+          axios.get(process.env.VUE_APP_BASE+'/get-team',{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
@@ -302,7 +302,7 @@ import workspace from '@/plugin/workspace';
         formData.append("name", this.in_workspace_name);
         formData.append("assigment", this.in_team);
         formData.append("deskripsi", this.in_workspace_name);
-        axios.post(this.url, formData, {
+        axios.post(process.env.VUE_APP_BASE+'/add-workspace', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.$cookies.get("login")}`
@@ -338,7 +338,7 @@ import workspace from '@/plugin/workspace';
         formData.append("deskripsi", this.deskripsi);
         formData.append("workspace", names);
         console.log(formData)
-        axios.post('http://localhost:8000/api/task', formData, {
+        axios.post(process.env.VUE_APP_BASE+'/task', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.$cookies.get("login")}`

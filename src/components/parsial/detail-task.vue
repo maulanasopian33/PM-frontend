@@ -99,6 +99,7 @@
 </template>
 
 <script>
+
 import axios from 'axios';
 import { process } from 'ipaddr.js';
 import Echo from "laravel-echo"
@@ -160,7 +161,7 @@ export default {
             var config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://localhost:8000/api/chat/'+this.detail_idtask,
+                url: process.env.VUE_APP_BASE+'/chat/'+this.detail_idtask,
                 headers: { 
                     "Authorization": `Bearer ${this.$cookies.get("login")}`,
                     "Content-Type": "application/json"
@@ -177,7 +178,7 @@ export default {
         let formData = new FormData();
         formData.append("status", Number(event.target.checked));
         formData.append("name", name);
-        axios.post('http://localhost:8000/api/todo/update',formData,{
+        axios.post(process.env.VUE_APP_BASE+'/todo/update',formData,{
             headers: {
                 "Authorization": `Bearer ${this.$cookies.get("login")}`
             },
@@ -198,7 +199,7 @@ export default {
       },
       deletetodo(item,index){
         this.$confirm('are you sure to delete '+item,"Are you sure?",'question').then(() => {
-          axios.delete('http://localhost:8000/api/todo/'+item,{
+          axios.delete(process.env.VUE_APP_BASE+'/todo/'+item,{
             headers: {
                 "Authorization": `Bearer ${this.$cookies.get("login")}`
             },
@@ -222,7 +223,7 @@ export default {
         // this.avatar = splitdetail[1];
       },
       getdatauser(){
-          axios.get('http://localhost:8000/api/whois',{
+          axios.get(process.env.VUE_APP_BASE+'/whois',{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
@@ -234,7 +235,7 @@ export default {
               });
       },
       getdatatask(data){
-        axios.get('http://localhost:8000/api/task/bytask/'+data,{
+        axios.get(process.env.VUE_APP_BASE+'/task/bytask/'+data,{
           headers: {
               "Authorization": `Bearer ${this.$cookies.get("login")}`
           },
@@ -256,7 +257,7 @@ export default {
           });
       },
       getassigment(items){
-        axios.get('http://localhost:8000/api/get-team',{
+        axios.get(process.env.VUE_APP_BASE+'/get-team',{
           headers: {
               "Authorization": `Bearer ${this.$cookies.get("login")}`
           },
@@ -281,7 +282,7 @@ export default {
         formData.append("id_task", this.detail_idtask);
         formData.append("name", this.nameTask);
         formData.append("status", Number(this.statustask));
-        axios.post("http://localhost:8000/api/todo", formData, {
+        axios.post(process.env.VUE_APP_BASE+"/todo", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.$cookies.get("login")}`
@@ -299,7 +300,7 @@ export default {
         });
       },
       gettodos(){
-          axios.get('http://localhost:8000/api/todo/'+this.detail_idtask,{
+          axios.get(process.env.VUE_APP_BASE+'/todo/'+this.detail_idtask,{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },

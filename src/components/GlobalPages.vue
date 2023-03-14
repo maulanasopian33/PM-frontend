@@ -109,7 +109,6 @@ import Chatroom from './base/chatroom.vue';
     data(){
       return{
 			    pesan :  '/',
-          url : 'http://localhost:8000/api/add-workspace',
           avatar: null,
           show: false,
           in_deskripsi : '',
@@ -139,7 +138,7 @@ import Chatroom from './base/chatroom.vue';
         formData.append("assigment", this.in_team);
         formData.append("deskripsi", this.in_workspace_name);
         // formData.append("deskripsi", this.in_deskripsi);
-        axios.post(this.url, formData, {
+        axios.post(process.env.VUE_APP_BASE+'/add-workspace', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.$cookies.get("login")}`

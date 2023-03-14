@@ -146,7 +146,7 @@ import axios from 'axios'
     },
     methods: {
         getdatauser(){
-          axios.get('http://localhost:8000/api/whois',{
+          axios.get(process.env.VUE_APP_BASE+'/whois',{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
@@ -168,7 +168,7 @@ import axios from 'axios'
             var config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://localhost:8000/api/chat/'+this.id_task,
+                url: process.env.VUE_APP_BASE+'/chat/'+this.id_task,
                 headers: { 
                     "Authorization": `Bearer ${this.$cookies.get("login")}`,
                     "Content-Type": "application/json"
@@ -194,7 +194,7 @@ import axios from 'axios'
             });
         },
         getchat(){
-            axios.get('http://localhost:8000/api/chat/'+this.id_task,{
+            axios.get(process.env.VUE_APP_BASE+'/chat/'+this.id_task,{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },

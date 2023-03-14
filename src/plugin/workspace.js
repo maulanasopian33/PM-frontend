@@ -2,7 +2,7 @@ import axios from 'axios';
 export default {
     methods: {
         getworkspace(){
-            axios.get('http://localhost:8000/api/get-workspace',{
+            axios.get(process.env.VUE_APP_BASE+'/get-workspace',{
                 headers: {
                     "Authorization": `Bearer ${this.$cookies.get("login")}`
                 },

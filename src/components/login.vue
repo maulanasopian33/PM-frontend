@@ -96,18 +96,21 @@ import axios from 'axios'
             },
             postlogin(){
                 axios
-                    .post('http://localhost:8000/api/login',{
+                    .post(process.env.VUE_APP_BASE+'/login',{
                         email : this.loginData.email,
                         password : this.loginData.password
                     })
                     .then(({data}) => {
-                        // console.log(data.status)
                         if(data.status){
-                            this.$alert("", 'Success','Berhasil Login');
+                            this.$alert("", 'Berhasil Login', 'success');
                             this.$cookies.set("login",data.data.token)
                             this.$router.push('/dashboard')
+                        }else{
+                            this.$alert("", data.message,'error');
                         }
-                    })
+                    }).catch((error) => {
+                        this.$alert("", error,'error');
+                    });
             }
         },
     }

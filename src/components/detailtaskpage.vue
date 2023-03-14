@@ -176,7 +176,7 @@ import DetailTask from './parsial/detail-task.vue';
       this.emailDomain = '';
     },
       getdatauser(){
-          axios.get('http://localhost:8000/api/whois',{
+          axios.get(process.env.VUE_APP_BASE+'/whois',{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
@@ -211,14 +211,14 @@ import DetailTask from './parsial/detail-task.vue';
         formData.append("name", this.in_workspace_name);
         formData.append("assigment", this.in_team);
         formData.append("deskripsi", this.in_workspace_name);
-        axios.post(this.url, formData, {
+        axios.post(process.env.VUE_APP_BASE+'/add-workspace', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.$cookies.get("login")}`
         },
         }).then((response) => {
           console.log(this.avatar);
-          this.$router.push('/dashboard/'+this.encoder(this.in_workspace_name+',http://localhost:8000/uploads/image/'+this.avatar.name))
+          this.$router.push('/dashboard/'+this.encoder(this.in_workspace_name+','+process.env.VUE_APP_WEB+'/uploads/image/'+this.avatar.name))
         }).catch((error) => {
           console.log(error)
           // this.$alert("", 'Success create workspace','success');

@@ -124,7 +124,7 @@
             <!-- normal contact -->
             <p class="text-left px-4 hidden md:block group-hover:block">Workspace</p>
             <!-- <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="Teknikal Support" msg="loremipsum" time="just now"></ContactNormal> -->
-            <ContactNormal v-for="data in wokspacedata" :detail="data.deskripsi" :avatar='"http://localhost:8000"+data.avatar' :name="data.name" msg="loremipsum" time="just now"></ContactNormal>
+            <ContactNormal v-for="data in wokspacedata" :detail="data.deskripsi" :avatar='process.env.VUE_APP_BASE+data.avatar' :name="data.name" msg="loremipsum" time="just now"></ContactNormal>
             
             <!-- normal contact -->
             <!-- unread contact -->
@@ -148,7 +148,6 @@ import workspace from '@/plugin/workspace';
             return {
                 modalshow : false,
                 admin : false,
-                url : 'http://localhost:8000/api/whois',
                 wokspacedata : [],
             }
         },
@@ -166,7 +165,7 @@ import workspace from '@/plugin/workspace';
         },
         methods: {
             getdatauser(){
-                axios.get(this.url,{
+                axios.get(process.env.VUE_APP_BASE+'/whois',{
                     headers: {
                         "Authorization": `Bearer ${this.$cookies.get("login")}`
                     },
