@@ -8,6 +8,7 @@ export default {
                 },
                 }).then(({data}) => {
                     this.wokspacedata = data;
+                    this.url = process.env.VUE_APP_WEB
 
                 }).catch((error) => {
                     console.log(error.response.status)

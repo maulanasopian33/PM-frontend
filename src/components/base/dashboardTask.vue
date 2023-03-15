@@ -134,6 +134,7 @@ import axios from 'axios';
                 detail : 'antmediahost.com',
                 avatar : '',
                 id : '',
+                url : '',
                 tasks   : [],
                 created : [],
                 OnProgress : [],
@@ -142,6 +143,7 @@ import axios from 'axios';
             }
         },
         mounted() {
+            this.url = process.env.VUE_APP_WEB
             this.getdatauser();
             this.detaildata();
             this.gettask();
@@ -220,6 +222,7 @@ import axios from 'axios';
                         
                         this.id = data.id
                     }).catch((error) => {
+                        this.$alert(error.message,'Error!','error');
                         // console.log(error)
                     });
             },
@@ -235,7 +238,8 @@ import axios from 'axios';
                         // console.log(data.data)
 
                     }).catch((error) => {
-                        console.log(error)
+                        this.$alert(error.message,'Error!','error');
+                        // console.log(error)
                     });
             },
             filter(data){

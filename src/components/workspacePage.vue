@@ -225,7 +225,6 @@ import workspace from '@/plugin/workspace';
     },
     mounted() {
       this.getdatauser();
-      console.log(process.env.VUE_APP_BASE)
     },
     methods: {
       getstatus() {

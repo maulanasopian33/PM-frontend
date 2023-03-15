@@ -41,15 +41,18 @@
         </div>
         <!-- chat header -->
         <!-- chat body -->
-        <div class="chat-body p-4 flex-1 overflow-y-scroll">
+        <div class="chat-body p-4 flex-1 overflow-y-scroll h-screen scroll-smooth">
             <!-- <ChatLeftNormal  avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal> -->
             <!-- <ChatLeftNormal msg="test ini pesannya" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
             <ChatLeftimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftimg>
             <ChatTime time="jdasjdjas"></ChatTime> -->
-            <div v-for="item in message">
-                <ChatRightNormal  v-if="item.from === myname" :msg="item.message"></ChatRightNormal>
-                <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
-                <ChatLeftNormal v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+            <div v-for="(chat, index) in message">
+                <ChatTime :time="index"></ChatTime>
+                <div v-for="item in chat">
+                    <ChatRightNormal  v-if="item.from === myname" :msg="item.message"></ChatRightNormal>
+                    <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
+                    <ChatLeftNormal v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+                </div>
             </div>
             <!-- <ChatSystem msg="mmsdamsdmasmdmmsadma"></ChatSystem> -->
             <!-- <ChatRightimg img="https://unsplash.com/photos/8--kuxbxuKU/download?force=true&w=640" caption="test ini pesannya"></ChatRightimg> -->
@@ -132,11 +135,14 @@ import axios from 'axios'
     data(){
         return{
             message : [],
+            msgrender : [],
             txtchat : '',
-            myname : ''
+            myname : '',
+            url : ''
         }
     },
     created() {
+        this.url = process.env.VUE_APP_WEB
         this.displayMessage()
         this.getdatauser()
         setTimeout(() => {
@@ -145,6 +151,26 @@ import axios from 'axios'
         }, 3000);
     },
     methods: {
+        groupChatByDate(chatData) {
+            // Membuat objek untuk menampung data terkelompokkan
+            const groupedChat = {};
+            // Iterasi setiap pesan chat dan kelompokkan berdasarkan tanggal
+            chatData.forEach(chat => {
+                const chatDate = new Date(chat.time).toLocaleDateString();
+
+                if (groupedChat[chatDate]) {
+                    groupedChat[chatDate].push(chat);
+                } else {
+                    groupedChat[chatDate] = [chat];
+                }
+            });
+            for (const date in groupedChat) {
+                groupedChat[date].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                // groupedChat[date].reverse();
+            }
+            // Mengembalikan data terkelompokkan
+            return groupedChat;
+        },
         getdatauser(){
           axios.get(process.env.VUE_APP_BASE+'/whois',{
               headers: {
@@ -183,14 +209,11 @@ import axios from 'axios'
             });
         },
         listenchat(){
-            window.Echo = new Echo({
-                broadcaster: 'pusher',
-                cluster :  'ap1',
-                key: '94e6a87800b6adf547b1' //Add your pusher key here
-            });
             let channel = 'chat-'+this.id_task
-            window.Echo.channel(channel).listen('chat', (e) => {
-            this.message.push({from : e.msg.from, message : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+            this.$echo.channel(channel).listen('chat', (e) => {
+            console.log(e)
+            this.msgrender.push({from : e.msg.from, message : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+            this.message = this.groupChatByDate(this.msgrender)
             });
         },
         getchat(){
@@ -199,9 +222,11 @@ import axios from 'axios'
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
               }).then(({data}) => {
-                this.message = data.data
-                  console.log(data.data)
+                this.message   = this.groupChatByDate(data.data)
+                this.msgrender = data.data
+                //   console.log(data.data)
               }).catch((error) => {
+                this.$alert(error.message,'Error!','error');
                   // console.log(error)
               });
         }

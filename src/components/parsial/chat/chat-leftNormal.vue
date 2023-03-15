@@ -1,10 +1,8 @@
 <template>
     <div class="flex flex-row justify-start my-1">
         <!-- avatar chat -->
-        <div class="w-8 h-8 relative flex flex-shrink-0 mr-4">
-            <img class="shadow-md rounded-full w-full h-full object-cover"
-                :src="avatar" alt="" />
-
+        <div class="w-10 h-10 relative flex flex-shrink-0 mr-4 bg-purple-600 justify-center items-center rounded-full">
+            <span class="text-lg font-medium text-center">{{ getAvatarFromName(from) }}</span>
         </div>
         <!-- avatar chat -->
         <div class="messages text-sm text-gray-700 grid grid-flow-row gap-2">
@@ -44,6 +42,12 @@ C15.786,7.8,14.8,8.785,14.8,10s0.986,2.2,2.201,2.2S19.2,11.215,19.2,10S18.216,7.
 <script>
 export default {
     name: 'chatLeftNormal',
-    props : ['msg','avatar','from']
+    props : ['msg','avatar','from'],
+    methods: {
+        getAvatarFromName(name) {
+            const firstLetter = name.charAt(0).toUpperCase();
+            return firstLetter;
+        },
+    },
 }
 </script>

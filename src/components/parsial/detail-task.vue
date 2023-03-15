@@ -83,14 +83,25 @@
               <span class="w-2/3">Note</span>
               <span class="text-center px-4 bg-blue-700 rounded-md cursor-pointer">add</span>
             </div>
-            <div class="bg-white mt-2">
+            <div class="bg-gray-800 rounded-md text-white w-full h-auto  p-2">
               a
             </div>
           </div>
           <div class="w-1/2">
-            <span>Attenment</span>
-            <div class="bg-white mt-2">
-              a
+            <span>attachment</span>
+            <div class=" bg-gray-800 rounded-md text-white w-full h-auto  p-4 text-sm">
+              <div class='inline-flex'>
+                <svg fill="#ffffff" width="20px" height="20px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path><path d="M18.153 6h-.009v5.342H23.5v-.002z"></path></g></svg>
+                <p>Lorem ipsum dolor sit amet consectetur.</p>
+              </div>
+              <div class='inline-flex'>
+                <svg fill="#ffffff" width="20px" height="20px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path><path d="M18.153 6h-.009v5.342H23.5v-.002z"></path></g></svg>
+                <p>Lorem ipsum dolor sit amet consectetur.</p>
+              </div>
+              <div class='inline-flex'>
+                <svg fill="#ffffff" width="20px" height="20px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path><path d="M18.153 6h-.009v5.342H23.5v-.002z"></path></g></svg>
+                <p>Lorem ipsum dolor sit amet consectetur.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -136,13 +147,8 @@ export default {
   	},
     methods: {
       getchat(){
-        window.Echo = new Echo({
-          broadcaster: 'pusher',
-          cluster :  'ap1',
-          key: '94e6a87800b6adf547b1' //Add your pusher key here
-        });
         let channel = 'chat-'+this.detail_idtask
-        window.Echo.channel(channel).listen('chat', (e) => {
+        this.$echo.channel(channel).listen('chat', (e) => {
           // this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
           this.gettodos()
           // this.pesan.push({
@@ -231,7 +237,7 @@ export default {
                   
                   this.me = data.name
               }).catch((error) => {
-                  // console.log(error)
+                this.$alert("", error.message,'error');
               });
       },
       getdatatask(data){
@@ -253,7 +259,7 @@ export default {
               // this.assigmentdata = detaildata.assigment.split(',')
               // this.todo = data.data
           }).catch((error) => {
-              // console.log(error)
+            this.$alert("", error.message,'error');
           });
       },
       getassigment(items){
@@ -274,6 +280,7 @@ export default {
               });
               this.taskassigment = datas
           }).catch((error) => {
+            this.$alert("", error.message,'error');
               // console.log(error)
           });
       },
@@ -295,7 +302,6 @@ export default {
           this.statustask = false
           this.sendmsg(msg,'system','aaa','notif')
         }).catch((error) => {
-          console.log(error)
           this.$alert(error.message,'Error!','error');
         });
       },
@@ -309,6 +315,7 @@ export default {
                   this.todo = data
               }).catch((error) => {
                   // console.log(error)
+                  this.$alert(error.message,'Error!','error');
               });
       },
     },

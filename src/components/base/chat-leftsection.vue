@@ -124,7 +124,7 @@
             <!-- normal contact -->
             <p class="text-left px-4 hidden md:block group-hover:block">Workspace</p>
             <!-- <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="Teknikal Support" msg="loremipsum" time="just now"></ContactNormal> -->
-            <ContactNormal v-for="data in wokspacedata" :detail="data.deskripsi" :avatar='process.env.VUE_APP_BASE+data.avatar' :name="data.name" msg="loremipsum" time="just now"></ContactNormal>
+            <ContactNormal v-for="data in wokspacedata" :detail="data.deskripsi" :avatar='url + data.avatar' :name="data.name" msg="loremipsum" time="just now"></ContactNormal>
             
             <!-- normal contact -->
             <!-- unread contact -->
@@ -149,6 +149,7 @@ import workspace from '@/plugin/workspace';
                 modalshow : false,
                 admin : false,
                 wokspacedata : [],
+                url : ''
             }
         },
         components : {
@@ -173,6 +174,7 @@ import workspace from '@/plugin/workspace';
                         
                         this.admin = data.admin
                     }).catch((error) => {
+                        this.$alert(error.message,'Error!','error');
                         // console.log(error)
                     });
             },

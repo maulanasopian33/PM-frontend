@@ -41,6 +41,7 @@
         <main class="flex-grow flex flex-row min-h-0">
           <!-- Left Section -->
           <ChatLeftsection @parsing="show = $event"></ChatLeftsection>
+          <admindashboard></admindashboard>
           <!-- <dashboardtask :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask> -->
         </main>
     </div>
@@ -103,7 +104,7 @@
 import axios from 'axios';
 import ChatLeftsection from './base/chat-leftsection.vue';
 import dashboardtask from './base/dashboardTask.vue';
-import Chatroom from './base/chatroom.vue';
+import admindashboard from './parsial/admin/dashboard.vue';
   export default {
     name: 'GlobalPage',
     data(){
@@ -118,9 +119,8 @@ import Chatroom from './base/chatroom.vue';
     },
     components : {
           ChatLeftsection,
-          Chatroom,
-          Chatroom,
-          dashboardtask
+          dashboardtask,
+          admindashboard
       },
     props: {
       msg: String

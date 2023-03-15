@@ -112,7 +112,7 @@ import DetailTask from './parsial/detail-task.vue';
     data(){
       return{
 			    pesan :  '/',
-          url : 'http://localhost:8000/api/add-workspace',
+          url : '',
           avatar: null,
           show: false,
           createTask : false,
@@ -217,13 +217,12 @@ import DetailTask from './parsial/detail-task.vue';
           "Authorization": `Bearer ${this.$cookies.get("login")}`
         },
         }).then((response) => {
-          console.log(this.avatar);
           this.$router.push('/dashboard/'+this.encoder(this.in_workspace_name+','+process.env.VUE_APP_WEB+'/uploads/image/'+this.avatar.name))
         }).catch((error) => {
-          console.log(error)
-          // this.$alert("", 'Success create workspace','success');
+
+          this.$alert("", error,'error');
+          
         });
-        // console.log(formData)
       },
       parsingdata(data){
           this.show = data
@@ -240,8 +239,6 @@ import DetailTask from './parsial/detail-task.vue';
           this.$refs.avatar.src = fileReader.result
         })
         fileReader.readAsDataURL(this.avatar)
-        // this.image = files[0]
-        // console.log('aa')
       }
     },
   }
