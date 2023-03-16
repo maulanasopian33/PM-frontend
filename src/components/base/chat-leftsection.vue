@@ -1,6 +1,6 @@
 <template>
     <section
-        class="flex flex-col flex-none overflow-auto w-10 hover:w-64 group lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
+        class="flex flex-col flex-none overflow-auto group w-0 lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
         <div class="header p-4 flex flex-row justify-between items-center flex-none">
             <!-- brand icon -->
             <div class="w-16 h-16 relative flex flex-shrink-0" style="filter: invert(100%);">
@@ -13,7 +13,7 @@
             <!-- title app -->
             <!-- create new message -->
             <a href="#"
-                class="block rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 hidden md:block group-hover:block">
+                class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 hidden md:block group-hover:block">
                 <svg viewBox="0 0 24 24" class="w-full h-full fill-current">
                     <path
                         d="M6.3 12.3l10-10a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1 0 1.4l-10 10a1 1 0 0 1-.7.3H7a1 1 0 0 1-1-1v-4a1 1 0 0 1 .3-.7zM8 16h2.59l9-9L17 4.41l-9 9V16zm10-2a1 1 0 0 1 2 0v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h6a1 1 0 0 1 0 2H4v14h14v-6z" />
@@ -128,8 +128,6 @@
             
             <!-- normal contact -->
             <!-- unread contact -->
-
-            <NewWorkspace v-if="admin" @parsing="parsingdata($event)"></NewWorkspace>
         </div>
         <!-- contact -->
     </section>

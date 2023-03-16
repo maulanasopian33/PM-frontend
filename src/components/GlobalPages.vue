@@ -41,7 +41,7 @@
         <main class="flex-grow flex flex-row min-h-0">
           <!-- Left Section -->
           <ChatLeftsection @parsing="show = $event"></ChatLeftsection>
-          <admindashboard></admindashboard>
+          <admindashboard class="w-full md:w-10/12"></admindashboard>
           <!-- <dashboardtask :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask> -->
         </main>
     </div>

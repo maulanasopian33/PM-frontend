@@ -198,7 +198,13 @@ export default {
                 }
                 this.nameTasks = ''
                 this.sendmsg(msg,'system','aaa','notif')
-                this.$alert("", 'updated','success');
+                this.$alert("", 'updated','success',{
+                  confirmButtonText: 'OK',
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error');
             });
@@ -213,6 +219,12 @@ export default {
                 this.todo.splice(index, 1)
                 let msg = this.me + ' menghapus todo ' +item
                 this.sendmsg(msg,'system','aaa','notif')
+                this.$alert("", 'Deleted','success',{
+                  confirmButtonText: 'OK',
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000
+                });
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error');
             });
@@ -296,7 +308,12 @@ export default {
         },
         }).then((response) => {
           this.todo.push({name : this.nameTask, status : this.statustask})
-          this.$alert("", 'Success Create','success');
+          this.$alert("", 'Success Create','success',{
+                  confirmButtonText: 'OK',
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000
+                });
           let msg = this.me + ' membuat todo baru untuk task ' +this.taskname
           this.nameTask = ''
           this.statustask = false

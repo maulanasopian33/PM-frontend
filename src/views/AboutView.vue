@@ -1,7 +1,11 @@
 <template>
 
 <div>
-  
+  <button @click="showPopup">Tampilkan Pop-up</button>
+  <modal name="my-modal">
+  <h2>Selamat Datang di Pop-up!</h2>
+  <p>Ini adalah pesan di dalam Pop-up</p>
+</modal>
 </div>
 </template>
 <style scoped>
@@ -28,6 +32,11 @@
       // handle event data here
       console.log(data)
     });
+  },
+  methods: {
+    showPopup() {
+      this.$modal.show('my-modal')
+    },
   },
 };
 </script>
