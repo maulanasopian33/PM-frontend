@@ -1,7 +1,7 @@
 <template>
-    <section class="flex flex-col flex-auto border-l h-full border-gray-800">
+    <section class="flex flex-col border-l h-screen border-gray-800">
         <!-- chat header -->
-        <div class="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
+        <div class="chat-header px-6 py-4 flex-shrink-0 justify-between items-center shadow">
             <div class="flex">
                 <!-- avatar -->
                 <div class="w-12 h-12 mr-4 relative flex flex-shrink-0">
@@ -41,14 +41,16 @@
         </div>
         <!-- chat header -->
         <!-- chat body -->
-        <div class="chat-body p-4 flex-1 overflow-y-scroll h-screen scroll-smooth">
-            <div v-if="showchat">
+        <div class="chat-body flex-grow p-4 overflow-y-scroll scroll-smooth">
+            <div v-if="showchat" >
                 <div v-for="(chat, index) in message">
                     <ChatTime :time="index"></ChatTime>
                     <div v-for="item in chat">
-                        <ChatRightNormal  v-if="item.from === myname" :msg="item.message"></ChatRightNormal>
+                        <chatLeftlike v-show="item.type === 'like'" v-if="item.from !== myname && item.from !== 'system'" :from="item.from"></chatLeftlike>
+                        <chatRightlike v-show="item.type === 'like'" v-if="item.from === myname"></chatRightlike>
+                        <ChatRightNormal v-show="item.type === 'normal'" v-if="item.from === myname" :msg="item.message"></ChatRightNormal>
                         <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
-                        <ChatLeftNormal v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+                        <ChatLeftNormal v-show="item.type === 'normal'" v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from" avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
                     </div>
                 </div>
             </div>
@@ -59,31 +61,27 @@
                         <p class="mb-3 font-semibold text-white flex flex-wrap justify-center px-6">
                             <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
                         </p>
-                        <input @change="onFilePicked()" type="file" ref="file" multiple class="hidden" />
+                        <input @change="onFilePicked()" type="file" ref="file"  multiple class="hidden" />
                         <button @click="selectFile()" id="button"
                             class="mt-2 rounded-sm px-3 py-1 bg-gray-800 hover:bg-gray-900 focus:shadow-outline focus:outline-none">
                             Upload a file
                         </button>
                     </header>
-
-                    <h1 class="pt-8 pb-3 font-semibold sm:text-lg text-gray-900">
-                        To Upload
-                    </h1>
-
-                    <ul id="gallery" class="flex flex-1 flex-wrap -m-1">
-                        <li
+                    <p v-show="largeFile" class="flex justify-center items-center px-3 py-2 bg-gray-800 rounded-md my-2"><svg width="25px" height="25px" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" fill="#ffffff" clip-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm-1.5-5.009c0-.867.659-1.491 1.491-1.491.85 0 1.509.624 1.509 1.491 0 .867-.659 1.509-1.509 1.509-.832 0-1.491-.642-1.491-1.509zM11.172 6a.5.5 0 0 0-.499.522l.306 7a.5.5 0 0 0 .5.478h1.043a.5.5 0 0 0 .5-.478l.305-7a.5.5 0 0 0-.5-.522h-1.655z"></path></g></svg><span>File terlalu besar mamank</span></p>
+                    <ul id="gallery" class="flex flex-1 flex-wrap m-4">
+                        <li v-if="this.files.length == 0"
                             class="h-full w-full text-center flex flex-col items-center justify-center items-center">
                             <img class="mx-auto w-32"
                                 src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png"
                                 alt="no data" />
                             <span class="text-small text-gray-500">No files selected</span>
                         </li>
-                        <li v-for="file in files" class="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-24">
+                        <li v-for="(file, index) in files" v-if="file.type =='img'" class="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-24">
                             <article tabindex="0" class="group hasImage w-full h-full rounded-md focus:outline-none focus:shadow-outline bg-gray-100 cursor-pointer relative text-transparent hover:text-white shadow-sm">
-                                <img :src="file.src" alt="upload preview" class="img-preview w-full h-full sticky object-cover rounded-md bg-fixed" />
+                                <img :src="file.data" alt="upload preview" class="img-preview w-full h-full sticky object-cover rounded-md bg-fixed" />
 
                                 <section class="flex flex-col rounded-md text-xs break-words w-full h-full z-20 absolute top-0 py-2 px-3">
-                                    <h1 class="flex-1"></h1>
+                                    <h1 class="flex-1">{{ file.name }}</h1>
                                     <div class="flex">
                                     <span class="p-1">
                                         <i>
@@ -94,7 +92,7 @@
                                     </span>
 
                                     <p class="p-1 size text-xs"></p>
-                                    <button class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md">
+                                    <button @click="deletefileup(index)" class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md">
                                         <svg class="pointer-events-none fill-current w-4 h-4 ml-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                         <path class="pointer-events-none" d="M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z" />
                                         </svg>
@@ -103,7 +101,32 @@
                                 </section>
                             </article>
                         </li>
+                        <li v-for="(file, index) in files" v-if="file.type =='file'" class="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-24 text-black">
+                            <article tabindex="0" class="group w-full h-full rounded-md focus:outline-none focus:shadow-outline elative bg-gray-100 cursor-pointer relative shadow-sm">
+                            <img alt="upload preview" class="img-preview hidden w-full h-full sticky object-cover rounded-md bg-fixed" />
+
+                            <section class="flex flex-col rounded-md text-xs break-words w-full h-full z-20 absolute top-0 py-2 px-3">
+                                <h1 class="flex-1 group-hover:text-blue-800">{{ file.name }}</h1>
+                                <div class="flex">
+                                <span class="p-1 text-blue-800">
+                                    <i>
+                                    <svg class="fill-current w-4 h-4 ml-auto pt-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <path d="M15 2v5h5v15h-16v-20h11zm1-2h-14v24h20v-18l-6-6z" />
+                                    </svg>
+                                    </i>
+                                </span>
+                                <p class="p-1 size text-xs text-gray-700"></p>
+                                <button @click="deletefileup(index)" class="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md text-gray-800">
+                                    <svg class="pointer-events-none fill-current w-4 h-4 ml-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path class="pointer-events-none" d="M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z" />
+                                    </svg>
+                                </button>
+                                </div>
+                            </section>
+                            </article>
+                        </li>
                     </ul>
+                    <input type="">
                 </section>
             </div>
             <!-- <ChatSystem msg="mmsdamsdmasmdmmsadma"></ChatSystem> -->
@@ -111,7 +134,7 @@
         </div>
         <!-- chat body -->
         <!-- chat footer -->
-        <div class="chat-footer flex-none">
+        <div class="chat-footer flex-shrink-0 h-24">
             <div class="flex flex-row items-center p-4">
                 <button type="button" @click="showchat = !showchat"
                     class="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-6 h-6">
@@ -126,25 +149,12 @@
                             d="M11,13 L8,10 L2,16 L11,16 L18,16 L13,11 L11,13 Z M0,3.99406028 C0,2.8927712 0.898212381,2 1.99079514,2 L18.0092049,2 C19.1086907,2 20,2.89451376 20,3.99406028 L20,16.0059397 C20,17.1072288 19.1017876,18 18.0092049,18 L1.99079514,18 C0.891309342,18 0,17.1054862 0,16.0059397 L0,3.99406028 Z M15,9 C16.1045695,9 17,8.1045695 17,7 C17,5.8954305 16.1045695,5 15,5 C13.8954305,5 13,5.8954305 13,7 C13,8.1045695 13.8954305,9 15,9 Z" />
                     </svg>
                 </button>
-                <button type="button"
-                    class="flex flex-shrink-0 focus:outline-none mx-2 text-blue-600 hover:text-blue-700 w-6 h-6">
-                    <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
-                        <path
-                            d="M0,6.00585866 C0,4.89805351 0.893899798,4 2.0048815,4 L5,4 L7,2 L13,2 L15,4 L17.9951185,4 C19.102384,4 20,4.89706013 20,6.00585866 L20,15.9941413 C20,17.1019465 19.1017876,18 18.0092049,18 L1.99079514,18 C0.891309342,18 0,17.1029399 0,15.9941413 L0,6.00585866 Z M10,16 C12.7614237,16 15,13.7614237 15,11 C15,8.23857625 12.7614237,6 10,6 C7.23857625,6 5,8.23857625 5,11 C5,13.7614237 7.23857625,16 10,16 Z M10,14 C11.6568542,14 13,12.6568542 13,11 C13,9.34314575 11.6568542,8 10,8 C8.34314575,8 7,9.34314575 7,11 C7,12.6568542 8.34314575,14 10,14 Z" />
-                    </svg>
-                </button>
-                <button type="button"
-                    class="flex flex-shrink-0 focus:outline-none mx-2 text-blue-600 hover:text-blue-700 w-6 h-6">
-                    <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
-                        <path
-                            d="M9,18 L9,16.9379599 C5.05368842,16.4447356 2,13.0713165 2,9 L4,9 L4,9.00181488 C4,12.3172241 6.6862915,15 10,15 C13.3069658,15 16,12.314521 16,9.00181488 L16,9 L18,9 C18,13.0790094 14.9395595,16.4450043 11,16.9378859 L11,18 L14,18 L14,20 L6,20 L6,18 L9,18 L9,18 Z M6,4.00650452 C6,1.79377317 7.79535615,0 10,0 C12.209139,0 14,1.79394555 14,4.00650452 L14,8.99349548 C14,11.2062268 12.2046438,13 10,13 C7.790861,13 6,11.2060545 6,8.99349548 L6,4.00650452 L6,4.00650452 Z" />
-                    </svg>
-                </button>
+                
                 <div class="relative flex-grow">
                     <label>
                         <input
                             class="rounded-full py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
-                            type="text" v-on:keyup.enter="sendmsg()" v-model="txtchat" placeholder="Aa" />
+                            type="text" v-on:keyup.enter="sendmsg('normal')" v-model="txtchat" placeholder="Aa" />
                         <button type="button"
                             class="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none block text-blue-600 hover:text-blue-700 w-6 h-6">
                             <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
@@ -154,7 +164,11 @@
                         </button>
                     </label>
                 </div>
-                <button  @click="sendmsg()"  type="button"
+                <button  @click="sendmsg('normal')"  type="button"
+                    class="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-10 h-10">
+                    <svg viewBox="0 0 24 24" class="w-full h-full fill-current" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.1391 2.95907L7.10914 5.95907C1.03914 7.98907 1.03914 11.2991 7.10914 13.3191L9.78914 14.2091L10.6791 16.8891C12.6991 22.9591 16.0191 22.9591 18.0391 16.8891L21.0491 7.86907C22.3891 3.81907 20.1891 1.60907 16.1391 2.95907ZM16.4591 8.33907L12.6591 12.1591C12.5091 12.3091 12.3191 12.3791 12.1291 12.3791C11.9391 12.3791 11.7491 12.3091 11.5991 12.1591C11.3091 11.8691 11.3091 11.3891 11.5991 11.0991L15.3991 7.27907C15.6891 6.98907 16.1691 6.98907 16.4591 7.27907C16.7491 7.56907 16.7491 8.04907 16.4591 8.33907Z"></path> </g></svg>
+                </button>
+                <button  @click="sendmsg('like')"  type="button"
                     class="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-6 h-6">
                     <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
                         <path
@@ -170,8 +184,10 @@
 <script>
 import ChatLeftimg from '../parsial/chat/chat-leftimg.vue';
 import ChatLeftNormal from '../parsial/chat/chat-leftNormal.vue';
+import chatLeftlike from '@/components/parsial/chat/chat-likeleft.vue'
 import ChatRightimg from '../parsial/chat/chat-rightimg.vue';
 import ChatRightNormal from '../parsial/chat/chat-rightNormal.vue';
+import chatRightlike from '@/components/parsial/chat/chat-likeright.vue'
 import ChatSystem from '../parsial/chat/chat-system.vue';
 import ChatTime from '../parsial/chat/chat-time.vue';
 import myfirst from '@/MyFirstPlugin.js'
@@ -182,7 +198,7 @@ import axios from 'axios'
         mixins : [myfirst],
     name: "chatroom",
     props : ['name', 'avatar','divisi', 'id_task'],
-    components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem },
+    components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem, chatLeftlike,chatRightlike },
     data(){
         return{
             message : [],
@@ -191,7 +207,8 @@ import axios from 'axios'
             showchat : true,
             myname : '',
             url : '',
-            files : []
+            files : [],
+            largeFile : false,
         }
     },
     created() {
@@ -204,6 +221,10 @@ import axios from 'axios'
         }, 3000);
     },
     methods: {
+        deletefileup(index){
+            this.files.splice(index,1)
+            console.log(index)
+        },
         groupChatByDate(chatData) {
             // Membuat objek untuk menampung data terkelompokkan
             const groupedChat = {};
@@ -236,29 +257,65 @@ import axios from 'axios'
                   // console.log(error)
               });
         },
-        sendmsg(){
-            let form = JSON.stringify({
-                msg     : this.txtchat,
-                from    : this.myname,
-                reply   : false,
-                time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
-                type    : 'normal'
-            })
-            var config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: process.env.VUE_APP_BASE+'/chat/'+this.id_task,
-                headers: { 
-                    "Authorization": `Bearer ${this.$cookies.get("login")}`,
-                    "Content-Type": "application/json"
-                },
-                data : form
-                };
-            axios(config).then((response) => {
-                console.log('send message :',response)
-                this.txtchat = ''
+        sendmsg(type){
+            if(this.showchat){
+                let form = '';
+                switch(type){
+                    case 'like' :
+                        form = JSON.stringify({
+                            msg     : 'like',
+                            from    : this.myname,
+                            reply   : false,
+                            time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
+                            type    : type
+                        })
+                    break;
+                    case 'normal' :
+                        form = JSON.stringify({
+                            msg     : this.txtchat,
+                            from    : this.myname,
+                            reply   : false,
+                            time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
+                            type    : type
+                        })
+                    }
+                var config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: process.env.VUE_APP_BASE+'/chat/'+this.id_task,
+                    headers: { 
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`,
+                        "Content-Type": "application/json"
+                    },
+                    data : form
+                    };
+                axios(config).then((response) => {
+                    console.log('send message :',response)
+                    this.txtchat = ''
+                }).catch((error) => {
+                    console.log(error)
+                });
+                console.log('chat')
+            }else{
+                console.log('file')
+                this.sendfile()
+            }
+            
+        },
+        sendfile(){
+            let formData = new FormData();
+            formData.append("avatar", this.files);
+            axios.post(process.env.VUE_APP_BASE+'/chat/'+this.id_task, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "Authorization": `Bearer ${this.$cookies.get("login")}`
+            },
+            }).then((response) => {
+            //   this.$modal.hide('my-modal')
+              console.log(response)
+              // this.$router.go(this.$router.currentRoute)
             }).catch((error) => {
-                console.log(error)
+              console.log(error)
             });
         },
         listenchat(){
@@ -277,7 +334,7 @@ import axios from 'axios'
               }).then(({data}) => {
                 this.message   = this.groupChatByDate(data.data)
                 this.msgrender = data.data
-                //   console.log(data.data)
+                  console.log(data.data)
               }).catch((error) => {
                 this.$alert(error.message,'Error!','error');
                   // console.log(error)
@@ -286,17 +343,28 @@ import axios from 'axios'
         onFilePicked () {
             // this.avatar = this.$refs.file.files[0];
             // let filename = files[0].name
-            console.log(this.$refs.file.files)
             let temps = this.$refs.file.files
-            console.log(temps)
             Array.from(this.$refs.file.files).forEach(element => {
-                console.log(element)
-                const fileReader = new FileReader()
-                fileReader.addEventListener('load', () => {
-                    this.files.push({src:fileReader.result})
-                })
-                fileReader.readAsDataURL(element)
+                if(element.size > 20971520){
+                    this.largeFile = true
+                    setTimeout(() => {
+                        this.largeFile = false
+                    }, 2000);
+                }else{
+                    const isImage = element.type.match("image.*")
+                    if(isImage){
+                        const fileReader = new FileReader()
+                        fileReader.addEventListener('load', () => {
+                            console.log(element)
+                            this.files.push({data:fileReader.result,name:element.name,type:'img'})
+                        })
+                        fileReader.readAsDataURL(element)
+                    }else{
+                        this.files.push({data:"",name:element.name,type:'file'})
+                    }
+                }
             });
+
             // const fileReader = new FileReader()
             // fileReader.addEventListener('load', () => {
             //   this.$refs.avatar.src = fileReader.result

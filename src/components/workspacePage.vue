@@ -232,35 +232,35 @@ import workspace from '@/plugin/workspace';
             this.$router.push('/login')
           }
         },
-        sanitizeTag(value) {
-          return value.replace(/<[^>]*>?/gm, '').trim();
-        },
-    addIfUnique(array, value) {
-      return [...new Set(array).add(value)];
-    },
-    processTagsOnKeyUpEvent(value) {
-      if (this.emailDomains.length < 20) {
-        this.emailDomain = this.sanitizeTag(value);
+      sanitizeTag(value) {
+        return value.replace(/<[^>]*>?/gm, '').trim();
+      },
+      addIfUnique(array, value) {
+        return [...new Set(array).add(value)];
+      },
+      processTagsOnKeyUpEvent(value) {
+        if (this.emailDomains.length < 20) {
+          this.emailDomain = this.sanitizeTag(value);
 
-        if (value.length > 0) {
+          if (value.length > 0) {
+            this.revertTag();
+              let tags = [value];
+              tags.forEach((tag) => {
+                if (tag.length > 0) {
+                  this.emailDomains = this.addIfUnique(this.emailDomains, tag);
+                }
+              });
+          }
+        } else {
           this.revertTag();
-            let tags = [value];
-            tags.forEach((tag) => {
-              if (tag.length > 0) {
-                this.emailDomains = this.addIfUnique(this.emailDomains, tag);
-              }
-            });
         }
-      } else {
-        this.revertTag();
-      }
-    },
-    removeTag(index) {
-      this.emailDomains.splice(index, 1);
-    },
-    revertTag() {
-      this.emailDomain = '';
-    },
+      },
+      removeTag(index) {
+        this.emailDomains.splice(index, 1);
+      },
+      revertTag() {
+        this.emailDomain = '';
+      },
       getdatauser(){
           axios.get(process.env.VUE_APP_BASE+'/whois',{
               headers: {
