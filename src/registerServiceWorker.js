@@ -12,39 +12,51 @@ if (process.env.NODE_ENV === 'production') {
     },
     registered () {
       console.log('Service worker has been registered.')
-      window.Pusher = Pusher;
-      window.Echo = new Echo({
-        broadcaster: 'pusher',
-        cluster :  'ap1',
-        key: '94e6a87800b6adf547b1' //Add your pusher key here
-      });
-      let channel = 'global-message'
-      window.Echo.channel(channel).listen('GlobalMessage', (e) => {
-        // this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
-        console.log(e)
-        if ('Notification' in window) {
-          // cek apakah izin notifikasi telah diberikan
-          if (Notification.permission === 'granted') {
-            // tampilkan notifikasi
-            new Notification(e.from,  {
-              body: e.message
-            });
-          } else {
-            // minta izin untuk menampilkan notifikasi
-            Notification.requestPermission().then(function(permission) {
-              // jika izin diberikan, tampilkan notifikasi
-              if (permission === 'granted') {
-                new Notification(e.from,  {
+      let myname = '';
+      axios.get(process.env.VUE_APP_BASE + '/whois', {
+        headers: {
+          "Authorization": `Bearer ${this.$cookies.get("login")}`
+        },
+      }).then(({ data }) => {
+        myname = data.name
+        window.Pusher = Pusher;
+        window.Echo = new Echo({
+          broadcaster: 'pusher',
+          cluster: 'ap1',
+          key: '94e6a87800b6adf547b1' //Add your pusher key here
+        });
+        let channel = 'global-message'
+        window.Echo.channel(channel).listen('GlobalMessage', (e) => {
+          // this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+          console.log(e)
+          if ('Notification' in window) {
+            // cek apakah izin notifikasi telah diberikan
+            if (Notification.permission === 'granted') {
+              // tampilkan notifikasi
+              if(e.from !== myname){
+                new Notification(e.from, {
                   body: e.message
                 });
               }
-            });
+            } else {
+              // minta izin untuk menampilkan notifikasi
+              Notification.requestPermission().then(function (permission) {
+                // jika izin diberikan, tampilkan notifikasi
+                if (permission === 'granted') {
+                  if(e.from !== myname){
+                    new Notification(e.from, {
+                      body: e.message
+                    });
+                  }
+                }
+              });
+            }
           }
-        }
-        // this.pesan.push({
-        // 	message: e.message,
-        // });
+        });
+      }).catch((error) => {
+        // this.$alert(error.message, 'Error!', 'error');
       });
+      
     },
     cached () {
       // console.log('Content has been cached for offline use.')
