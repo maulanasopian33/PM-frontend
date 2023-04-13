@@ -8,6 +8,7 @@ import VueRouter from 'vue-router'
 import VueSimpleAlert from "vue-simple-alert"
 import HomeViewVue from '@/views/AboutView.vue'
 import '@/css/style.css'
+import dashboardVue from '@/components/parsial/admin/dashboard.vue'
 Vue.use(VueSimpleAlert);
 Vue.use(VueRouter)
 
@@ -38,7 +39,8 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: GlobalPage
+    component: GlobalPage,
+    props: true
   },
   {
     path: '/login',

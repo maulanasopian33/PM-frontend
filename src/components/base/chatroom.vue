@@ -248,6 +248,7 @@ export default {
     data() {
         return {
             message: [],
+            gettaskname : '',
             msgrender: [],
             txtchat: '',
             showchat: true,
@@ -266,6 +267,7 @@ export default {
         setTimeout(() => {
             this.listenchat()
             this.getchat()
+            this.getdatatask(this.id_task)
         }, 3000);
     },
     methods: {
@@ -307,6 +309,43 @@ export default {
                 this.$alert(error.message, 'Error!', 'error');
             });
         },
+        sendnotif(msg,from,type){
+            let form = JSON.stringify({
+                message : msg,
+                from    : from,
+                reply   : false,
+                time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
+                type    : type
+            })
+            var config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: process.env.VUE_APP_BASE+'/sendNotif',
+                headers: { 
+                    "Authorization": `Bearer ${this.$cookies.get("login")}`,
+                    "Content-Type": "application/json"
+                },
+                data : form
+                };
+            axios(config).then((response) => {
+                
+            }).catch((error) => {
+                this.$alert(error.message,'Error Send Notif!','error');
+            });
+          },
+          getdatatask(data){
+                axios.get(process.env.VUE_APP_BASE+'/task/bytask/'+data,{
+                headers: {
+                    "Authorization": `Bearer ${this.$cookies.get("login")}`
+                },
+                }).then(({data}) => {
+                    this.gettaskname = data.data.data[0].name;
+                    // this.assigmentdata = detaildata.assigment.split(',')
+                    // this.todo = data.data
+                }).catch((error) => {
+                    this.$alert("Get Task Datas", error.message,'error');
+                });
+            },
         sendmsg(type) {
             if (this.showchat) {
                 let form = '';
@@ -340,6 +379,7 @@ export default {
                     data: form
                 };
                 axios(config).then((response) => {
+                    this.sendnotif(this.myname + " Mengirimkan Pesan/"+this.gettaskname,this.myname,'normal')
                     this.txtchat = ''
                 }).catch((error) => {
                     this.$alert(error.message, 'Error!', 'error');
@@ -362,8 +402,8 @@ export default {
                     "Authorization": `Bearer ${this.$cookies.get("login")}`
                 },
             }).then((response) => {
-                //   this.$modal.hide('my-modal')
                 this.showchat = true;
+                this.sendnotif("mengirimkan file",this.myname,'image')
                 // this.$router.go(this.$router.currentRoute)
             }).catch((error) => {
                 this.$alert(error.message, 'Error!', 'error');

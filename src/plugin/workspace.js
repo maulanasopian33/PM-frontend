@@ -1,4 +1,5 @@
 import axios from 'axios';
+import eventBus from '@/plugin/eventBus';
 export default {
     methods: {
         getworkspace(){
@@ -8,6 +9,7 @@ export default {
                 },
                 }).then(({data}) => {
                     this.wokspacedata = data;
+                    eventBus.$emit('workspace', data);
                     this.url = process.env.VUE_APP_WEB
 
                 }).catch((error) => {

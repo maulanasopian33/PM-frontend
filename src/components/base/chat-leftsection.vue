@@ -139,6 +139,7 @@ import ContactNormal from '../parsial/chat/contact-normal.vue';
 import ContactUnread from '../parsial/chat/contact-unread.vue';
 import NewWorkspace from '../parsial/chat/new-workspace.vue';
 import workspace from '@/plugin/workspace';
+import eventBus from '@/plugin/eventBus';
     export default {
         mixins : [workspace],
         name: 'chat-leftsection',
@@ -156,26 +157,16 @@ import workspace from '@/plugin/workspace';
             NewWorkspace
         },
         created() {
-            this.$root.$refs.A = this;
+
         },
         mounted() {
-            this.getdatauser();
             this.getworkspace();
+            this.url = process.env.VUE_APP_WEB
+            // eventBus.$on('workspace', (data) => {
+            //     this.wokspacedata = data;
+            // });
         },
         methods: {
-            getdatauser(){
-                axios.get(process.env.VUE_APP_BASE+'/whois',{
-                    headers: {
-                        "Authorization": `Bearer ${this.$cookies.get("login")}`
-                    },
-                    }).then(({data}) => {
-                        
-                        this.admin = data.admin
-                    }).catch((error) => {
-                        this.$alert(error.message,'Error!','error');
-                        // console.log(error)
-                    });
-            },
             parsingdata(data){
                 this.$emit("parsing", data);
                 this.modalshow = data 

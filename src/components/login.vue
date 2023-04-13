@@ -95,21 +95,21 @@ import axios from 'axios'
                 }
             },
             postlogin(){
+                this.$loading(true)
                 axios
                     .post(process.env.VUE_APP_BASE+'/login',{
                         email : this.loginData.email,
                         password : this.loginData.password
                     })
                     .then(({data}) => {
-                        if(data.status){
-                            this.$alert("", 'Berhasil Login', 'success');
-                            this.$cookies.set("login",data.data.token)
-                            this.$router.push('/dashboard')
-                        }else{
-                            this.$alert("", data.message,'error');
-                        }
+                        this.$loading(false)
+                        // this.$alert("", 'Berhasil Login', 'success');
+                        this.$cookies.set("login",data.data.token)
+                        this.$router.push('/dashboard')
                     }).catch((error) => {
-                        this.$alert("", error,'error');
+                        console.clear();
+                        this.$loading(false)
+                        this.$alert("", error.response.data.message,'error');
                     });
             }
         },

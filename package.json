@@ -27,7 +27,8 @@
     "vue-simple-alert": "^1.1.1",
     "vue-universal-modal": "^1.1.4",
     "vue3-cookies": "^1.0.6",
-    "vue3-simple-typeahead": "^1.0.11"
+    "vue3-simple-typeahead": "^1.0.11",
+    "vuejs-loading-plugin": "^1.0.51"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

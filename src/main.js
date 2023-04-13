@@ -7,7 +7,9 @@ import './registerServiceWorker'
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import VueJsModal from 'vue-js-modal'
+import VueLoading from 'vuejs-loading-plugin'
 
+Vue.use(VueLoading)
 Vue.use(VueJsModal)
 Vue.use(VueCookies);
 Vue.config.productionTip = false

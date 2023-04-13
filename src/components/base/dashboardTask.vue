@@ -235,7 +235,7 @@ import axios from 'axios';
                         this.tasks = data.data;
                         
                         this.filter(this.tasks)
-                        // console.log(data.data)
+                        console.log(data.data)
 
                     }).catch((error) => {
                         this.$alert(error.message,'Error!','error');

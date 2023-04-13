@@ -48,7 +48,7 @@
         </button>
       </div>      
     </modal>
-    <div class="overflow-y-scroll w-full p-10">
+    <div class="overflow-y-scroll w-full md:p-10 p-4">
       <div class="container p-0 md:p-10 bg-gray-800 rounded-lg ">
         <div class="flex-1 p-10 sm:p-0">
           <div class="flex justify-between items-center">
@@ -70,7 +70,7 @@
               </a>
             </div>
           </div>
-          <div class="mb-10 sm:mb-0 mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div class="mb-10 sm:mb-0 mt-10 grid gap-4 grid-cols-1 xl:grid-cols-4 lg:grid-cols-">
             <div @click="showPopup"
               class="group bg-gray-900/30 py-20 px-4 flex flex-col space-y-0 items-center cursor-pointer rounded-md hover:bg-gray-900/40 hover:smooth-hover">
               <a class="bg-gray-900/70 text-white/50 group-hover:text-white group-hover:smooth-hover flex w-20 h-20 rounded-full items-center justify-center"
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-    import workspace from '@/plugin/workspace';
+import workspace from '@/plugin/workspace';
     import axios from 'axios';
     export default {
         mixins : [workspace],
@@ -218,6 +218,7 @@
                   // console.log(error)
               });
           },
+          
           onFilePicked () {
             this.avatar = this.$refs.file.files[0];
             // let filename = files[0].name
