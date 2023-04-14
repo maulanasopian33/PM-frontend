@@ -1,9 +1,9 @@
 <template>
-    <!-- end modal -->
-        <div class="h-full md:p-10 p-2 overflow-y-scroll">
-            <modal name="my-modal" :adaptive="true" height="auto" class="rounded-2xl">
-                <div class=" text-gray-800 p-8 bg-white dark:bg-gray-900">
-                    <div class="flex justify-between w-full">
+    <div class="h-full md:p-10 p-2 overflow-y-scroll">
+        <!-- end modal -->
+        <modal name="my-modal" :adaptive="true" height="auto" class="rounded-2xl">
+            <div class=" text-gray-800 p-8 bg-white dark:bg-gray-900">
+                <div class="flex justify-between w-full">
                         <h2 class="text-lg font-bold text-left dark:text-white">Add Teams</h2>
                     </div>
                     <div class="flex w-full">
@@ -17,7 +17,7 @@
                         </div>
                         <div class="text-left p-6 w-4/6">
                             <label for="" class="mb-3 text-md font-bold dark:text-white">Name</label>
-                            <input v-model="in_workspace_name" type="text"
+                            <input v-model="team_name" type="text"
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         </div>
 
@@ -25,19 +25,23 @@
                     <div class="flex gap-2">
                         <div class="w-1/2">
                             <label for="" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white">Email</label>
-                            <input v-model="in_workspace_name" type="text"
+                            <input v-model="team_email" type="email"
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         </div>
                         <div class="w-1/2">
                             <label for="" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white">No Wa</label>
-                            <input v-model="in_workspace_name" type="text"
-                                class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            <div class="relative">
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3">
+                                    <h2 class="text-lg font-semibold text-gray-900">+62</h2>
+                                </div>
+                                <input v-model="team_no" type="text" class="block w-full rounded-lg border border-gray-300 bg-white p-4 pl-16 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:focus:border-blue-500 dark:focus:ring-blue-500" placeholder="Nomor Whatsapp" required />
+                            </div>
                         </div>
                     </div>
                     <label for="" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white">Password</label>
-                    <input v-model="in_workspace_name" type="text"
+                    <input v-model="team_password" type="password"
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                    <button @click="saveworkspace"
+                    <button @click="saveTeam"
                         class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
                         Save Data
                     </button>
@@ -91,7 +95,7 @@
                 <button @click="showPopup()" class="dark:bg-transparent dark:text-gray-200 rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b md:mx-3 px-4 py-3 md:py-2 my-2">Add Teams</button>
             </div>
             <div class="overflow-x-scroll max-sm:w-[290px] max-w-screen-md lg:max-w-screen-lg  ml-4 mr-0 my-4">
-                <table class="w-full">
+                <table ref="table" class="w-full">
                     <thead class="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-100">
                         <tr>
                             <th
@@ -153,8 +157,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div
-                    class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between w-full">
+                <!-- <div :class="widthtable" class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
                     <span class="text-xs xs:text-sm text-gray-900">
                         Showing 1 to 4 of 50 Entries
                     </span>
@@ -168,7 +171,7 @@
                             Next
                         </button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 </template>
@@ -180,12 +183,49 @@ export default {
     data() {
         return {
             team : [],
+            team_email : '',
+            team_name : '',
+            team_no : '',
+            team_password : '',
+            widthtable : ''
         }
     },
     mounted() {
         this.getdatateam()
+        this.widthtable = 'w-['+this.$refs.table.clientWidth+'px]';
     },
     methods: {
+        saveTeam(){
+            let formData = new FormData();
+            // formData.append("avatar", this.avatar);
+            formData.append("name", this.team_name);
+            formData.append("email", this.team_email);
+            formData.append("nomor", this.team_no);
+            formData.append("password", this.team_password);
+            axios.post(process.env.VUE_APP_BASE+'/add-member', formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "Authorization": `Bearer ${this.$cookies.get("login")}`
+            },
+            }).then(({data}) => {
+                if(data.status){
+                    this.getdatateam()
+                    this.$modal.hide('my-modal')
+                    this.$alert(data.message,'','success',{
+                        confirmButtonText: 'OK',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }else{
+                    this.$alert(data.message,'Error!','error');
+                    this.$modal.hide('my-modal')
+                }
+            }).catch((error) => {
+              console.log(error)
+              this.$alert(error.message,'Error!','error');
+            });
+        },
         getAvatarFromName(name) {
             const firstLetter = name.charAt(0).toUpperCase();
             return firstLetter;
@@ -212,7 +252,7 @@ export default {
                 "Authorization": `Bearer ${this.$cookies.get("login")}`
             },
             }).then(({data}) => {
-              console.log(data)
+                console.log(data)
                 this.team.splice(index, 1)
                 // let msg = this.me + ' menghapus todo ' +item
                 // this.sendmsg(msg,'system','aaa','notif')

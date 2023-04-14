@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-full flex antialiased text-gray-200 bg-gray-900 overflow-hidden">
+  <div class=" w-full flex antialiased text-gray-200 bg-gray-900 overflow-hidden">
     <!-- modal create workspace -->
     <div v-if="show" class=" w-full h-full bg-opacity-30 bg-white fixed z-30 flex items-center justify-center">
       <div class="w-2/4 bg-[#2a2a2c] h-4/5 text-gray-300 rounded-lg p-10 text-left">
@@ -40,7 +40,7 @@
       <!-- Top header -->
         <main class="flex-grow flex flex-row min-h-0 h-full">
           <!-- Left Section -->
-          <ChatLeftsection @parsing="show = $event"></ChatLeftsection>
+          <ChatLeftsection v-show="leftsection"></ChatLeftsection>
           <DetailTask ></DetailTask>
         </main>
     </div>
@@ -128,7 +128,8 @@ import DetailTask from './parsial/detail-task.vue';
           deskripsi : '',
           emailDomain: '',
           emailDomains: [],
-          teams : []
+          teams : [],
+          leftsection : true,
 		    }
     },
     components : {
@@ -139,6 +140,9 @@ import DetailTask from './parsial/detail-task.vue';
       this.getstatus();
       this.getdatauser();
       this.getdatateam();
+      if(window.innerWidth < '460'){
+        this.leftsection = false
+      }
     },
     methods: {
       getstatus() {

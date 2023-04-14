@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view class="h-screen"/>
+    <!-- <MobileBottomnav></MobileBottomnav> -->
   </div>
 </template>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -26,3 +26,11 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
+
+<script>
+import MobileBottomnav from './components/parsial/mobile-bottomnav.vue';
+
+  export default{
+    components: { MobileBottomnav }
+}
+</script>

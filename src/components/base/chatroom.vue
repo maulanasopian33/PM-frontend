@@ -40,7 +40,7 @@
         </div>
         <!-- chat header -->
         <!-- chat body -->
-        <div class="chat-body flex-grow p-4 overflow-y-scroll scroll-smooth">
+        <div ref="chatbody" class="chat-body flex-grow p-4 overflow-y-scroll scroll-smooth">
             <div v-if="showchat">
                 <div v-for="(chat, index) in message">
                     <ChatTime :time="index"></ChatTime>
@@ -409,6 +409,11 @@ export default {
                 this.$alert(error.message, 'Error!', 'error');
             });
         },
+        scrolltobottom(){
+            // console.log(this.$refs.chatbody.scrollHeight);
+            // this.$refs.chatbody.scrollTo(0,this.$refs.chatbody.clientHeight)
+            // console.log(this.$refs.chatbody.clientHeight)
+        },
         listenchat() {
             let channel = 'chat-' + this.id_task
             this.$echo.channel(channel).listen('chat', (e) => {
@@ -424,6 +429,7 @@ export default {
             }).then(({ data }) => {
                 this.message = this.groupChatByDate(data.data)
                 this.msgrender = data.data
+                this.scrolltobottom()
             }).catch((error) => {
                 this.$alert(error.message, 'Error!', 'error');
             });

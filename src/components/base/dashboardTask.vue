@@ -41,10 +41,10 @@
                 <span @click="createtask()" class="bg-orange-500 cursor-pointer px-5 py-3 rounded-full">Add Task</span>
             </div>
             <div class="md:py-10 md:px-5 md:flex">
-                <div class="rounded-lg md:mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
+                <div class="rounded-lg m-0 md:mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
                     <div class="flex">
                         <h3 class="w-1/2 text-2xl">Created</h3>
-                        <h3 class="w-1/2 text-right">2/3</h3>
+                        <h3 class="w-1/2 text-right">{{ created.length }}/{{ sum }}</h3>
                     </div>
                     <div class="h-full" @drop="onDrop($event, 1)" @dragover.prevent @dragenter.prevent >
                     <div v-for="task in created" :key="task.id_task">
@@ -64,10 +64,10 @@
                     </div>
                     </div>
                 </div>
-                <div class="rounded-lg mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
+                <div class="rounded-lg m-0 md:mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
                     <div class="flex">
                         <h3 class="w-1/2 text-xl">On Progress</h3>
-                        <h3 class="w-1/2 text-right">2/3</h3>
+                        <h3 class="w-1/2 text-right">{{ OnProgress.length }}/{{ sum }}</h3>
                     </div>
                     <div class="h-full" @drop="onDrop($event, 2)" @dragover.prevent @dragenter.prevent>
                         <div v-for="task in OnProgress" :key="task.id_task">
@@ -87,10 +87,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="rounded-lg mx-2 my-1 p-5 w-full md:w-1/3 border-2 border-gray-800">
+                <div class="rounded-lg m-0 md:mx-2 my-1 p-5 w-full md:w-1/3 border-2 border-gray-800">
                     <div class="flex">
                         <h3 class="w-1/2 text-2xl">Finished</h3>
-                        <h3 class="w-1/2 text-right">2/3</h3>
+                        <h3 class="w-1/2 text-right">{{ finished.length }}/{{ sum }}</h3>
                     </div>
                     <div class="h-full" @drop="onDrop($event, 3)" @dragover.prevent @dragenter.prevent>
                         <div v-for="task in finished" :key="task.id_task">
@@ -138,7 +138,8 @@ import axios from 'axios';
                 tasks   : [],
                 created : [],
                 OnProgress : [],
-                finished : []
+                finished : [],
+                sum : 0,
 
             }
         },
@@ -233,9 +234,8 @@ import axios from 'axios';
                     },
                     }).then(({data}) => {
                         this.tasks = data.data;
-                        
+                        this.sum = data.count;
                         this.filter(this.tasks)
-                        console.log(data.data)
 
                     }).catch((error) => {
                         this.$alert(error.message,'Error!','error');

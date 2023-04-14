@@ -5,7 +5,7 @@
                 <img class="shadow-md rounded-full w-full h-full object-cover"
                     :src="avatar" alt="" />
             </div>
-            <div class="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
+            <div class="flex-auto ml-4 mr-6 block group-hover:block">
                 <h3 class="text-left text-lg">{{ name }}</h3>
                 <div class="flex items-center text-sm text-gray-600">
                     <p class="truncate">{{ detail }}</p>

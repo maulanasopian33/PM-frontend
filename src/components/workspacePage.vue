@@ -120,9 +120,10 @@
       <!-- Top header -->
         <main class="flex-grow flex flex-row min-h-0 w-screen">
           <!-- Left Section -->
-          <ChatLeftsection class="md:w-1/4 hidden md:block" @parsing="show = $event"></ChatLeftsection>
-          <dashboardtask class="md:w-2/4 w-full" @parsingdata="createTask = $event" :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
+          <ChatLeftsection v-show="leftsection"></ChatLeftsection>
+          <dashboardtask v-show="maincontent" class="md:w-2/4 w-full" @parsingdata="createTask = $event" :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
         </main>
+        <MobileBottomnav item1="Workspace" icon1="fa-earth-asia" item2="Tasks" icon2="fa-list-check" item3="Back" icon3="fa-angle-left" @action="eventbottomnav" v-show="mobileview" class="bottom-0"></MobileBottomnav>
     </div>
 </div>
 </template>
@@ -189,6 +190,7 @@ import ChatLeftsection from './base/chat-leftsection.vue';
 import dashboardtask from './base/dashboardTask.vue';
 import Chatroom from './base/chatroom.vue';
 import workspace from '@/plugin/workspace';
+import MobileBottomnav from './parsial/mobile-bottomnav.vue';
   export default {
     mixins : [workspace],
     name: 'workspacepage',
@@ -211,22 +213,45 @@ import workspace from '@/plugin/workspace';
           deskripsi : '',
           emailDomain: '',
           emailDomains: [],
-          teams : []
+          teams : [],
+          mobileview : false,
+          leftsection : true,
+          maincontent : true
 		    }
     },
     components : {
-          ChatLeftsection,
-          Chatroom,
-          Chatroom,
-          dashboardtask,
-      },
+    ChatLeftsection,
+    Chatroom,
+    Chatroom,
+    dashboardtask,
+    MobileBottomnav
+},
     props: {
       msg: String
     },
     mounted() {
       this.getdatauser();
+      if(window.innerWidth < '460'){
+        this.mobileview = true
+        this.leftsection = false
+      }
     },
     methods: {
+      eventbottomnav(value){
+        switch(value){
+          case 0 :
+            this.leftsection = true
+            this.maincontent = false
+            break;
+          case 1 :
+            this.leftsection = false
+            this.maincontent = true
+            break;
+          case 2 :
+            this.$router.push('/dashboard');
+            break;
+        }
+      },
       getstatus() {
           if (this.$cookies.get("login") == null) {
             this.$router.push('/login')

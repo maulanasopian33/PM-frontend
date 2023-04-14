@@ -217,7 +217,7 @@ export default {
         return data.split('/')[3]
       },
       setview(){
-        if(this.screenWidth < 640){
+        if(this.screenWidth < 460){
           this.chatview = false
           this.detailView = true
         }else{
@@ -230,12 +230,14 @@ export default {
         this.setview()
       },
       detailview(data){
-        if(data){
-          this.chatview = false
-          this.detailView = true
-        }else{
-          this.chatview = true
-          this.detailView = false
+        if (this.screenWidth < 460) {
+          if(data){
+            this.chatview = false
+            this.detailView = true
+          }else{
+            this.chatview = true
+            this.detailView = false
+          }
         }
       },
       getchat(){
