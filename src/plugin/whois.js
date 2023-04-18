@@ -9,6 +9,7 @@ export default {
             }).then(({ data }) => {
 
                 this.isadmin = data.admin
+                this.id = data.id
             }).catch((error) => {
                 this.$alert(error.message, 'Error!', 'error');
             });

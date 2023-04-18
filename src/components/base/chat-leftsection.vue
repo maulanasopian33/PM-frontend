@@ -3,19 +3,27 @@
         class="flex flex-col flex-none overflow-auto group w-full lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
         <div class="header p-4 flex flex-row justify-between items-center flex-none">
             <!-- brand icon -->
-            <div class="w-16 h-16 relative flex flex-shrink-0" style="filter: invert(100%);">
-                <img class="rounded-full w-full h-full object-cover" alt="ravisankarchinnam"
-                    src="https://avatars3.githubusercontent.com/u/22351907?s=60" />
+            <div class="h-20 relative flex flex-shrink-0">
+                <router-link to="/dashboard">
+                    <img class=" w-full h-full" alt="ravisankarchinnam"
+                        src="/img/logo_banner_light.png" />
+                </router-link>
             </div>
             <!-- brand icon -->
             <!-- Title app -->
-            <p class="text-md font-bold block text-left">Project Manager</p>
+            <!-- <p class="text-md font-bold block text-left">ProManage</p> -->
             <!-- title app -->
             <!-- create new message -->
-            <a @click="logout()"
-                class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </a>
+            <div class="flex gap-1">
+                <a @click="reload()"
+                    class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
+                    <i class="fa-solid fa-rotate"></i>
+                </a>
+                <a @click="logout()"
+                    class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
             <!-- create new message -->
         </div>
         <!-- search box -->
@@ -164,6 +172,9 @@ import eventBus from '@/plugin/eventBus';
             // });
         },
         methods: {
+            reload(){
+                location.reload()
+            },
             parsingdata(data){
                 this.$emit("parsing", data);
                 this.modalshow = data 

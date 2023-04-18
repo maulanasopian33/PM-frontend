@@ -12,7 +12,7 @@
                                 src="https://images.unsplash.com/photo-1531316282956-d38457be0993?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80"
                                 alt="" class="rounded-full w-20  h-20 border-[1px]">
                             <input ref="file" hidden type="file" @change="onFilePicked()">
-                            <button @click="selectFile()"
+                            <button @click=""
                                 class="mt-2 py-3 px-4 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">Select</button>
                         </div>
                         <div class="text-left p-6 w-4/6">
@@ -148,7 +148,7 @@
                                     <span class="relative">Edit</span>
                                 </span>
                                 <span
-                                    class="relative inline-block px-3 py-1 font-semibold text-gray-900 cursor-pointer leading-tight" @click="deletemember(item.name,item.id)">
+                                    class="relative inline-block mt-2 px-3 py-1 font-semibold text-red-900 cursor-pointer leading-tight" @click="deletemember(item.name,item.id)">
                                     <span aria-hidden
                                         class="absolute inset-0 bg-red-500 opacity-50 rounded-full"></span>
                                     <span class="relative">Hapus</span>
@@ -234,7 +234,7 @@ export default {
             this.$modal.show('my-modal')
           },
         getdatateam(){
-          axios.get('http://localhost:8000/api/get-team',{
+          axios.get(process.env.VUE_APP_BASE+'/get-team',{
               headers: {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
@@ -246,7 +246,7 @@ export default {
               });
       },
       deletemember(item,index){
-        this.$confirm('are you sure to delete '+item,"Are you sure?",'question').then(() => {
+        this.$confirm('are you sure to delete '+item,"Are you sure?",'question').then((result) => {
           axios.delete(process.env.VUE_APP_BASE+'/destroymember/'+index,{
             headers: {
                 "Authorization": `Bearer ${this.$cookies.get("login")}`

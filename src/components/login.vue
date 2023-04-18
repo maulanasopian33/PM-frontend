@@ -1,11 +1,11 @@
 <template>
         <!-- Container -->
-    <div class="app-background flex flex-wrap min-h-screen w-full content-center justify-center py-10">
-        <vue-multiple-themes
+    <div class="bg-gray-200 flex flex-wrap shadow-xl min-h-screen w-full content-center justify-center py-10">
+        <!-- <vue-multiple-themes
       :defaultTheme="'Pallet12'"
       >
 
-    </vue-multiple-themes>
+    </vue-multiple-themes> -->
         <!-- Login component -->
         <div class="flex shadow-md">
             <!-- Login form -->
@@ -13,6 +13,7 @@
                 style="width: 24rem; height: 32rem;">
                 <div class="w-72">
                     <!-- Heading -->
+                    <img src="/img/icons/icon.png" class="h-20 mx-auto"/>
                     <h1 class="text-xl font-semibold">Welcome back</h1>
                     <small class="text-gray-400">Welcome back! Please enter your details</small>
 
@@ -21,24 +22,24 @@
                         <div class="mb-3">
                             <label class="mb-2 block text-xs font-semibold">Email</label>
                             <input type="email" v-model="loginData.email" placeholder="Enter your email"
-                                class="block w-full rounded-md border border-gray-300 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" />
+                                class="block w-full rounded-md border border-gray-300 focus:border-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-800 py-1 px-1.5 text-gray-500" />
                         </div>
 
                         <div class="mb-3">
                             <label class="mb-2 block text-xs font-semibold">Password</label>
                             <input type="password" v-model="loginData.password" placeholder="*****"
-                                class="block w-full rounded-md border border-gray-300 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-1.5 text-gray-500" />
+                                class="block w-full rounded-md border border-gray-300 focus:border-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-800 py-1 px-1.5 text-gray-500" />
                         </div>
 
                         <div class="mb-3 flex flex-wrap content-center">
-                            <input id="remember" type="checkbox" class="mr-1 checked:bg-purple-700" /> <label
+                            <input id="remember" type="checkbox" class="mr-1 checked:bg-gray-800" /> <label
                                 for="remember" class="mr-auto text-xs font-semibold">Remember for 30 days</label>
-                            <a href="#" class="text-xs font-semibold text-purple-700">Forgot password?</a>
+                            <a href="#" class="text-xs font-semibold text-gray-800">Forgot password?</a>
                         </div>
 
                         <div class="mb-3">
                             <button
-                                class="mb-1.5 block w-full text-center text-white app-card-tag-bg hover:bg-purple-900 px-2 py-1.5 rounded-md">Sign
+                                class="mb-1.5 block w-full text-center bg-gray-800 text-white hover:bg-gray-500 px-2 py-1.5 rounded-md">Sign
                                 in</button>
                         </div>
                     </form>
@@ -46,7 +47,7 @@
                     <!-- Footer -->
                     <div class="text-center">
                         <span class="text-xs text-gray-400 font-semibold">Don't have account?</span>
-                        <a href="#" class="text-xs font-semibold text-purple-700">Sign up</a>
+                        <a href="#" class="text-xs font-semibold text-gray-800">Sign up</a>
                     </div>
                 </div>
             </div>
@@ -54,23 +55,22 @@
             <!-- Login banner -->
             <div class="flex hidden md:block flex-wrap content-center justify-center rounded-r-md" style="width: 24rem; height: 32rem;">
                 <img class="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
-                    src="https://i.imgur.com/9l1A4OS.jpeg">
+                    src="/img/Promanage-login-hero.png">
             </div>
 
         </div>
 
         <!-- Credit -->
-        <!-- <div class="mt-3 w-full">
-            <p class="text-center">Made by <a target="_blank" href="https://www.instagram.com/_inubayuaji/"
-                    class="text-purple-700">Inu Bayu Aji</a> and ispired by <a target="_blank"
-                    href="https://dribbble.com/shots/17564792-Log-in-page-Untitled-UI" class="text-purple-700">this</a>.
+        <div class="mt-5 w-full">
+            <p class="text-center flex justify-center font-bold">Powered by  <a target="_blank" href="https://www.instagram.com/_inubayuaji/"
+                    class="text-purple-700"><img class="h-6" src="https://www.antmediahost.com/wp-content/uploads/2021/12/Logo-AntMediaHost.webp"/></a>.
             </p>
-        </div> -->
+        </div>
     </div>
 </template>
 
 <script>
-  import VueMultipleThemes from "vue-multiple-themes";
+//   import VueMultipleThemes from "vue-multiple-themes";
 import axios from 'axios'
     export default {
         name : 'login',
@@ -83,7 +83,7 @@ import axios from 'axios'
             }
         },
         components : {
-            VueMultipleThemes,
+            // VueMultipleThemes,
         },
         mounted(){
             this.getstatus();

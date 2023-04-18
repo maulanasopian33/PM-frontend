@@ -88,6 +88,11 @@
                 :alt="data.name" />
               <h4 class="text-white text-md font-bold capitalize text-center break-all">{{ data.name }}</h4>
               <p class="text-white/50 text-sm break-all">{{ data.deskripsi }}</p>
+              <div class="absolute -bottom-2 md:bottom-5 flex gap-2">
+                <button class="bg-yellow-700 text-white px-2 text-sm md:px-4 py-1 md:py-2 w-full rounded-md">Edit</button>
+                <button class="bg-red-700 text-white px-4 py-2 w-full rounded-md" @click="deleteworkspace(data.id, data.name)">Hapus</button>
+
+              </div>
               <p class="absolute top-2 text-white/20 inline-flex items-center text-xs">22 Online <span
                   class="ml-2 w-2 h-2 block bg-green-500 rounded-full group-hover:animate-pulse"></span></p>
             </div>
@@ -99,7 +104,7 @@
 </template>
 
 <script>
-import workspace from '@/plugin/workspace';
+    import workspace from '@/plugin/workspace';
     import axios from 'axios';
     export default {
         mixins : [workspace],
@@ -132,6 +137,26 @@ import workspace from '@/plugin/workspace';
           showPopup() {
             this.$modal.show('my-modal')
           },
+          deleteworkspace(id, name){
+            this.$confirm('are you sure to delete workspace ' + name, "Are you sure?", 'question').then(() => {
+              axios.delete(process.env.VUE_APP_BASE + '/workspace/' + id, {
+                headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+                },
+              }).then(({data}) => {
+                this.$alert("", 'Deleted', 'success', {
+                  confirmButtonText: 'OK',
+                  showCancelButton: false,
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                location.reload()
+              }).catch((error) => {
+                this.$alert(error.message, 'Error!', 'error');
+                console.log(error)
+              });
+            });
+          },
           saveworkspace(){
             let data = [];
             this.emailDomains.forEach((item) => {
@@ -144,7 +169,7 @@ import workspace from '@/plugin/workspace';
             let formData = new FormData();
             formData.append("avatar", this.avatar);
             formData.append("name", this.in_workspace_name);
-            formData.append("assigment", this.id+','+data.toString());
+            formData.append("assigment", data.toString());
             formData.append("deskripsi", this.in_workspace_name);
             // formData.append("deskripsi", this.in_deskripsi);
             axios.post(process.env.VUE_APP_BASE+'/add-workspace', formData, {
@@ -154,6 +179,7 @@ import workspace from '@/plugin/workspace';
             },
             }).then((response) => {
               this.$modal.hide('my-modal')
+              location.reload()
               // console.log(response)
               // this.$router.go(this.$router.currentRoute)
             }).catch((error) => {
@@ -189,19 +215,6 @@ import workspace from '@/plugin/workspace';
           },
           revertTag() {
             this.emailDomain = '';
-          },
-          getdatauser(){
-              axios.get(process.env.VUE_APP_BASE+'/whois',{
-                  headers: {
-                      "Authorization": `Bearer ${this.$cookies.get("login")}`
-                  },
-                  }).then(({data}) => {
-                      this.myname = data.name
-                      this.id = data.id
-                      this.getdatateam()
-                  }).catch((error) => {
-                      // console.log(error)
-                  });
           },
           getdatateam(){
             axios.get(process.env.VUE_APP_BASE+'/get-team',{

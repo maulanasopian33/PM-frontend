@@ -1,7 +1,7 @@
 <template>
     <div class="w-full md:flex">
       <div v-show="chatview" class="md:w-1/2 w-full flex-none">
-        <chatroom  @statusview="detailview" :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
+        <chatroom  :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
       </div>
       <div v-show="detailView" class="md:w-1/2 w-full bg-gray-900 text-white p-10 px-5 border-l-2 border-gray-600 h-full overflow-y-scroll">
         <div class="hidden max-sm:inline-flex  w-full h-12 text-white items-center px-2 justify-between">

@@ -47,7 +47,7 @@
                     <div v-for="item in chat">
                         <chatLeftlike v-show="item.type === 'like'" v-if="item.from !== myname && item.from !== 'system'"
                             :from="item.from"></chatLeftlike>
-                        <ChatLeftimg v-show="item.type === 'file'" v-if="item.from !== myname && item.from !== 'system'" caption="" :img="url + item.message" avatar="" ></ChatLeftimg>
+                        <ChatLeftimg v-show="item.type === 'file'" v-if="item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
                         <chatRightlike v-show="item.type === 'like'" v-if="item.from === myname"></chatRightlike>
                         <ChatRightimg v-show="item.type === 'file'" v-if="item.from === myname" caption="" :img="url + item.message" ></ChatRightimg>
                         <ChatRightNormal v-show="item.type === 'normal'" v-if="item.from === myname" :msg="item.message">
