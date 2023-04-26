@@ -1,9 +1,9 @@
 <template>
   <div class="overflow-y-scroll">
     <modal name="my-modal" :adaptive="true" height="auto" class="rounded-2xl">
-      <div class=" text-gray-800 p-8 bg-white dark:bg-gray-900">
+      <div class=" text-gray-800 p-8 bg-gray-900">
         <div class="flex justify-between w-full">
-          <h2 class="text-lg font-bold text-left dark:text-white">Create Workspace</h2>
+          <h2 class="text-lg font-bold text-left text-white">Create Workspace</h2>
         </div>
         <div class="flex w-full">
           <div class="p-6">
@@ -12,12 +12,12 @@
             <button @click="selectFile()" class="mt-2 py-3 px-4 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800" >Select</button>
           </div>
           <div class="text-left p-6 w-4/6">
-            <label for="" class="mb-3 text-md font-bold dark:text-white">Workspace name</label>
+            <label for="" class="mb-3 text-md font-bold text-white">Workspace name</label>
             <input v-model="in_workspace_name" type="text" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
           </div>
           
         </div>
-        <label for="" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white">Assigment</label>
+        <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Assigment</label>
         <div class="flex flex-wrap overflow-x-scroll">
             <span v-for="(tag, index) in emailDomains" v-bind:key="index" class=" m-1 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-indigo-500 hover:bg-indigo-300 text-white hover:text-black cursor-pointer">
               {{ tag }}
@@ -39,7 +39,7 @@
             </select>
           </div>
         </div>
-        <label for="email" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white mt-5">Deskripsi</label>
+        <label for="email" class="block text-sm text-left font-bold ml-1 mb-2 text-white mt-5">Deskripsi</label>
         <div class="relative">
           <textarea type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
         </div>

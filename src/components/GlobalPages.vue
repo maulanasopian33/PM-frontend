@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex antialiased bg-gray-200 dark:text-gray-200 dark:bg-gray-900 overflow-hidden">
+  <div class="w-full flex antialiased bg-gray-900 text-gray-200 overflow-hidden">
     <div class="flex-1 flex flex-col">
       <!-- Top header -->
         <div class="border-b-2 border-gray-800 p-2 flex flex-row z-20">

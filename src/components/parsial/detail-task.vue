@@ -1,10 +1,10 @@
 <template>
     <div class="w-full md:flex">
-      <div v-show="chatview" class="md:w-1/2 w-full flex-none">
-        <chatroom  :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
+      <div v-show="chatview" class="lg:w-1/2 w-full flex-none">
+        <chatroom @statusview="detailview(true)" :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
       </div>
-      <div v-show="detailView" class="md:w-1/2 w-full bg-gray-900 text-white p-10 px-5 border-l-2 border-gray-600 h-full overflow-y-scroll">
-        <div class="hidden max-sm:inline-flex  w-full h-12 text-white items-center px-2 justify-between">
+      <div v-show="detailView" class="lg:w-1/2 w-full bg-gray-900 text-white p-5 border-l-2 border-gray-600 h-full overflow-y-scroll">
+        <div class="hidden max-lg:inline-flex  w-full h-12 text-white items-center px-2 mb-5 justify-between">
           <div>
             <button class="hover:bg-gray-800 p-3 rounded-full" @click="$router.go(-1)">
               <svg class="fill-current" width="20px" height="20px" viewBox="0 0 1024 1024">
@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="flex items-center mb-4">
-          <h2 class="text-2xl font-bold px-3 py-1 text-left flex-1">{{ taskname }}</h2>
+          <h2 class="text-2xl font-bold px-3 py-1 text-left flex-1 break-all">{{ taskname }}</h2>
           <span class="bg-blue-500 px-3 rounded-md w-fit h-7 text-center mx-3">{{ detailpriority }}</span>
           <div class='mx-auto rounded-lg shadow-xl items-center justify-center flex'>
           <span class="p-1 inline-flex bg-gray-900 rounded-md">
@@ -186,7 +186,7 @@ export default {
       },
       onFilePicked() {
         if (this.$refs.file.files[0].size > 20971520) {
-          this.$alert(error.message, 'Error!', 'error');
+          this.$alert("kegedean bos, nyesek database hihi", 'Error!', 'error');
         } else{
           let formData = new FormData();
           formData.append("msg", this.$refs.file.files[0]);
@@ -217,7 +217,7 @@ export default {
         return data.split('/')[3]
       },
       setview(){
-        if(this.screenWidth < 460){
+        if(this.screenWidth < 950){
           this.chatview = false
           this.detailView = true
         }else{
@@ -227,10 +227,10 @@ export default {
       },
       getWindowSize(){
         this.screenWidth = window.innerWidth
-        this.setview()
+        // this.setview()
       },
       detailview(data){
-        if (this.screenWidth < 460) {
+        if (this.screenWidth < 950) {
           if(data){
             this.chatview = false
             this.detailView = true

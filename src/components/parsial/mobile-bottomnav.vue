@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <div class="px-7 bg-white dark:bg-gray-900 shadow-lg rounded-2xl">
+        <div class="px-7 bg-gray-900 shadow-lg rounded-2xl">
             <div class="flex">
                 <div class="flex-1 group">
                     <a @click="setaction(0)" class="flex items-end justify-center text-center mx-auto px-4 pt-2 w-full text-gray-400 group-hover:text-white">

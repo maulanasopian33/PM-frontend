@@ -2,9 +2,9 @@
     <div class="h-full md:p-10 p-2 overflow-y-scroll">
         <!-- end modal -->
         <modal name="my-modal" :adaptive="true" height="auto" class="rounded-2xl">
-            <div class=" text-gray-800 p-8 bg-white dark:bg-gray-900">
+            <div class=" text-gray-800 p-8 bg-gray-900">
                 <div class="flex justify-between w-full">
-                        <h2 class="text-lg font-bold text-left dark:text-white">Add Teams</h2>
+                        <h2 class="text-lg font-bold text-left text-white">Add Teams</h2>
                     </div>
                     <div class="flex w-full">
                         <div class="p-6">
@@ -13,10 +13,10 @@
                                 alt="" class="rounded-full w-20  h-20 border-[1px]">
                             <input ref="file" hidden type="file" @change="onFilePicked()">
                             <button @click=""
-                                class="mt-2 py-3 px-4 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">Select</button>
+                                class="mt-2 py-3 px-4 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm focus:ring-offset-gray-800">Select</button>
                         </div>
                         <div class="text-left p-6 w-4/6">
-                            <label for="" class="mb-3 text-md font-bold dark:text-white">Name</label>
+                            <label for="" class="mb-3 text-md font-bold text-white">Name</label>
                             <input v-model="team_name" type="text"
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         </div>
@@ -24,12 +24,12 @@
                     </div>
                     <div class="flex gap-2">
                         <div class="w-1/2">
-                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white">Email</label>
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Email</label>
                             <input v-model="team_email" type="email"
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         </div>
                         <div class="w-1/2">
-                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white">No Wa</label>
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">No Wa</label>
                             <div class="relative">
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3">
                                     <h2 class="text-lg font-semibold text-gray-900">+62</h2>
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <label for="" class="block text-sm text-left font-bold ml-1 mb-2 dark:text-white">Password</label>
+                    <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Password</label>
                     <input v-model="team_password" type="password"
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                     <button @click="saveTeam"
@@ -48,19 +48,19 @@
                 </div>
             </modal>
             <div>
-                <h2 class="text-2xl font-semibold text-left leading-tight dark:text-white px-4">Teams</h2>
+                <h2 class="text-2xl font-semibold text-left leading-tight text-white px-4">Teams</h2>
             </div>
             <div class="my-2 flex sm:flex-row flex-col px-4">
                 <div class="flex flex-row mb-1 sm:mb-0 py-3">
                     <div class="relative">
                         <select
-                            class="appearance-none h-full rounded-l border block w-full bg-white dark:bg-transparent dark:text-gray-200 border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:border-gray-500">
+                            class="appearance-none h-full rounded-l border block w-full bg-transparent text-gray-200 border-gray-400 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-gray-900 focus:border-gray-500">
                             <option>5</option>
                             <option>10</option>
                             <option>20</option>
                         </select>
                         <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 dark:bg-transparent dark:text-gray-200 text-gray-700">
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 bg-transparent text-gray-200 ">
                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
@@ -68,13 +68,13 @@
                     </div>
                     <div class="relative">
                         <select
-                            class=" h-full rounded-r border-t dark:bg-transparent dark:text-gray-200 sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white dark:focus:bg-gray-900 border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                            class=" h-full rounded-r border-t bg-transparent text-gray-200 sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full focus:bg-gray-900 border-gray-400  py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r  focus:border-gray-500">
                             <option>All</option>
                             <option>Active</option>
                             <option>Inactive</option>
                         </select>
                         <div
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center dark:bg-transparent dark:text-gray-200 px-2 text-gray-700 dark:focus:bg-gray-900">
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center bg-transparent text-gray-200 px-2 focus:bg-gray-900">
                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
@@ -90,13 +90,13 @@
                         </svg>
                     </span>
                     <input placeholder="Search"
-                        class="appearance-none dark:bg-transparent dark:focus:bg-gray-900 dark:placeholder-gray-100 dark:text-gray-200 rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
+                        class="appearance-none bg-transparent focus:bg-gray-900 placeholder-gray-100 text-gray-200 rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full text-sm  focus:placeholder-gray-600 focus:text-gray-200 focus:outline-none" />
                 </div>
-                <button @click="showPopup()" class="dark:bg-transparent dark:text-gray-200 rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b md:mx-3 px-4 py-3 md:py-2 my-2">Add Teams</button>
+                <button @click="showPopup()" class="bg-transparent text-gray-200 rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b md:mx-3 px-4 py-3 md:py-2 my-2">Add Teams</button>
             </div>
-            <div class="overflow-x-scroll max-sm:w-[290px] max-w-screen-md lg:max-w-screen-lg  ml-4 mr-0 my-4">
+            <div class="overflow-x-scroll max-sm:w-[260px] max-w-screen-md lg:max-w-screen-lg  ml-4 mr-0 my-4">
                 <table ref="table" class="w-full">
-                    <thead class="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-100">
+                    <thead class="bg-gray-800 text-gray-100">
                         <tr>
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 text-left text-xs font-semibold  uppercase tracking-wider">

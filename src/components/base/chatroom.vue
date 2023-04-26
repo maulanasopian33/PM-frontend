@@ -49,7 +49,7 @@
                             :from="item.from"></chatLeftlike>
                         <ChatLeftimg v-show="item.type === 'file'" v-if="item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
                         <chatRightlike v-show="item.type === 'like'" v-if="item.from === myname"></chatRightlike>
-                        <ChatRightimg v-show="item.type === 'file'" v-if="item.from === myname" caption="" :img="url + item.message" ></ChatRightimg>
+                        <ChatRightimg v-if="item.type === 'file' && item.from === myname" caption="" :img="url + item.message" ></ChatRightimg>
                         <ChatRightNormal v-show="item.type === 'normal'" v-if="item.from === myname" :msg="item.message">
                         </ChatRightNormal>
                         <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
@@ -265,8 +265,8 @@ export default {
         this.displayMessage()
         this.getdatauser()
         setTimeout(() => {
-            this.listenchat()
             this.getchat()
+            this.listenchat()
             this.getdatatask(this.id_task)
         }, 3000);
     },
@@ -429,7 +429,8 @@ export default {
             }).then(({ data }) => {
                 this.message = this.groupChatByDate(data.data)
                 this.msgrender = data.data
-                this.scrolltobottom()
+                // console.log(this.message)
+                // this.scrolltobottom()
             }).catch((error) => {
                 this.$alert(error.message, 'Error!', 'error');
             });
