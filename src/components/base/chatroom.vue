@@ -43,7 +43,7 @@
         <div ref="chatbody" class="chat-body flex-grow p-4 overflow-y-scroll scroll-smooth">
             <div v-if="showchat">
                 <div v-for="(chat, index) in message">
-                    <ChatTime :time="index"></ChatTime>
+                    <ChatTime :time="(index == new Date().toLocaleDateString()) ? 'Today' : index"></ChatTime>
                     <div v-for="item in chat">
                         <chatLeftlike v-show="item.type === 'like'" v-if="item.from !== myname && item.from !== 'system'"
                             :from="item.from"></chatLeftlike>

@@ -1,5 +1,84 @@
 <template>
         <section class="flex flex-col flex-auto border-l border-gray-800">
+            <modal name="create-task" :adaptive="true" height="auto" class="rounded-2xl">
+                <div class=" text-gray-800 p-8 bg-gray-900">
+                    <div class="flex flex-col justify-between w-full overflow-y-scroll">
+                        <h2 class="text-lg font-bold text-left text-white">Add Task</h2>
+                        <div class="w-full my-1">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Task Name</label>
+                            <input v-model="name_task" type="text"
+                                class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        </div>
+                        <div class="w-full my-1">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Priority</label>
+                            <div class="inline-block relative w-full">
+                                <select v-model="priority"
+                                    class="block appearance-none mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                        </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <div class="w-1/2">
+                                <label for="" class="block text-sm text-left font-bold mb-2 text-white">Start Date</label>
+                                <input v-model="startdate" type="date"
+                                    class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            </div>
+                            <div class="w-1/2">
+                                <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Due Date</label>
+                                <input type="date" v-model="duedate" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required />
+                            </div>
+                        </div>
+                        <div class="w-full my-1">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Assigment</label>
+                            <div class="flex flex-wrap overflow-x-scroll">
+                                <span v-for="(tag, index) in emailDomains" v-bind:key="index" class=" m-1 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-indigo-500 hover:bg-indigo-300 text-white hover:text-black cursor-pointer">
+                                    {{ tag }}
+                                    <button
+                                        type="button"
+                                        class="flex-shrink-0 -mr-0.5 ml-1.5 inline-flex hover:bg-indigo-400 p-1 rounded-full"
+                                        v-on:click="removeTag(index)">
+                                        <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                                        <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex mt-1 overflow-x-scroll bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline border border-gray-300">
+                            <div class="flex-grow text-gray-700 text-center">
+                                <select class="h-full rounded-lg py-2 pl-2 w-full pr-4 block appearance-none leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 outline-none" @change="processTagsOnKeyUpEvent($event.target.value)">
+                                <option value="" >Pilih Anggota Tim</option>
+                                <option v-for="team in teams" :value="team.name" :key="team.id">{{ team.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label for="email" class="block text-sm text-left font-bold ml-1 mb-2 text-white mt-5">Deskripsi</label>
+                        <div class="relative">
+                            <textarea v-model="deskripsi" type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
+                        </div>
+                        <div class="flex gap-1 justify-between">
+                            <button @click="savetask()" class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                            Save Task
+                            </button>
+                            <button @click="hidePopup" class="text-center mt-5 w-full border rounded-xl outline-none py-5  border-blue-700 text-white text-sm shadow-sm">
+                            Cancel
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </modal>
         <!-- chat header -->
         <div class="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
             <div class="flex">
@@ -36,9 +115,9 @@
                 </a> -->
             </div>
         </div>
-        <div class="chat-body md:p-4 pt-10 flex-1 overflow-y-scroll">
+        <div class="chat-body md:p-4 pt-10 flex-1">
             <div class="text-end w-full px-4">
-                <span @click="createtask()" class="bg-orange-500 cursor-pointer px-5 py-3 rounded-full">Add Task</span>
+                <span @click="showPopup" class="bg-blue-600 cursor-pointer px-5 py-3 rounded-full">Add Task</span>
             </div>
             <div class="md:py-10 md:px-5 md:flex">
                 <div class="rounded-lg m-0 md:mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
@@ -140,6 +219,15 @@ import axios from 'axios';
                 OnProgress : [],
                 finished : [],
                 sum : 0,
+                name_task : '',
+                priority : '',
+                startdate : '',
+                duedate : '',
+                assigment : '',
+                deskripsi : '',
+                emailDomain: '',
+                emailDomains: [],
+                teams : [],
 
             }
         },
@@ -150,6 +238,41 @@ import axios from 'axios';
             this.gettask();
         },
         methods: {
+            sanitizeTag(value) {
+                return value.replace(/<[^>]*>?/gm, '').trim();
+            },
+            addIfUnique(array, value) {
+                return [...new Set(array).add(value)];
+            },
+            processTagsOnKeyUpEvent(value) {
+                if (this.emailDomains.length < 20) {
+                this.emailDomain = this.sanitizeTag(value);
+
+                if (value.length > 0) {
+                    this.revertTag();
+                    let tags = [value];
+                    tags.forEach((tag) => {
+                        if (tag.length > 0) {
+                        this.emailDomains = this.addIfUnique(this.emailDomains, tag);
+                        }
+                    });
+                }
+                } else {
+                this.revertTag();
+                }
+            },
+            removeTag(index) {
+                this.emailDomains.splice(index, 1);
+            },
+            revertTag() {
+                this.emailDomain = '';
+            },
+            showPopup() {
+                this.$modal.show('create-task')
+            },
+            hidePopup() {
+                this.$modal.hide('create-task')
+            },
             // drag & drop
             startDrag(evt, item, pos) {
                 evt.dataTransfer.dropEffect = 'move'
@@ -200,6 +323,74 @@ import axios from 'axios';
                     this.$alert(error.message, 'Error!', 'error');
                 });
             },
+            getdatauser(){
+                axios.get(process.env.VUE_APP_BASE+'/whois',{
+                    headers: {
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`
+                    },
+                    }).then(({data}) => {
+                        this.myname = data.name
+                        this.id = data.id
+                        this.getdatateam()
+                    }).catch((error) => {
+                        // console.log(error)
+                    });
+            },
+            getdatateam(){
+                axios.get(process.env.VUE_APP_BASE+'/get-team',{
+                    headers: {
+                        "Authorization": `Bearer ${this.$cookies.get("login")}`
+                    },
+                    }).then(({data}) => {
+                        // console.log('datateam',data.data)
+                        let selfdata = this.myname
+                        this.teams = data.data.filter(function(e){
+                            return e.name !== selfdata
+                        });
+                    }).catch((error) => {
+                        // console.log(error)
+                    });
+            },
+            selectFile(){
+                let fileInputElement = this.$refs.file
+                fileInputElement.click();
+            },
+            savetask(){
+                let data = [];
+                this.emailDomains.forEach((item) => {
+                data.push(this.teams.filter(function(e){
+                    return e.name == item
+                })[0].id)
+                });
+                let decode = atob(this.$route.params.workspace);
+                let splitdetail = decode.split(','); 
+                let names = splitdetail[0].toString();
+                this.createTask = false;
+                let formData = new FormData();
+                formData.append("name", this.name_task);
+                formData.append("priority", this.priority);
+                formData.append("start_date", this.startdate);
+                formData.append("due_date", this.duedate);
+                formData.append("status", 'created');
+                formData.append("assigment", this.id+','+data.toString());
+                formData.append("deskripsi", this.deskripsi);
+                formData.append("workspace", names);
+                console.log(formData)
+                axios.post(process.env.VUE_APP_BASE+'/task', formData, {
+                headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${this.$cookies.get("login")}`
+                },
+                }).then((response) => {
+                // console.log(response)
+                this.$router.go()
+                }).catch((error) => {
+                this.$alert("", error,'error');
+                });
+            },
+            parsingdata(data){
+                this.show = data
+            },
             encoder(msg){
                 var encode = btoa(msg); 
                 return encode
@@ -213,19 +404,6 @@ import axios from 'axios';
                 this.names = splitdetail[0].toString();
                 this.avatar = splitdetail[1];
 
-            },
-            getdatauser(){
-                axios.get(process.env.VUE_APP_BASE+'/whois',{
-                    headers: {
-                        "Authorization": `Bearer ${this.$cookies.get("login")}`
-                    },
-                    }).then(({data}) => {
-                        
-                        this.id = data.id
-                    }).catch((error) => {
-                        this.$alert(error.message,'Error!','error');
-                        // console.log(error)
-                    });
             },
             gettask(){
                 axios.get(process.env.VUE_APP_BASE+'/task/workspace/'+this.names,{

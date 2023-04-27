@@ -9,11 +9,11 @@
                     <div class="flex w-full">
                         <div class="p-6">
                             <img ref="avatar"
-                                src="https://images.unsplash.com/photo-1531316282956-d38457be0993?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80"
+                                src="/img/camera.png"
                                 alt="" class="rounded-full w-20  h-20 border-[1px]">
                             <input ref="file" hidden type="file" @change="onFilePicked()">
                             <button @click=""
-                                class="mt-2 py-3 px-4 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm focus:ring-offset-gray-800">Select</button>
+                                class="hidden mt-2 py-3 px-4 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm focus:ring-offset-gray-800">Select</button>
                         </div>
                         <div class="text-left p-6 w-4/6">
                             <label for="" class="mb-3 text-md font-bold text-white">Name</label>
@@ -21,6 +21,11 @@
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                         </div>
 
+                    </div>
+                    <div class="w-full my-2">
+                        <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Username</label>
+                        <input v-model="team_username" type="text"
+                            class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                     </div>
                     <div class="flex gap-2">
                         <div class="w-1/2">
@@ -44,6 +49,66 @@
                     <button @click="saveTeam"
                         class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
                         Save Data
+                    </button>
+                </div>
+            </modal>
+        <modal name="edit-modal" :adaptive="true" height="auto" class="rounded-2xl">
+            <div class=" text-gray-800 p-8 bg-gray-900">
+                <div class="flex justify-between w-full">
+                        <h2 class="text-lg font-bold text-left text-white">Edit Teams</h2>
+                    </div>
+                    <div class="flex w-full">
+                        <div class="p-6">
+                            <img ref="avatar"
+                                src="/img/camera.png"
+                                alt="" class="rounded-full w-20  h-20 border-[1px]">
+                            <input ref="file" hidden type="file" @change="onFilePicked()">
+                            <button @click=""
+                                class="hidden mt-2 py-3 px-4 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm focus:ring-offset-gray-800">Select</button>
+                        </div>
+                        <div class="text-left p-6 w-4/6">
+                            <label for="" class="mb-3 text-md font-bold text-white">Name</label>
+                            <input v-model="team_name" type="text"
+                                class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        </div>
+
+                    </div>
+                    <div class="w-full my-2">
+                        <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Username</label>
+                        <input v-model="team_username" type="text"
+                            class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="w-1/2">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Email</label>
+                            <input v-model="team_email" type="email"
+                                class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        </div>
+                        <div class="w-1/2">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">No Wa</label>
+                            <div class="relative">
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3">
+                                    <h2 class="text-lg font-semibold text-gray-900">+62</h2>
+                                </div>
+                                <input v-model="team_no" type="text" class="block w-full rounded-lg border border-gray-300 bg-white p-4 pl-16 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:focus:border-blue-500 dark:focus:ring-blue-500" placeholder="Nomor Whatsapp" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-left text-white text-sm p-2">
+                        <input @change="changepassword = !changepassword"
+                            class="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] checked:bg-blue-900 bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-blue-900 after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-blue-900 checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]"
+                            type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                        <label class="inline-block pl-[0.15rem] hover:cursor-pointer"
+                            for="flexSwitchCheckDefault">Update Password</label>
+                    </div>
+                    <div v-show="changepassword">
+                        <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Password</label>
+                        <input placeholder="****" v-model="team_password" type="password"
+                        class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                    </div>
+                    <button @click="updateteam"
+                        class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                        Update Data
                     </button>
                 </div>
             </modal>
@@ -142,7 +207,7 @@
                             </td>
                             <td class="px-5 py-5 border-b text-sm">
                                 <span
-                                    class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                    class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight cursor-pointer" @click="updateteams(item.id,item.name)">
                                     <span aria-hidden
                                         class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
                                     <span class="relative">Edit</span>
@@ -185,9 +250,12 @@ export default {
             team : [],
             team_email : '',
             team_name : '',
+            team_username : '',
             team_no : '',
             team_password : '',
-            widthtable : ''
+            widthtable : '',
+            changepassword : false,
+            idteam : ''
         }
     },
     mounted() {
@@ -195,10 +263,57 @@ export default {
         this.widthtable = 'w-['+this.$refs.table.clientWidth+'px]';
     },
     methods: {
+        updateteams(id,name){
+            this.idteam = id
+            this.$modal.show('edit-modal')
+            let data = this.team.filter(function(val){
+              return val.name === name
+            })
+            this.team_name = data[0].name
+            this.team_username = data[0].username
+            this.team_email = data[0].email
+            this.team_no = data[0].nomor
+        },
+        updateteam(){
+            let formData = new FormData();
+            if(this.changepassword){
+                formData.append("password", this.team_password);
+            }
+            formData.append("name", this.team_name);
+            formData.append("id", this.idteam);
+            formData.append("username", this.team_username);
+            formData.append("email", this.team_email);
+            formData.append("nomor", this.team_no);
+            axios.post(process.env.VUE_APP_BASE+'/update-member', formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "Authorization": `Bearer ${this.$cookies.get("login")}`
+            },
+            }).then(({data}) => {
+                if(data.status){
+                    this.getdatateam()
+                    this.$modal.hide('edit-modal')
+                    this.$alert(data.message,'','success',{
+                        confirmButtonText: 'OK',
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }else{
+                    this.$alert(data.message,'Error!','error');
+                    this.$modal.hide('edit-modal')
+                }
+            }).catch((error) => {
+              this.$alert(error.message,'Error!','error');
+            });
+            this.changepassword = false
+            this.team_password = ''
+        },
         saveTeam(){
             let formData = new FormData();
             // formData.append("avatar", this.avatar);
             formData.append("name", this.team_name);
+            formData.append("username", this.team_username);
             formData.append("email", this.team_email);
             formData.append("nomor", this.team_no);
             formData.append("password", this.team_password);
@@ -211,6 +326,11 @@ export default {
                 if(data.status){
                     this.getdatateam()
                     this.$modal.hide('my-modal')
+                    this.team_name = ''
+                    this.team_username = ''
+                    this.team_email = ''
+                    this.team_no = ""
+                    this.team_password = ''
                     this.$alert(data.message,'','success',{
                         confirmButtonText: 'OK',
                         showCancelButton: false,
@@ -252,11 +372,11 @@ export default {
                 "Authorization": `Bearer ${this.$cookies.get("login")}`
             },
             }).then(({data}) => {
-                console.log(data)
                 this.team.splice(index, 1)
                 // let msg = this.me + ' menghapus todo ' +item
                 // this.sendmsg(msg,'system','aaa','notif')
                 // this.sendnotif(msg +" di task " + this.taskname +'/Project Manager','Project Manager','normal')
+                this.getdatateam()
                 this.$alert("", 'Deleted','success',{
                   confirmButtonText: 'OK',
                   showCancelButton: false,
@@ -265,7 +385,6 @@ export default {
                 });
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error');
-                console.log(error)
             });
         });
       },

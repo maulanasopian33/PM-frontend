@@ -20,8 +20,8 @@
                     <!-- Form -->
                     <form class="mt-4" @submit.prevent="postlogin">
                         <div class="mb-3">
-                            <label class="mb-2 block text-xs font-semibold">Email</label>
-                            <input type="email" v-model="loginData.email" placeholder="Enter your email"
+                            <label class="mb-2 block text-xs font-semibold">Email/Username</label>
+                            <input type="text" v-model="loginData.email" placeholder="Enter your email or username"
                                 class="block w-full rounded-md border border-gray-300 focus:border-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-800 py-1 px-1.5 text-gray-500" />
                         </div>
 
@@ -32,8 +32,8 @@
                         </div>
 
                         <div class="mb-3 flex flex-wrap content-center">
-                            <input id="remember" type="checkbox" class="mr-1 checked:bg-gray-800" /> <label
-                                for="remember" class="mr-auto text-xs font-semibold">Remember for 30 days</label>
+                            <input id="remember" type="checkbox" v-model="remember" class="mr-1 checked:bg-gray-800" /> <label
+                                for="remember"  class="mr-auto text-xs font-semibold">Remember for 30 days</label>
                             <a href="#" class="text-xs font-semibold text-gray-800">Forgot password?</a>
                         </div>
 
@@ -79,7 +79,8 @@ import axios from 'axios'
                 loginData:{
                     email : '',
                     password : ''
-                }
+                },
+                remember : false,
             }
         },
         components : {
@@ -104,7 +105,11 @@ import axios from 'axios'
                     .then(({data}) => {
                         this.$loading(false)
                         // this.$alert("", 'Berhasil Login', 'success');
-                        this.$cookies.set("login",data.data.token)
+                        if (this.remember) {
+                            this.$cookies.set("login",data.data.token,60 * 60 * 24 * 30)
+                        }else{
+                            this.$cookies.set("login",data.data.token)
+                        }
                         this.$router.push('/dashboard')
                     }).catch((error) => {
                         console.clear();

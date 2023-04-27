@@ -246,6 +246,7 @@ export default {
           // this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
           this.notif['status'] = true
           this.gettodos()
+          this.getchatdb()
           // this.pesan.push({
           // 	message: e.message,
           // });
