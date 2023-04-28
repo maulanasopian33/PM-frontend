@@ -1,8 +1,9 @@
-import GlobalChatVue from '@/components/GlobalChat copy.vue'
+import GlobalChatVue from '@/components/GlobalChat.vue'
 import GlobalPage from '@/components/GlobalPages.vue'
 import Workspace from '@/components/workspacePage.vue'
 import loginVue from '@/components/login.vue'
 import detailworkspace from '@/components/detailtaskpage.vue'
+import workspaceChat from '@/components/base/workspace-chat.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueSimpleAlert from "vue-simple-alert"
@@ -29,6 +30,11 @@ const routes = [
     path: '/dashboard/:workspace',
     name: 'dashboard by id',
     component: Workspace
+  },
+  {
+    path: '/:workspace/diskusi',
+    name: 'dashboard by id',
+    component: workspaceChat
   },
   {
     path: '/detail/:workspace',

@@ -94,12 +94,12 @@ import MobileBottomnav from './parsial/mobile-bottomnav.vue';
 		    }
     },
     components : {
-    ChatLeftsection,
-    Chatroom,
-    Chatroom,
-    dashboardtask,
-    MobileBottomnav
-},
+        ChatLeftsection,
+        Chatroom,
+        Chatroom,
+        dashboardtask,
+        MobileBottomnav
+    },
     props: {
       msg: String
     },
