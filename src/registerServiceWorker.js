@@ -23,7 +23,9 @@ if (process.env.NODE_ENV === 'production') {
       
 
     },
-    registered () {
+    registered (sw) {
+      // sw.showNotification('Notification with ServiceWorker')
+      console.log(test)
       let myname = '';
       const getData = new Promise(function(resolve, reject) {
         fetch(process.env.VUE_APP_BASE + '/whois', {
@@ -62,9 +64,12 @@ if (process.env.NODE_ENV === 'production') {
               if(e.from !== data.name){
                 let messages = e.message
                 let message = messages.split('/')
-                new Notification(message[1], {
+                sw.showNotification(message[1], {
                   body: message[0]
-                });
+                })
+                // new Notification(message[1], {
+                //   body: message[0]
+                // });
               }
             } else {
               // minta izin untuk menampilkan notifikasi
@@ -74,9 +79,9 @@ if (process.env.NODE_ENV === 'production') {
                   if(e.from !== data.name){
                     let messages = e.message
                     let message = messages.split('/')
-                    new Notification(message[1], {
+                    sw.showNotification(message[1], {
                       body: message[0]
-                    });
+                    })
                   }
                 }
               });

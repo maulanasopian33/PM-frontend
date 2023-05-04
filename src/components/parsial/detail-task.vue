@@ -409,10 +409,12 @@ export default {
         });
       },
       decoder(){
-        let decode = atob(this.$route.params.workspace);
+        let data = this.$route.params.workspace
+        let decode = atob(data.replace('xMl3Jk','+').replace('Por21Ld','/').replace('Ml34','==').replace('Ml32','='));
         let splitdetail = decode.split(','); 
         this.nameworkspace = splitdetail[0].toString();
         this.avatar = splitdetail[1].toString();
+        this.detail_idtask = splitdetail[3].toString()
         // this.parsingtaskname = splitdetail[2].toString();
         this.getdatatask(splitdetail[3].toString())
         this.getchat()

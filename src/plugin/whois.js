@@ -7,9 +7,10 @@ export default {
                     "Authorization": `Bearer ${this.$cookies.get("login")}`
                 },
             }).then(({ data }) => {
-
                 this.isadmin = data.admin
                 this.id = data.id
+                this.myname = data.name
+                this.whoisdata = data
             }).catch((error) => {
                 this.$alert(error.message, 'Error!', 'error');
             });

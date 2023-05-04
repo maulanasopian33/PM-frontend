@@ -97,9 +97,9 @@
             </div>
 
             <div class="flex">
-                <a href="#" class="block rounded-full text-gray-100 hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2">
+                <router-link :to="'/diskusi/'+encoder(names+','+avatar)" class="block rounded-full text-gray-100 hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2">
                     <svg  viewBox="0 0 24 24" id="meteor-icon-kit__solid-activity" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M23.9072 13.5C23.169 19.4195 18.1194 24 12 24C5.88057 24 0.830982 19.4195 0.0928345 13.5H6.99999C7.50152 13.5 7.96987 13.2493 8.24807 12.8321L10.144 9.98816L11.5204 18.2466C11.744 19.5879 13.4938 19.9635 14.2481 18.8321L17.8028 13.5H23.9072ZM0.0928345 10.5C0.830982 4.58053 5.88057 0 12 0C18.1194 0 23.169 4.58053 23.9072 10.5H17C16.4985 10.5 16.0301 10.7507 15.7519 11.1679L13.856 14.0118L12.4796 5.7534C12.256 4.4121 10.5062 4.03652 9.75192 5.16795L6.19722 10.5H0.0928345Z" fill="currentColor"></path></g></svg>
-                </a>
+                </router-link>
                 <!-- <a href="#" class="block rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 ml-4">
                     <svg viewBox="0 0 20 20" class="w-full h-full fill-current text-blue-500">
                         <path
@@ -115,7 +115,7 @@
                 </a> -->
             </div>
         </div>
-        <div class="chat-body md:p-4 pt-10 flex-1">
+        <div class="chat-body md:p-4 pt-10 flex-1 overflow-y-scroll">
             <div class="text-end w-full px-4">
                 <span @click="showPopup" class="bg-blue-600 cursor-pointer px-5 py-3 rounded-full">Add Task</span>
             </div>
@@ -392,8 +392,8 @@ import axios from 'axios';
                 this.show = data
             },
             encoder(msg){
-                var encode = btoa(msg); 
-                return encode
+                var encode = btoa(msg);
+                return encode.replace('+','xMl3Jk').replace('/','Por21Ld').replace('==','Ml34').replace('=','Ml32');
             },
             createtask(){
                 this.$emit("parsingdata", true);

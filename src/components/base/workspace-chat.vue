@@ -11,12 +11,11 @@
           <!-- <router-link :to="pesan">Home</router-link>  -->
         <!-- Top header -->
           <main class="flex-grow flex flex-row min-h-0 w-screen">
-            <!-- Left Section -->
             <ChatLeftsection v-show="leftsection"></ChatLeftsection>
-            <dashboardtask v-show="maincontent" class="md:w-2/4 w-full" :name="this.$route.params.workspace" detail="antmediahost.com" avatar="/"></dashboardtask>
+            <Chatroom name="Support" avatar="avatar" id_workspace="1" divisi="nameworkspace" class="w-full"></Chatroom>
+            <!-- Left Section -->
           </main>
-          <MobileBottomnav item1="Workspace" icon1="fa-earth-asia" item2="Tasks" icon2="fa-list-check" item3="Back" icon3="fa-angle-left" @action="eventbottomnav" v-show="mobileview" class="bottom-0"></MobileBottomnav>
-      </div>
+        </div>
   </div>
   </template>
   <style>
@@ -77,28 +76,21 @@
     }
   </style>
   <script>
-  import axios from 'axios';
-  import ChatLeftsection from './base/chat-leftsection.vue';
-  import dashboardtask from './base/dashboardTask.vue';
-  import Chatroom from './base/chatroom.vue';
-  import workspace from '@/plugin/workspace';
-  import MobileBottomnav from './parsial/mobile-bottomnav.vue';
+    import axios from 'axios';
+    import ChatLeftsection from '@/components/base/chat-leftsection.vue';
+    import Chatroom from './chatroom-global.vue';
     export default {
-      mixins : [workspace],
       name: 'workspace-chat',
       data(){
         return{
-            mobileview : false,
-            leftsection : true,
-            maincontent : true
+                mobileview : false,
+                leftsection : true,
+                maincontent : true
               }
       },
       components : {
           ChatLeftsection,
-          Chatroom,
-          Chatroom,
-          dashboardtask,
-          MobileBottomnav
+          Chatroom
       },
       props: {
         msg: String

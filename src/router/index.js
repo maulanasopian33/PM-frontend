@@ -32,8 +32,8 @@ const routes = [
     component: Workspace
   },
   {
-    path: '/:workspace/diskusi',
-    name: 'dashboard by id',
+    path: '/diskusi/:workspace',
+    name: 'diskusi by workspace',
     component: workspaceChat
   },
   {
