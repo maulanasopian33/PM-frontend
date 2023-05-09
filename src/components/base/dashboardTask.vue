@@ -116,26 +116,27 @@
             </div>
         </div>
         <div class="chat-body md:p-4 pt-10 flex-1 overflow-y-scroll">
-            <div class="text-end w-full px-4">
+            <div class="text-end w-full px-4 md:10 md:mb-3">
                 <span @click="showPopup" class="bg-blue-600 cursor-pointer px-5 py-3 rounded-full">Add Task</span>
             </div>
             <div class="md:py-10 md:px-5 md:flex">
-                <div class="rounded-lg m-0 md:mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
-                    <div class="flex">
-                        <h3 class="w-1/2 text-2xl">Created</h3>
+                <div class="rounded-lg m-0 md:mx-2 my-1 bg-gray-800 p-5 mx-2 md:w-1/2 lg:w-1/3">
+                    <div class="flex mb-10">
+                        <h3 class="w-1/2 text-xl md:text-2xl">Created</h3>
                         <h3 class="w-1/2 text-right">{{ created.length }}/{{ sum }}</h3>
                     </div>
                     <div class="h-full" @drop="onDrop($event, 1)" @dragover.prevent @dragenter.prevent >
                     <div v-for="task in created" :key="task.id_task">
                         <div draggable @dragstart="startDrag($event, task, 1)">
                             <router-link class="drag-el" :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
-                                <div class="relative my-2 flex items-center justify-between rounded-lg border w-full border-gray-400 p-3 hover:bg-gray-800">
-                                    
-                                    <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                <div class="relative hover:bg-sky-100 hover:text-gray-800 flex items-center justify-between rounded-lg p-3">
+                                        
+                                    <div class="ml-4 mr-6 min-w-0 flex-auto inline-flex gap-4 items-center  group-hover:block">
+                                        <i class="fa-sharp fa-solid fa-list-check"></i>
                                         <h3 class="text-left text-lg">{{ task.name }}</h3>
-                                        <div class="flex items-center text-sm text-gray-600">
+                                        <!-- <div class="flex items-center text-sm text-gray-600">
                                             <p class="truncate">{{ task.deskripsi }}</p>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </router-link>
@@ -143,22 +144,23 @@
                     </div>
                     </div>
                 </div>
-                <div class="rounded-lg m-0 md:mx-2 my-1 border-2 border-gray-800 p-5 w-full md:w-1/3">
-                    <div class="flex">
-                        <h3 class="w-1/2 text-xl">On Progress</h3>
+                <div class="rounded-lg m-0 md:mx-2 my-1 bg-gray-800 p-5 mx-2 md:w-1/2 lg:w-1/3">
+                    <div class="flex mb-10">
+                        <h3 class="w-1/2 text-xl md:text-2xl">On Progress</h3>
                         <h3 class="w-1/2 text-right">{{ OnProgress.length }}/{{ sum }}</h3>
                     </div>
                     <div class="h-full" @drop="onDrop($event, 2)" @dragover.prevent @dragenter.prevent>
                         <div v-for="task in OnProgress" :key="task.id_task">
                             <div draggable @dragstart="startDrag($event, task, 2)">
                                 <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
-                                    <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                                    <div class="relative hover:bg-sky-100 hover:text-gray-800 flex items-center justify-between rounded-lg p-3">
                                         
-                                        <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                        <div class="ml-4 mr-6 min-w-0 flex-auto inline-flex gap-4 items-center  group-hover:block">
+                                            <i class="fa-sharp fa-solid fa-list-check"></i>
                                             <h3 class="text-left text-lg">{{ task.name }}</h3>
-                                            <div class="flex items-center text-sm text-gray-600">
+                                            <!-- <div class="flex items-center text-sm text-gray-600">
                                                 <p class="truncate">{{ task.deskripsi }}</p>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </router-link>
@@ -166,22 +168,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="rounded-lg m-0 md:mx-2 my-1 p-5 w-full md:w-1/3 border-2 border-gray-800">
-                    <div class="flex">
-                        <h3 class="w-1/2 text-2xl">Finished</h3>
+                <div class="rounded-lg m-0 md:mx-2 my-1 p-5 mx-2 md:w-1/2 lg:w-1/3 bg-gray-800">
+                    <div class="flex mb-10">
+                        <h3 class="w-1/2 text-xl md:text-2xl">Finished</h3>
                         <h3 class="w-1/2 text-right">{{ finished.length }}/{{ sum }}</h3>
                     </div>
                     <div class="h-full" @drop="onDrop($event, 3)" @dragover.prevent @dragenter.prevent>
                         <div v-for="task in finished" :key="task.id_task">
                             <div draggable @dragstart="startDrag($event, task, 2)">
                                 <router-link :to="'/detail/'+encoder(names+','+avatar+','+task.name+','+task.id_task)">
-                                    <div class="relative my-2 flex items-center justify-between rounded-lg border border-gray-400 p-3 hover:bg-gray-800">
+                                    <div class="relative hover:bg-sky-100 hover:text-gray-800 flex items-center justify-between rounded-lg p-3">
                                         
-                                        <div class="ml-4 mr-6 min-w-0 flex-auto group-hover:block">
+                                        <div class="ml-4 mr-6 min-w-0 flex-auto inline-flex gap-4 items-center  group-hover:block">
+                                            <i class="fa-sharp fa-solid fa-list-check"></i>
                                             <h3 class="text-left text-lg">{{ task.name }}</h3>
-                                            <div class="flex items-center text-sm text-gray-600">
+                                            <!-- <div class="flex items-center text-sm text-gray-600">
                                                 <p class="truncate">{{ task.deskripsi }}</p>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </router-link>

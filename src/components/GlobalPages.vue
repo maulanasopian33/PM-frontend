@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex antialiased bg-gray-900 text-gray-200 overflow-hidden">
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col h-full">
       <!-- Top header -->
         <div class="border-b-2 border-gray-800 p-2 flex flex-row z-20">
             <div class="bg-red-600 w-3 h-3 rounded-full mr-2"></div>
@@ -9,14 +9,14 @@
         </div>
         <!-- <router-link :to="pesan">Home</router-link>  -->
       <!-- Top header -->
-        <main class="flex flex-row flex-grow overflow-y-scroll">
+        <main class="flex flex-row flex-grow overflow-y-auto">
           <!-- Left Section -->
           <ChatLeftsection v-show="leftsection" @parsing="show = $event" class=""></ChatLeftsection>
           <div v-show="maincontent" class="flex flex-row flex-grow">
             <Teams v-show="isadmin" v-if="hash === '#team'" class="md:w-full flex-grow sm:w-8/12 w-full"></Teams>
-            <Setting :dataprofil="whoisdata" v-else-if="hash === '#profil'" class="w-full md:w-full flex-grow sm:w-8/12"></Setting>
+            <Setting :dataprofil="whoisdata" v-else-if="hash === '#profil'" class="w-full md:w-full flex-grow sm:w-8/12 h-full overflow-y-scroll"></Setting>
             <div v-else class="w-full md:w-full flex-grow sm:w-8/12">
-              <admindashboard v-if="isadmin" class="w-full md:w-full flex-grow sm:w-8/12"></admindashboard>
+              <admindashboard v-if="isadmin" class="w-full md:w-full flex-grow sm:w-8/12 h-full overflow-y-scroll"></admindashboard>
               <Dashboarduser v-else class="w-full md:w-full flex-grow sm:w-8/12 overflow-y-scroll"></Dashboarduser>
             </div>
               <!-- Sidebar -->
