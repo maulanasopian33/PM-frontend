@@ -151,6 +151,7 @@ export default {
         todo : [],
         notif : [],
         nameTask : '',
+        update : false,
         me : '',
         url : process.env.VUE_APP_WEB,
         avatar : '',
@@ -366,6 +367,7 @@ export default {
                   msg = this.me + ' mengubah status todo ' +name+' belum selesai'
                 }
                 this.nameTasks = ''
+                this.update = true;
                 this.sendmsg(msg,'system','aaa','notif')
                 this.sendnotif(msg +" di task " + this.taskname +'/Project Manager','Project Manager','normal')
                 this.$alert("", 'updated','success',{
@@ -510,13 +512,23 @@ export default {
                   "Authorization": `Bearer ${this.$cookies.get("login")}`
               },
               }).then(({data}) => {
-                  // console.log(data)
                   this.todo = data
+                  const allTrue = data.every(item => item.status === 1);
+                  if(this.update){
+                    if(allTrue){
+                      let url = '/dashboard/'+this.encoder(this.nameworkspace+','+this.avatar);
+                      this.$router.push( { path : url, force: true}).catch(()=>{});
+
+                    }
+                  }
               }).catch((error) => {
-                  // console.log(error)
                   this.$alert(error.message,'Error!','error');
               });
       },
+      encoder(msg){
+          var encode = btoa(msg); 
+          return encode
+      }
     },
 }
 </script>

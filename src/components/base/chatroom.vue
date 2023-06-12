@@ -10,7 +10,7 @@
                 <!-- avatar -->
                 <!-- contact info -->
                 <div class="text-sm text-left">
-                    <p class="font-bold text-base">Diskusi {{ name }}</p>
+                    <p class="font-bold text-base" @click="scrollTo()">Diskusi {{ name }}</p>
                     <p class="font-light">{{ divisi }}</p>
                 </div>
                 <!-- contact info -->
@@ -47,15 +47,14 @@
                     <div v-for="item in chat">
                         <chatLeftlike v-show="item.type === 'like'" v-if="item.from !== myname && item.from !== 'system'"
                             :from="item.from"></chatLeftlike>
-                        <ChatLeftimg v-show="item.type === 'file'" v-if="item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
+                        <ChatLeftimg v-if="item.type === 'file' && item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
                         <chatRightlike v-show="item.type === 'like'" v-if="item.from === myname"></chatRightlike>
                         <ChatRightimg v-if="item.type === 'file' && item.from === myname" caption="" :img="url + item.message" ></ChatRightimg>
                         <ChatRightNormal v-show="item.type === 'normal'" v-if="item.from === myname" :msg="item.message">
                         </ChatRightNormal>
                         <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
                         <ChatLeftNormal v-show="item.type === 'normal'"
-                            v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from"
-                            avatar="https://randomuser.me/api/portraits/women/61.jpg"></ChatLeftNormal>
+                            v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from"></ChatLeftNormal>
                     </div>
                 </div>
             </div>
@@ -76,7 +75,7 @@
                         <article tabindex="0"
                             class="group hasImage w-full text-black h-3/4 rounded-md focus:outline-none focus:shadow-outline  cursor-pointer relative text-transparent hover:text-gray-700 shadow-sm">
                             <img :src="this.files[0].data" alt="upload preview"
-                                class="img-preview w-full h-full sticky object-cover rounded-md bg-fixed" />
+                                class="img-preview max-w-sm m-auto w-full h-full sticky object-cover rounded-md bg-fixed" />
 
                             <section
                                 class="flex flex-col rounded-md text-xs break-words w-full h-full z-20 absolute top-0 py-2 px-3">
@@ -260,6 +259,9 @@ export default {
             detailview : false
         }
     },
+    mounted() {
+        document.addEventListener('uploadfile', this.uploadfileevent);
+    },
     created() {
         this.url = process.env.VUE_APP_WEB
         this.displayMessage()
@@ -271,11 +273,43 @@ export default {
         }, 3000);
     },
     methods: {
+        uploadfileevent(event) {
+            this.showchat = false;
+            const data = event.detail;
+            var imageContent = data.split(';')[1].split(',')[1];
+            // Lakukan apa yang perlu dilakukan dengan data di sini
+            let filename = "Promanage-"+ Math.ceil(Math.random()*9999999999999) + '.jpg'
+            var file = new File([this.base64ToArrayBuffer(imageContent)], filename, {type: 'image/png'});
+            this.upload = file;
+            const fileReader = new FileReader()
+            fileReader.addEventListener('load', () => {
+                this.files.push({ data: fileReader.result, name: this.upload.name, type: 'img' })
+            })
+            fileReader.readAsDataURL(file)
+        },
+        base64ToArrayBuffer(base64){
+            var binaryString = window.atob(base64);
+            var length = binaryString.length;
+            var bytes = new Uint8Array(length);
+            for (var i = 0; i < length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        },
+        scrollTo() {
+        },
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const chatBody = this.$refs.chatbody;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+        },
         callto(){
             this.$emit('statusview', true)
         },
         deletefileup(index) {
             this.files.splice(index, 1)
+            this.showchat = true
         },
         groupChatByDate(chatData) {
             // Membuat objek untuk menampung data terkelompokkan
@@ -390,6 +424,7 @@ export default {
 
         },
         sendfile() {
+            this.$loading(true)
             let formData = new FormData();
             formData.append("msg", this.upload);
             formData.append("type", "file");
@@ -404,8 +439,11 @@ export default {
             }).then((response) => {
                 this.showchat = true;
                 this.sendnotif("mengirimkan file",this.myname,'image')
+                this.$loading(false)
+                this.files = [];
                 // this.$router.go(this.$router.currentRoute)
             }).catch((error) => {
+                this.$loading(false)
                 this.$alert(error.message, 'Error!', 'error');
             });
         },
@@ -419,6 +457,9 @@ export default {
             this.$echo.channel(channel).listen('chat', (e) => {
                 this.msgrender.push({ from: e.msg.from, message: e.msg.message, reply: e.msg.reply, time: e.msg.time, type: e.msg.type });
                 this.message = this.groupChatByDate(this.msgrender)
+                setTimeout(() => {
+                    this.scrolltobottom()
+                }, 2000);
             });
         },
         getchat() {
@@ -430,7 +471,9 @@ export default {
                 this.message = this.groupChatByDate(data.data)
                 this.msgrender = data.data
                 // console.log(this.message)
-                // this.scrolltobottom()
+                setTimeout(() => {
+                    this.scrolltobottom()
+                }, 2000);
             }).catch((error) => {
                 this.$alert(error.message, 'Error!', 'error');
             });

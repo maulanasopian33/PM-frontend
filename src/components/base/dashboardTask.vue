@@ -68,8 +68,8 @@
                             <textarea v-model="deskripsi" type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
                         </div>
                         <div class="flex gap-1 justify-between">
-                            <button @click="savetask()" class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
-                            Save Task
+                            <button @click="savetask()" :disabled="onsave" class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                                <i v-show="onsave" class="fa-solid fa-spinner fa-spin"></i> Save Task
                             </button>
                             <button @click="hidePopup" class="text-center mt-5 w-full border rounded-xl outline-none py-5  border-blue-700 text-white text-sm shadow-sm">
                             Cancel
@@ -212,6 +212,7 @@ import axios from 'axios';
         },
         data() {
             return {
+                onsave : false,
                 names : '',
                 detail : 'antmediahost.com',
                 avatar : '',
@@ -359,6 +360,7 @@ import axios from 'axios';
                 fileInputElement.click();
             },
             savetask(){
+                this.onsave = true;
                 let data = [];
                 this.emailDomains.forEach((item) => {
                 data.push(this.teams.filter(function(e){
@@ -386,10 +388,17 @@ import axios from 'axios';
                 },
                 }).then((response) => {
                 // console.log(response)
+                this.cleardata()
                 this.$router.go()
                 }).catch((error) => {
                 this.$alert("", error,'error');
                 });
+            },
+            cleardata(){
+                this.name_task = ''
+                this.startdate = ''
+                this.duedate = ''
+                this.deskripsi = ''
             },
             parsingdata(data){
                 this.show = data

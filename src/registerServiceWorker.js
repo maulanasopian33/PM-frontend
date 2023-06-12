@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     registered (sw) {
       // sw.showNotification('Notification with ServiceWorker')
-      console.log(test)
+      // console.log(sw)
       let myname = '';
       const getData = new Promise(function(resolve, reject) {
         fetch(process.env.VUE_APP_BASE + '/whois', {
@@ -51,8 +51,11 @@ if (process.env.NODE_ENV === 'production') {
         window.Pusher = Pusher;
         window.Echo = new Echo({
           broadcaster: 'pusher',
+          cluster :  'ap1',
+          broadcaster: 'pusher',
+          key: '94e6a87800b6adf547b1',
           cluster: 'ap1',
-          key: '94e6a87800b6adf547b1' //Add your pusher key here
+          forceTLS: true,
         });
         let channel = 'global-message'
         window.Echo.channel(channel).listen('GlobalMessage', (e) => {

@@ -41,10 +41,10 @@
         </div>
         <label for="email" class="block text-sm text-left font-bold ml-1 mb-2 text-white mt-5">Deskripsi</label>
         <div class="relative">
-          <textarea type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
+          <textarea v-model="in_deskripsi" type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
         </div>
-        <button @click="saveworkspace" class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
-          Save Data
+        <button @click="saveworkspace" :disabled="onsave" class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+          <i v-show="onsave" class="fa-solid fa-spinner fa-spin"></i> Save Data
         </button>
       </div>      
     </modal>
@@ -91,8 +91,8 @@
         <div class="relative">
           <textarea v-model="in_deskripsi" type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
         </div>
-        <button @click="updateworkspace" class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
-          Update Data
+        <button @click="updateworkspace" :disabled="onupdate" class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+          <i v-show="onupdate" class="fa-solid fa-spinner fa-spin"></i> Update Data
         </button>
       </div>      
     </modal>
@@ -102,22 +102,6 @@
         <div class="flex-1 p-10 sm:p-0">
           <div class="flex justify-between items-center">
             <h3 class="text-xl font-extralight text-white/50">Workspace</h3>
-            <div class="inline-flex items-center space-x-2">
-              <a class="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </a>
-              <a class="bg-gray-900 text-white/50 p-2 rounded-md hover:text-white smooth-hover" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                </svg>
-              </a>
-            </div>
           </div>
           <div class="mb-10 sm:mb-0 mt-10 grid gap-4 grid-cols-1 xl:grid-cols-4 lg:grid-cols-">
             <div @click="showPopup"
@@ -160,6 +144,8 @@
         name : 'admindashboard',
         data() {
           return {
+            onsave : false,
+            onupdate : false,
             wokspacedata : [],
             avatar: null,
             in_deskripsi : '',
@@ -188,6 +174,10 @@
         methods: {
           showPopup() {
             this.$modal.show('my-modal')
+            this.in_workspace_name = ''
+            this.emailDomains = []
+            this.in_deskripsi = ''
+
           },
           showedit(id,name) {
             this.curentUpadateId = id
@@ -227,6 +217,7 @@
             });
           },
           updateworkspace(){
+            this.onupdate = true;
             let data = [];
             this.emailDomains.forEach((item) => {
               data.push(this.teams.filter(function(e){
@@ -247,16 +238,21 @@
             },
             }).then((response) => {
               this.$modal.hide('edit-modal')
-              // this.updatework = false
+              this.onupdate = false
               location.reload()
               this.avatar = null
-              // this.$router.go(this.$router.currentRoute)
+              this.curentUpadateId = ''
+              this.in_workspace_name = ''
+              this.in_deskripsi = ''
+              this.updatework = false;
             }).catch((error) => {
+              this.onupdate = false
               console.log(error)
             });
             // console.log(formData)
           },
           saveworkspace(){
+            this.onsave = true;
             let data = [];
             this.emailDomains.forEach((item) => {
               data.push(this.teams.filter(function(e){
@@ -269,7 +265,7 @@
             formData.append("avatar", this.avatar);
             formData.append("name", this.in_workspace_name);
             formData.append("assigment", data.toString());
-            formData.append("deskripsi", this.in_workspace_name);
+            formData.append("deskripsi", this.in_deskripsi);
             // formData.append("deskripsi", this.in_deskripsi);
             axios.post(process.env.VUE_APP_BASE+'/add-workspace', formData, {
             headers: {
@@ -278,6 +274,9 @@
             },
             }).then((response) => {
               this.$modal.hide('my-modal')
+              this.onsave = false;
+              this.in_workspace_name = '';
+              this.in_deskripsi = "";
               location.reload()
             }).catch((error) => {
               console.log(error)

@@ -44,7 +44,7 @@
 <script>
 export default {
     name: 'chatLeftNormal',
-    props : ['msg','avatar','from'],
+    props : ['msg','from'],
     methods: {
         getAvatarFromName(name) {
             const firstLetter = name.charAt(0).toUpperCase();

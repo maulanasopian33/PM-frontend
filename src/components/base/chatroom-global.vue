@@ -46,14 +46,15 @@
         <!-- chat body -->
         <div ref="chatbody" class="chat-body flex-grow p-4 overflow-y-scroll scroll-smooth">
             <div v-if="showchat">
+                
                 <div v-for="(chat, index) in message">
                     <ChatTime :time="(index == new Date().toLocaleDateString()) ? 'Today' : index"></ChatTime>
                     <div v-for="item in chat">
                         <chatLeftlike v-show="item.type === 'like'" v-if="item.from !== myname && item.from !== 'system'"
                             :from="item.from"></chatLeftlike>
-                        <ChatLeftimg v-show="item.type === 'file'" v-if="item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
+                        <ChatLeftimg @click="showSingle(url + item.message)" v-if="item.type === 'file' && item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
                         <chatRightlike v-show="item.type === 'like'" v-if="item.from === myname"></chatRightlike>
-                        <ChatRightimg v-if="item.type === 'file' && item.from === myname" caption="" :img="url + item.message" ></ChatRightimg>
+                        <ChatRightimg  v-if="item.type === 'file' && item.from === myname" caption="" :img="url + item.message" ></ChatRightimg>
                         <ChatRightNormal v-show="item.type === 'normal'" v-if="item.from === myname" :msg="item.message">
                         </ChatRightNormal>
                         <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
@@ -80,7 +81,7 @@
                         <article tabindex="0"
                             class="group hasImage w-full text-black h-3/4 rounded-md focus:outline-none focus:shadow-outline  cursor-pointer relative text-transparent hover:text-gray-700 shadow-sm">
                             <img :src="this.files[0].data" alt="upload preview"
-                                class="img-preview w-full h-full sticky object-cover rounded-md bg-fixed" />
+                                class="img-preview w-full h-full max-w-sm m-auto sticky object-cover rounded-md bg-fixed" />
 
                             <section
                                 class="flex flex-col rounded-md text-xs break-words w-full h-full z-20 absolute top-0 py-2 px-3">
@@ -231,7 +232,9 @@
         <!-- chat footer -->
     </section>
 </template>
+
 <script>
+
 import ChatLeftimg from '../parsial/chat/chat-leftimg.vue';
 import ChatLeftNormal from '../parsial/chat/chat-leftNormal.vue';
 import chatLeftlike from '@/components/parsial/chat/chat-likeleft.vue'
@@ -263,11 +266,13 @@ export default {
             name : '',
             avatar : '',
             largeFile: false,
-            detailview : false
+            detailview : false,
+            test : '',
         }
     },
     mounted() {
         this.getworkspace();
+        document.addEventListener('uploadfile', this.uploadfileevent);
     },
     created() {
         this.url = process.env.VUE_APP_WEB
@@ -280,6 +285,35 @@ export default {
         // }, 3000);
     },
     methods: {
+        uploadfileevent(event) {
+            this.showchat = false;
+            const data = event.detail;
+            var imageContent = data.split(';')[1].split(',')[1];
+            // Lakukan apa yang perlu dilakukan dengan data di sini
+            let filename = "Promanage-"+ Math.ceil(Math.random()*9999999999999) + '.jpg'
+            var file = new File([this.base64ToArrayBuffer(imageContent)], filename, {type: 'image/png'});
+            this.upload = file;
+            const fileReader = new FileReader()
+            fileReader.addEventListener('load', () => {
+                this.files.push({ data: fileReader.result, name: this.upload.name, type: 'img' })
+            })
+            fileReader.readAsDataURL(file)
+        },
+        base64ToArrayBuffer(base64){
+            var binaryString = window.atob(base64);
+            var length = binaryString.length;
+            var bytes = new Uint8Array(length);
+            for (var i = 0; i < length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        },
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const chatBody = this.$refs.chatbody;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+        },
         getworkspace(){
             axios.get(process.env.VUE_APP_BASE+'/get-workspace',{
                 headers: {
@@ -313,6 +347,7 @@ export default {
                                 })
             this.subtitle = thisworkspace[0].name
             this.id_workspace = thisworkspace[0].id
+            console.log(this.id_workspace)
             this.getchat()
             this.listenchat()
             // this.avatar = splitdetail[1];
@@ -322,6 +357,7 @@ export default {
         },
         deletefileup(index) {
             this.files.splice(index, 1)
+            this.showchat = true
         },
         groupChatByDate(chatData) {
             // Membuat objek untuk menampung data terkelompokkan
@@ -434,13 +470,14 @@ export default {
 
         },
         sendfile() {
+            this.$loading(true)
             let formData = new FormData();
             formData.append("msg", this.upload);
             formData.append("type", "file");
             formData.append("from", this.myname);
             formData.append("reply", 0);
             formData.append("time", new Date().toISOString().slice(0, 19).replace('T', ' '));
-            axios.post(process.env.VUE_APP_BASE + '/workspace/chat/' + this.id_task, formData, {
+            axios.post(process.env.VUE_APP_BASE + '/workspace/chat/' + this.id_workspace, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${this.$cookies.get("login")}`
@@ -448,8 +485,11 @@ export default {
             }).then((response) => {
                 this.showchat = true;
                 this.sendnotif("mengirimkan file",this.myname,'image')
+                this.$loading(false)
+                this.files = [];
                 // this.$router.go(this.$router.currentRoute)
             }).catch((error) => {
+                this.$loading(false)
                 this.$alert(error.message, 'Error!', 'error');
             });
         },
@@ -463,6 +503,7 @@ export default {
             this.$echo.channel(channel).listen('chat', (e) => {
                 this.msgrender.push({ from: e.msg.from, message: e.msg.message, reply: e.msg.reply, time: e.msg.time, type: e.msg.type });
                 this.message = this.groupChatByDate(this.msgrender)
+                this.scrollToBottom();
             });
         },
         getchat() {
@@ -473,6 +514,7 @@ export default {
             }).then(({ data }) => {
                 this.message = this.groupChatByDate(data.data)
                 this.msgrender = data.data
+                this.scrollToBottom();
                 // console.log(data.data)
                 // this.scrolltobottom()
             }).catch((error) => {
@@ -503,6 +545,8 @@ export default {
             let fileInputElement = this.$refs.file
             fileInputElement.click();
         },
+
+
     },
 }
 </script>

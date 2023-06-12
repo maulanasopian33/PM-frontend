@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex antialiased bg-gray-900 text-gray-200 overflow-hidden">
+  <div class="w-full flex antialiased bg-gray-900 text-gray-200 overflow-hidden select-none">
     <div class="flex-1 flex flex-col h-full">
       <!-- Top header -->
         <div class="border-b-2 border-gray-800 p-2 flex flex-row z-20">
@@ -153,7 +153,7 @@ import Dashboarduser from './base/dashboarduser.vue';
           avatar: null,
           show: false,
           in_deskripsi : '',
-          isadmin : null,
+          isadmin : true,
           in_team : '',
           position : '',
           in_workspace_name : '',

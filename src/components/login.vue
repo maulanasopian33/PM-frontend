@@ -1,6 +1,6 @@
 <template>
         <!-- Container -->
-    <div class="bg-gray-200 flex flex-wrap shadow-xl min-h-screen w-full content-center justify-center py-10">
+    <div class="bg-[url('https://devpm.antmedia.id/img/background.jpg')] flex flex-wrap shadow-xl min-h-screen w-full content-center justify-center py-10">
         <!-- <vue-multiple-themes
       :defaultTheme="'Pallet12'"
       >
@@ -34,7 +34,7 @@
                         <div class="mb-3 flex flex-wrap content-center">
                             <input id="remember" type="checkbox" v-model="remember" class="mr-1 checked:bg-gray-800" /> <label
                                 for="remember"  class="mr-auto text-xs font-semibold">Remember for 30 days</label>
-                            <a href="#" class="text-xs font-semibold text-gray-800">Forgot password?</a>
+                            <!-- <a href="#" class="text-xs font-semibold text-gray-800">Forgot password?</a> -->
                         </div>
 
                         <div class="mb-3">
@@ -44,11 +44,11 @@
                         </div>
                     </form>
 
-                    <!-- Footer -->
+                    <!-- Footer
                     <div class="text-center">
                         <span class="text-xs text-gray-400 font-semibold">Don't have account?</span>
                         <a href="#" class="text-xs font-semibold text-gray-800">Sign up</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -62,7 +62,7 @@
 
         <!-- Credit -->
         <div class="mt-5 w-full">
-            <p class="text-center flex justify-center font-bold">Powered by  <a target="_blank" href="https://www.instagram.com/_inubayuaji/"
+            <p class="text-center px-5 rounded-lg py-2 bg-white/40 flex justify-center font-bold w-1/4 mx-auto">Powered by  <a target="_blank" href="https://antmediahost.com"
                     class="text-purple-700"><img class="h-6" src="https://www.antmediahost.com/wp-content/uploads/2021/12/Logo-AntMediaHost.webp"/></a>.
             </p>
         </div>

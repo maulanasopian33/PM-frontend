@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <script src="https://kit.fontawesome.com/44bff26b59.js" crossorigin="anonymous"></script>
-        <title>ProManage</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="<%= BASE_URL %>paste.js"></script>
+    <title>ProManage</title>
   </head>
   <body>
     <noscript>
@@ -14,5 +16,13 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+
+    <script>
+      $("html").pasteImageReader(function(results) {
+        dataURL = results.dataURL;
+        const event = new CustomEvent('uploadfile', { detail: dataURL });
+        document.dispatchEvent(event);
+      });
+      </script>
   </body>
 </html>

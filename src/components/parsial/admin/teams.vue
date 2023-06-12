@@ -46,9 +46,9 @@
                     <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Password</label>
                     <input v-model="team_password" type="password"
                                 class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                    <button @click="saveTeam"
-                        class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
-                        Save Data
+                    <button @click="saveTeam" :disabled="onsave"
+                        class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                        <i v-show="onsave" class="fa-solid fa-spinner fa-spin"></i> Save Data
                     </button>
                 </div>
             </modal>
@@ -106,9 +106,9 @@
                         <input placeholder="****" v-model="team_password" type="password"
                         class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
                     </div>
-                    <button @click="updateteam"
-                        class="text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
-                        Update Data
+                    <button @click="updateteam" :disabled="onupdate"
+                        class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                        <i v-show="onupdate" class="fa-solid fa-spinner fa-spin"></i> Update Data
                     </button>
                 </div>
             </modal>
@@ -247,6 +247,8 @@ export default {
     name : "teams",
     data() {
         return {
+            onsave : false,
+            onupdate : false,
             team : [],
             team_email : '',
             team_name : '',
@@ -275,6 +277,7 @@ export default {
             this.team_no = data[0].nomor
         },
         updateteam(){
+            this.onupdate =true
             let formData = new FormData();
             if(this.changepassword){
                 formData.append("password", this.team_password);
@@ -291,8 +294,14 @@ export default {
             },
             }).then(({data}) => {
                 if(data.status){
+                    this.onupdate = false
                     this.getdatateam()
                     this.$modal.hide('edit-modal')
+                    this.team_name = ''
+                    this.team_username = ''
+                    this.team_email = ''
+                    this.team_no = ""
+                    this.team_password = ''
                     this.$alert(data.message,'','success',{
                         confirmButtonText: 'OK',
                         showCancelButton: false,
@@ -310,6 +319,7 @@ export default {
             this.team_password = ''
         },
         saveTeam(){
+            this.onsave = true;
             let formData = new FormData();
             // formData.append("avatar", this.avatar);
             formData.append("name", this.team_name);
@@ -331,6 +341,7 @@ export default {
                     this.team_email = ''
                     this.team_no = ""
                     this.team_password = ''
+                    this.onsave = false;
                     this.$alert(data.message,'','success',{
                         confirmButtonText: 'OK',
                         showCancelButton: false,
@@ -342,8 +353,8 @@ export default {
                     this.$modal.hide('my-modal')
                 }
             }).catch((error) => {
-              console.log(error)
-              this.$alert(error.message,'Error!','error');
+                this.onsave = false;
+                this.$alert(error.message,'Error!','error');
             });
         },
         getAvatarFromName(name) {
@@ -352,6 +363,11 @@ export default {
         },
         showPopup() {
             this.$modal.show('my-modal')
+            this.team_name = ''
+            this.team_username = ''
+            this.team_email = ''
+            this.team_no = ""
+            this.team_password = ''
           },
         getdatateam(){
           axios.get(process.env.VUE_APP_BASE+'/get-team',{

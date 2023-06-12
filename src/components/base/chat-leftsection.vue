@@ -15,7 +15,7 @@
             <!-- title app -->
             <!-- create new message -->
             <div class="flex gap-1">
-                <router-link to="/dashboard" class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
+                <router-link v-show="windowWidth > '460'" to="/dashboard" class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
                     <i class="fa-solid fa-house"></i>
                 </router-link>
                 <a @click="reload()"
@@ -26,7 +26,7 @@
                     class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block cursor-pointer">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </a>
-                <router-link to="/dashboard#profil" class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
+                <router-link v-show="windowWidth > '460'" to="/dashboard#profil" class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
                     <i class="fa-sharp fa-solid fa-gear"></i>
                 </router-link>
             </div>
@@ -159,7 +159,8 @@ import eventBus from '@/plugin/eventBus';
                 modalshow : false,
                 admin : false,
                 wokspacedata : [],
-                url : ''
+                url : '',
+                windowWidth : window.innerWidth,
             }
         },
         components : {

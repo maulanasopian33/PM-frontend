@@ -1,21 +1,30 @@
 <template>
     <div class="flex flex-row justify-start">
         <!-- avatar chat -->
+        <vue-easy-lightbox
+                :visible="visibleimgpre"
+                :imgs="imgspre"
+                @hide="handleHide"
+                ></vue-easy-lightbox>
         <div class="w-10 h-10 relative flex flex-shrink-0 mr-4 bg-purple-600 justify-center items-center rounded-full">
             <span class="text-lg font-medium text-center">{{ getAvatarFromName(from) }}</span>
         </div>
         <div class="messages text-sm text-gray-700 grid grid-flow-col gap-2">
-            <div class="flex items-center group">
+            <div class="flex flex-col items-center group">
                 <div class="px-1 py-3 text-left rounded-r-3xl rounded-b-3xl bg-gray-800 max-w-xs lg:max-w-md text-gray-200">
                     <a class="block w-64 h-64 relative flex flex-shrink-0 max-w-xs lg:max-w-md" href="#">
                         <img class="absolute shadow-md w-full h-full rounded-2xl object-cover"
-                            :src="img" :alt="caption" />
+                            :src="img" :alt="caption" @click="showSingle(img)" />
                     </a>
                     <span class="p-6">
                         {{ caption }}
                     </span>
+
                 </div>
-                <div class="flex my-2">
+                <div class="px-1 py-2  rounded-lg w-full mt-1 bg-gray-800 max-w-xs lg:max-w-md text-center ">
+                    <p @click="download(img)" class="cursor-pointer text-white"><i class="fa-solid fa-download"></i> Download </p>
+                </div>
+                <div v-show="false" class="flex my-2">
                     <button type="button"
                         class="hidden group-hover:block flex flex-shrink-0 focus:outline-none mx-2 block rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-700 bg-gray-800 w-8 h-8 p-2">
                         <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
@@ -45,14 +54,48 @@
 </template>
 
 <script>
+import axios from 'axios';
+import VueEasyLightbox from 'vue-easy-lightbox'
     export default {
         name: 'chatleftimg',
         props : ['caption','img', 'avatar','from'],
+        components : {VueEasyLightbox},
+        data(){
+            return{
+                // image preview
+                visibleimgpre : false,
+                imgspre : "",
+                onHide : false,
+                // [end] image preview
+            }
+        },
         methods: {
             getAvatarFromName(name) {
                 const firstLetter = name.charAt(0).toUpperCase();
                 return firstLetter;
             },
+            showSingle(url){
+                this.imgspre = url;
+                this.visibleimgpre = true;
+            },
+            handleHide() {
+                this.visibleimgpre = false
+            },
+            download(url){
+                axios({
+                    url: url,
+                    method: 'GET',
+                    responseType: 'blob',
+                }).then((response) => {
+                     var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                     var fileLink = document.createElement('a');
+                     const myArray = url.split("/");
+                     fileLink.href = fileURL;
+                     fileLink.setAttribute('download', myArray[myArray.length -1]);
+                     document.body.appendChild(fileLink);
+                     fileLink.click();
+                });
+            }
         },
     }
 </script>

@@ -30,7 +30,7 @@
                     class=" text-gray-100 autofill:bg-gray-800 bg-gray-800 py-3 px-4 block w-full border-2 border-gray-400 rounded-md text-sm focus:border-gray-500 focus:ring-gray-500 shadow-sm">
             </div>
             <div class="flex gap-2 mt-5 justify-end">
-                <button @click="updatedata" class="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-400">Update</button>
+                <button @click="updatedata" :disabled="onsave" class="disabled:bg-blue-400 px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-400"><i v-show="onsave" class="fa-solid fa-spinner fa-spin"></i> Update</button>
                 <button class="px-4 py-2 bg-orange-600 rounded-md hover:bg-orange-400">Kembali</button>
             </div>
         </div>
@@ -52,7 +52,7 @@
                     class=" text-gray-100 autofill:bg-gray-800 bg-gray-800 py-3 px-4 block w-full border-2 border-gray-400 rounded-md text-sm focus:border-gray-500 focus:ring-gray-500 shadow-sm">
             </div>
             <div class="flex gap-2 mt-5 justify-end">
-                <button @click="updatepassword" class="px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-400">Update</button>
+                <button :disabled="onupdate" @click="updatepassword" class="disabled:bg-blue-400 px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-400"><i v-show="onupdate" class="fa-solid fa-spinner fa-spin"></i> Update</button>
                 <button class="px-4 py-2 bg-orange-600 rounded-md hover:bg-orange-400">Kembali</button>
             </div>
         </div>
@@ -67,6 +67,8 @@ export default {
     props : ['dataprofil'],
     data() {
         return {
+            onsave : false,
+            onupdate : false,
             profil : true,
             whoisdata : [],
             newpassword : '',
@@ -100,6 +102,7 @@ export default {
             }
         },
         updatepassword(){
+            this.onupdate = true
             if (this.newpassword !== this.verifypassword) {
                 this.$alert("Konfirmasi Password Tidak Sama",'Error!','error');
             }
@@ -112,6 +115,7 @@ export default {
               "Authorization": `Bearer ${this.$cookies.get("login")}`
             },
             }).then(({data}) => {
+                this.onupdate = false
                 if(data.status){
                     this.$modal.hide('edit-modal')
                     this.$alert(data.message,'','success',{
@@ -125,10 +129,12 @@ export default {
                     this.$modal.hide('edit-modal')
                 }
             }).catch((error) => {
+                this.onupdate = false
               this.$alert(error.message,'Error!','error');
             });
         },
         updatedata(){
+            this.onsave = true;
             axios.post(process.env.VUE_APP_BASE+'/update-member', this.whoisdata, {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -147,8 +153,10 @@ export default {
                     this.$alert(data.message,'Error!','error');
                     this.$modal.hide('edit-modal')
                 }
+                this.onsave =false
             }).catch((error) => {
-              this.$alert(error.message,'Error!','error');
+                this.onsave =false
+                this.$alert(error.message,'Error!','error');
             });
         },
         

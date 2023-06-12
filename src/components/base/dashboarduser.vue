@@ -28,7 +28,7 @@
                         </li>
                     </router-link>
                     <router-link v-for="item in data" :to="'/detail/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar+','+item.name+','+item.id_task)">
-                        <li class='flex cursor-default pl-10 items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out'>
+                        <li class='flex cursor-pointer pl-10 items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out'>
                             <i class="fa-sharp fa-solid fa-list-check items-start"></i>
                             <div class="flex flex-col">
                                 <a class="break-all px-4" >{{ item.name  }}</a>
@@ -42,12 +42,11 @@
                 <span class="text-xs font-extralight text-gray-400">Total tasks : {{ sumonprogress }} task </span>
                 <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in OnProgress">
                     <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)">
-                        <li class='flex cursor-default items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
+                        <li class='flex cursor-pointer items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
                             <i class="fa-sharp fa-solid fa-laptop-file"></i>
                             <div class="flex flex-row items-center justify-between w-full">
                                 <a class="break-all px-4"><span class="font-bold text-blue-500">{{ index }}</span></a>
                                 <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)" v-show="data.length >= 3" class="bg-blue-500 text-white px-2 py-1 rounded-md">more</router-link>
-                                <!-- <a class="break-all px-4" v-for="(item, index) in data" :key="index">{{ item.name  }}</a> -->
                             </div>
                         </li>
                     </router-link>
@@ -55,7 +54,6 @@
                         <li class='flex cursor-default pl-10 items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out'>
                             <i class="fa-sharp fa-solid fa-list-check items-start"></i>
                             <div class="flex flex-col">
-                                <!-- <a class="break-all px-4"><span class="font-bold text-blue-500">{{ index }}</span></a> -->
                                 <a class="break-all px-4" >{{ item.name  }}</a>
                             </div>
                         </li>
@@ -67,21 +65,10 @@
                 <span class="text-xs font-extralight text-gray-400">Total tasks : {{ this.sumfinished }} task </span>
                 <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in finished">
                     <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)">
-                        <li class='flex cursor-default items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
+                        <li v-for="item in data" class='flex cursor-pointer items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
                             <i class="fa-sharp fa-solid fa-laptop-file"></i>
                             <div class="flex flex-row items-center justify-between w-full">
-                                <a class="break-all px-4"><span class="font-bold text-blue-500">{{ index }}</span></a>
-                                <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)" v-show="data.length >= 3" class="bg-blue-500 text-white px-2 py-1 rounded-md">more</router-link>
-                                <!-- <a class="break-all px-4" v-for="(item, index) in data" :key="index">{{ item.name  }}</a> -->
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link v-for="item in data" :to="'/detail/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar+','+item.name+','+item.id_task)">
-                        <li class='flex cursor-default pl-10 items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out'>
-                            <i class="fa-sharp fa-solid fa-list-check items-start"></i>
-                            <div class="flex flex-col">
-                                <!-- <a class="break-all px-4"><span class="font-bold text-blue-500">{{ index }}</span></a> -->
-                                <a class="break-all px-4" >{{ item.name  }}</a>
+                                <a class="break-all px-4"><span class="font-bold text-blue-500">{{ index }}</span> - {{ item.name  }}</a>
                             </div>
                         </li>
                     </router-link>
