@@ -1,5 +1,84 @@
 <template>
     <div class="w-full md:flex">
+                  <modal name="create-task" :adaptive="true" height="auto" class="rounded-2xl">
+                <div class=" text-gray-800 p-8 bg-gray-900">
+                    <div class="flex flex-col justify-between w-full overflow-y-scroll">
+                        <h2 class="text-lg font-bold text-left text-white">Edit Task</h2>
+                        <div class="w-full my-1">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Task Name</label>
+                            <input v-model="name_task" type="text"
+                                class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        </div>
+                        <div class="w-full my-1">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Priority</label>
+                            <div class="inline-block relative w-full">
+                                <select v-model="priority"
+                                    class="block appearance-none mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
+                                    <option :selected="(priorityselected === 'high')" value="high">High</option>
+                                    <option :selected="(priorityselected === 'medium')" value="medium">Medium</option>
+                                    <option :selected="(priorityselected === 'low')" value="low">Low</option>
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path
+                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                        </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <div class="w-1/2">
+                                <label for="" class="block text-sm text-left font-bold mb-2 text-white">Start Date</label>
+                                <input v-model="startdate" type="date"
+                                    class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            </div>
+                            <div class="w-1/2">
+                                <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Due Date</label>
+                                <input type="date" v-model="duedate" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required />
+                            </div>
+                        </div>
+                        <div class="w-full my-1">
+                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Assigment</label>
+                            <div class="flex flex-wrap overflow-x-scroll">
+                                <span v-for="(tag, index) in taskassigment" v-bind:key="index" class=" m-1 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-indigo-500 hover:bg-indigo-300 text-white hover:text-black cursor-pointer">
+                                    {{ tag }}
+                                    <button
+                                        type="button"
+                                        class="flex-shrink-0 -mr-0.5 ml-1.5 inline-flex hover:bg-indigo-400 p-1 rounded-full"
+                                        v-on:click="removeTag(index)">
+                                        <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                                        <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex mt-1 overflow-x-scroll bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline border border-gray-300">
+                            <div class="flex-grow text-gray-700 text-center">
+                                <select class="h-full rounded-lg py-2 pl-2 w-full pr-4 block appearance-none leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 outline-none" @change="processTagsOnKeyUpEvent($event.target.value)">
+                                <option value="" >Pilih Anggota Tim</option>
+                                <option v-for="team in teams" :value="team.name" :key="team.id">{{ team.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label for="email" class="block text-sm text-left font-bold ml-1 mb-2 text-white mt-5">Deskripsi</label>
+                        <div class="relative">
+                            <textarea v-model="deskripsi" type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
+                        </div>
+                        <div class="flex gap-1 justify-between">
+                            <button @click="updatetasks()" :disabled="onsave" class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                                <i v-show="onsave" class="fa-solid fa-spinner fa-spin"></i> Update Task
+                            </button>
+                            <button @click="hidePopup" class="text-center mt-5 w-full border rounded-xl outline-none py-5  border-blue-700 text-white text-sm shadow-sm">
+                            Cancel
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </modal>
       <div v-show="chatview" class="lg:w-1/2 w-full flex-none">
         <chatroom @statusview="detailview(true)" :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
       </div>
@@ -40,7 +119,7 @@
           <span class="bg-blue-500 px-3 rounded-md w-fit h-7 text-center mx-3">{{ detailpriority }}</span>
           <div class='mx-auto rounded-lg shadow-xl items-center justify-center flex'>
           <span class="p-1 inline-flex bg-gray-900 rounded-md">
-            <button class="px-2 py-1 rounded">
+            <button @click="showPopup" class="px-2 py-1 rounded">
               <svg class="text-gray-200" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" />
               </svg>
@@ -168,11 +247,23 @@ export default {
         attachments : [],
         detailView : true,
         chatview : true,
+        name_task : '',
+        priority : '',
+        startdate : '',
+        duedate : '',
+        assigment : '',
+        deskripsi : '',
+        emailDomain: '',
+        emailDomains: [],
+        teams : [],
+        priorityselected : '',
+        onsave : false,
       }
     },
     mounted() {
       this.decoder()
       this.getdatauser()
+      this.getdatateam()
       this.screenWidth = window.innerWidth
       this.setview()
       window.addEventListener('resize', this.getWindowSize)
@@ -181,9 +272,112 @@ export default {
       
   	},
     methods: {
+      updatetasks(){
+        this.onsave = true;
+          let data = [];
+          this.taskassigment.forEach((item) => {
+            data.push(this.teams.filter(function(e){
+              return e.name == item
+            })[0].id)
+          });
+          let formData = new FormData();
+          formData.append("name", this.name_task);
+          formData.append("priority", this.priority);
+          formData.append("start_date", this.startdate);
+          formData.append("due_date", this.duedate);
+          formData.append("assigment", data.toString());
+          formData.append("deskripsi", this.deskripsi);
+          axios.post(process.env.VUE_APP_BASE+"/tasks/"+this.detail_idtask, formData, {
+          headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${this.$cookies.get("login")}`
+          },
+          }).then((response) => {
+          // console.log(response)
+          this.hidePopup()
+          this.onsave = false;
+          location.reload()
+          }).catch((error) => {
+          this.$alert("", error,'error');
+          });
+      },
+      getdatateam(){
+          axios.get(process.env.VUE_APP_BASE+'/get-team',{
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+              }).then(({data}) => {
+                  // console.log('datateam',data.data)
+                  let selfdata = this.myname
+                  this.teams = data.data.filter(function(e){
+                      return e.name !== selfdata
+                  });
+              }).catch((error) => {
+                  // console.log(error)
+              });
+      },
+      sanitizeTag(value) {
+          return value.replace(/<[^>]*>?/gm, '').trim();
+      },
+      addIfUnique(array, value) {
+          return [...new Set(array).add(value)];
+      },
+      processTagsOnKeyUpEvent(value) {
+          if (this.taskassigment.length < 20) {
+          this.emailDomain = this.sanitizeTag(value);
+
+          if (value.length > 0) {
+              this.revertTag();
+              let tags = [value];
+              tags.forEach((tag) => {
+                  if (tag.length > 0) {
+                  this.taskassigment = this.addIfUnique(this.taskassigment, tag);
+                  }
+              });
+          }
+          } else {
+          this.revertTag();
+          }
+      },
+      removeTag(index) {
+          this.taskassigment.splice(index, 1);
+      },
+      revertTag() {
+          this.emailDomain = '';
+      },
+      showPopup() {
+          this.$modal.show('create-task')
+      },
+      hidePopup() {
+          this.$modal.hide('create-task')
+          this.name_task = ''
+          this.startdate = ''
+          this.duedate = ''
+          this.deskripsi = ''
+
+      },
       selectFile() {
         let fileInputElement = this.$refs.file
         fileInputElement.click();
+      },
+      updatetask(id, status){
+          let formData = new FormData();
+          formData.append("status", status);
+          axios.post(process.env.VUE_APP_BASE+"/task/"+id, formData, {
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+          }).then((response) => {
+              // console.log(response);
+              if(response.data.status){
+                  this.$alert("", 'Success updated', 'success');
+              }else{
+                  this.$alert(response.data.message, 'Error!', 'error');
+              }
+          }).catch((error) => {
+              // console.log(error)
+              this.$alert(error.message, 'Error!', 'error');
+          });
       },
       onFilePicked() {
         if (this.$refs.file.files[0].size > 20971520) {
@@ -441,12 +635,17 @@ export default {
           },
           }).then(({data}) => {
               this.taskname = data.data.data[0].name;
+              this.name_task = data.data.data[0].name;
               // this.taskassigment = data.data[0].assigment.split(',');
               this.getassigment(data.data.data[0].assigment.split(','))
               this.detailpriority = data.data.data[0].priority
+              this.priorityselected = data.data.data[0].priority
               this.detailduedate = data.data.data[0].due_date.split(' ')[0]
+              this.duedate = data.data.data[0].due_date.split(' ')[0]
+              this.startdate = data.data.data[0].start_date.split(' ')[0]
               this.detail_idtask = data.data.data[0].id_task
               this.taskdeskripsi = data.data.data[0].deskripsi
+              this.deskripsi = data.data.data[0].deskripsi
 
               this.gettodos()
               this.getchat()
