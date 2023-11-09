@@ -9,7 +9,7 @@
             <div class="flex items-start group">
                 <div class="px-6 py-3 rounded-t-full rounded-r-full bg-gray-800 max-w-xs lg:max-w-md text-gray-200">
                     <p class="text-xs text-blue-700 text-left">{{ from }}</p>
-                    <p class="text-md break-all text-left ">
+                    <p class="text-md break-all text-left whitespace-pre-line">
                         {{ msg }}</p>
                 </div>
                 <div class="flex my-2">

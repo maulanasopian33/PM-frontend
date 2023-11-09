@@ -53,16 +53,16 @@
             </div>
 
             <!-- Login banner -->
-            <div class="flex hidden md:block flex-wrap content-center justify-center rounded-r-md" style="width: 24rem; height: 32rem;">
+            <!-- <div class="flex hidden md:block flex-wrap content-center justify-center rounded-r-md" style="width: 24rem; height: 32rem;">
                 <img class="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
                     src="/img/Promanage-login-hero.png">
-            </div>
+            </div> -->
 
         </div>
 
         <!-- Credit -->
         <div class="mt-5 w-full">
-            <p class="text-center px-5 rounded-lg py-2 bg-white/40 flex justify-center font-bold w-1/4 mx-auto">Powered by  <a target="_blank" href="https://antmediahost.com"
+            <p class="text-center px-5 rounded-lg py-2 bg-white/40 flex justify-center font-bold md:w-1/4 mx-auto">hosted by  <a target="_blank" href="https://antmediahost.com"
                     class="text-purple-700"><img class="h-6" src="https://www.antmediahost.com/wp-content/uploads/2021/12/Logo-AntMediaHost.webp"/></a>.
             </p>
         </div>
@@ -73,6 +73,7 @@
 //   import VueMultipleThemes from "vue-multiple-themes";
 import axios from 'axios'
     export default {
+        // eslint-disable-next-line vue/multi-word-component-names
         name : 'login',
         data(){
             return{
@@ -112,6 +113,7 @@ import axios from 'axios'
                         }
                         this.$router.push('/dashboard')
                     }).catch((error) => {
+                        // console.log(error)
                         console.clear();
                         this.$loading(false)
                         this.$alert("", error.response.data.message,'error');

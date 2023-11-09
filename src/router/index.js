@@ -4,6 +4,7 @@ import Workspace from '@/components/workspacePage.vue'
 import loginVue from '@/components/login.vue'
 import detailworkspace from '@/components/detailtaskpage.vue'
 import workspaceChat from '@/components/base/workspace-chat.vue'
+import reportproject from '@/components/base/reportproject.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueSimpleAlert from "vue-simple-alert"
@@ -30,6 +31,11 @@ const routes = [
     path: '/dashboard/:workspace',
     name: 'dashboard by id',
     component: Workspace
+  },
+  {
+    path: '/report/:workspace',
+    name: 'Detail project per workspace',
+    component: reportproject
   },
   {
     path: '/diskusi/:workspace',

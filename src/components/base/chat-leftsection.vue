@@ -1,9 +1,9 @@
 <template>
     <section
-        class="flex flex-col flex-none overflow-auto group w-full lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
+        class="flex flex-col flex-none overflow-auto w-full lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
         <div class="header p-4 flex flex-row justify-between items-center flex-none">
             <!-- brand icon -->
-            <div class="h-20 relative flex flex-shrink-0">
+            <div class="h-20 relative flex">
                 <router-link to="/dashboard">
                     <img class=" w-full h-full" alt="ravisankarchinnam"
                         src="/img/logo_banner_light.png" />
@@ -16,24 +16,36 @@
             <!-- create new message -->
             <div class="flex gap-1">
                 <router-link v-show="windowWidth > '460'" to="/dashboard" class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
-                    <i class="fa-solid fa-house"></i>
+                    <div class="text-center group">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="text-[10px] mt-3 hidden group-hover:block">Home</span>
+                    </div>
                 </router-link>
                 <a @click="reload()"
                     class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block cursor-pointer">
-                    <i class="fa-solid fa-rotate"></i>
+                    <div class="text-center group">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span class="text-[10px] mt-3 hidden group-hover:block">Reload</span>
+                    </div>
                 </a>
                 <a @click="logout()"
                     class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block cursor-pointer">
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <div class="text-center group">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="text-[10px] mt-3 hidden group-hover:block">Logout</span>
+                    </div>
                 </a>
                 <router-link v-show="windowWidth > '460'" to="/dashboard#profil" class=" rounded-full hover:bg-gray-700 bg-gray-800 w-10 h-10 p-2 block">
-                    <i class="fa-sharp fa-solid fa-gear"></i>
+                    <div class="text-center group">
+                        <i class="fa-sharp fa-solid fa-gear"></i>
+                        <span class="text-[10px] mt-3 hidden group-hover:block">Setting</span>
+                    </div>
                 </router-link>
             </div>
             <!-- create new message -->
         </div>
         <!-- search box -->
-        <div class="search-box p-4 flex-none">
+        <!-- <div class="search-box p-4 flex-none">
             <form onsubmit="">
                 <div class="relative">
                     <label>
@@ -49,7 +61,7 @@
                     </label>
                 </div>
             </form>
-        </div>
+        </div> -->
         <!-- search box -->
         <!-- Story -->
         <!-- <div class="active-users flex flex-row p-2 overflow-auto w-0 min-w-full">
@@ -133,9 +145,9 @@
         <!-- contact -->
         <div class="contacts p-2 flex-1 overflow-y-scroll">
             <!-- normal contact -->
-            <p class="text-left px-4 block group-hover:block">Workspace</p>
+            <p class="text-left px-4 block">Workspace</p>
             <!-- <ContactNormal avatar="https://randomuser.me/api/portraits/women/61.jpg" name="Teknikal Support" msg="loremipsum" time="just now"></ContactNormal> -->
-            <ContactNormal v-for="data in wokspacedata" :detail="data.deskripsi" :avatar='url + data.avatar' :name="data.name" msg="loremipsum" time="just now"></ContactNormal>
+            <ContactNormal v-for="(data, index) in wokspacedata" :key="index" :detail="data.deskripsi" :avatar='url + data.avatar' :name="data.name" msg="loremipsum" time="just now"></ContactNormal>
             
             <!-- normal contact -->
             <!-- unread contact -->
@@ -145,12 +157,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import ContactNormal from '../parsial/chat/contact-normal.vue';
-import ContactUnread from '../parsial/chat/contact-unread.vue';
-import NewWorkspace from '../parsial/chat/new-workspace.vue';
 import workspace from '@/plugin/workspace';
-import eventBus from '@/plugin/eventBus';
     export default {
         mixins : [workspace],
         name: 'chat-leftsection',
@@ -165,8 +173,6 @@ import eventBus from '@/plugin/eventBus';
         },
         components : {
             ContactNormal,
-            ContactUnread,
-            NewWorkspace
         },
         created() {
 

@@ -47,9 +47,9 @@
         <div ref="chatbody" class="chat-body flex-grow p-4 overflow-y-scroll scroll-smooth">
             <div v-if="showchat">
                 
-                <div v-for="(chat, index) in message">
+                <div v-for="(chat, index) in message" :key="index">
                     <ChatTime :time="(index == new Date().toLocaleDateString()) ? 'Today' : index"></ChatTime>
-                    <div v-for="item in chat">
+                    <div v-for="(item, index) in chat" :key="index">
                         <chatLeftlike v-show="item.type === 'like'" v-if="item.from !== myname && item.from !== 'system'"
                             :from="item.from"></chatLeftlike>
                         <ChatLeftimg @click="showSingle(url + item.message)" v-if="item.type === 'file' && item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
@@ -243,8 +243,8 @@ import ChatRightNormal from '../parsial/chat/chat-rightNormal.vue';
 import chatRightlike from '@/components/parsial/chat/chat-likeright.vue'
 import ChatSystem from '../parsial/chat/chat-system.vue';
 import ChatTime from '../parsial/chat/chat-time.vue';
-import Echo from "laravel-echo"
-import Pusher from "pusher-js"
+// import Echo from "laravel-echo"
+// import Pusher from "pusher-js"
 import axios from 'axios'
 export default {
     name: "chatroom-global",
@@ -325,7 +325,7 @@ export default {
                     this.decoder()
 
                 }).catch((error) => {
-                    // console.log(error.response.status)
+                    console.log(error.response.status)
                     // switch(error.response.status){
                     //     case 401 :
                     //         this.$cookies.remove("login")
@@ -347,7 +347,6 @@ export default {
                                 })
             this.subtitle = thisworkspace[0].name
             this.id_workspace = thisworkspace[0].id
-            console.log(this.id_workspace)
             this.getchat()
             this.listenchat()
             // this.avatar = splitdetail[1];
@@ -409,7 +408,7 @@ export default {
                 },
                 data : form
                 };
-            axios(config).then((response) => {
+            axios(config).then(() => {
                 
             }).catch((error) => {
                 this.$alert(error.message,'Error Send Notif!','error');
@@ -458,7 +457,7 @@ export default {
                     },
                     data: form
                 };
-                axios(config).then((response) => {
+                axios(config).then(() => {
                     this.sendnotif(this.myname + " Mengirimkan Pesan/"+this.gettaskname,this.myname,'normal')
                     this.txtchat = ''
                 }).catch((error) => {
@@ -482,9 +481,10 @@ export default {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${this.$cookies.get("login")}`
                 },
-            }).then((response) => {
+            }).then(() => {
                 this.showchat = true;
                 this.sendnotif("mengirimkan file",this.myname,'image')
+                
                 this.$loading(false)
                 this.files = [];
                 // this.$router.go(this.$router.currentRoute)

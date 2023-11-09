@@ -1,84 +1,84 @@
 <template>
     <div class="w-full md:flex">
-                  <modal name="create-task" :adaptive="true" height="auto" class="rounded-2xl">
-                <div class=" text-gray-800 p-8 bg-gray-900">
-                    <div class="flex flex-col justify-between w-full overflow-y-scroll">
-                        <h2 class="text-lg font-bold text-left text-white">Edit Task</h2>
-                        <div class="w-full my-1">
-                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Task Name</label>
-                            <input v-model="name_task" type="text"
-                                class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                        </div>
-                        <div class="w-full my-1">
-                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Priority</label>
-                            <div class="inline-block relative w-full">
-                                <select v-model="priority"
-                                    class="block appearance-none mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
-                                    <option :selected="(priorityselected === 'high')" value="high">High</option>
-                                    <option :selected="(priorityselected === 'medium')" value="medium">Medium</option>
-                                    <option :selected="(priorityselected === 'low')" value="low">Low</option>
-                                </select>
-                                <div
-                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20">
-                                        <path
-                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                        </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <div class="w-1/2">
-                                <label for="" class="block text-sm text-left font-bold mb-2 text-white">Start Date</label>
-                                <input v-model="startdate" type="date"
-                                    class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
-                            </div>
-                            <div class="w-1/2">
-                                <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Due Date</label>
-                                <input type="date" v-model="duedate" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required />
-                            </div>
-                        </div>
-                        <div class="w-full my-1">
-                            <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Assigment</label>
-                            <div class="flex flex-wrap overflow-x-scroll">
-                                <span v-for="(tag, index) in taskassigment" v-bind:key="index" class=" m-1 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-indigo-500 hover:bg-indigo-300 text-white hover:text-black cursor-pointer">
-                                    {{ tag }}
-                                    <button
-                                        type="button"
-                                        class="flex-shrink-0 -mr-0.5 ml-1.5 inline-flex hover:bg-indigo-400 p-1 rounded-full"
-                                        v-on:click="removeTag(index)">
-                                        <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-                                        <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
-                                        </svg>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex mt-1 overflow-x-scroll bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline border border-gray-300">
-                            <div class="flex-grow text-gray-700 text-center">
-                                <select class="h-full rounded-lg py-2 pl-2 w-full pr-4 block appearance-none leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 outline-none" @change="processTagsOnKeyUpEvent($event.target.value)">
-                                <option value="" >Pilih Anggota Tim</option>
-                                <option v-for="team in teams" :value="team.name" :key="team.id">{{ team.name }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <label for="email" class="block text-sm text-left font-bold ml-1 mb-2 text-white mt-5">Deskripsi</label>
-                        <div class="relative">
-                            <textarea v-model="deskripsi" type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
-                        </div>
-                        <div class="flex gap-1 justify-between">
-                            <button @click="updatetasks()" :disabled="onsave" class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
-                                <i v-show="onsave" class="fa-solid fa-spinner fa-spin"></i> Update Task
-                            </button>
-                            <button @click="hidePopup" class="text-center mt-5 w-full border rounded-xl outline-none py-5  border-blue-700 text-white text-sm shadow-sm">
-                            Cancel
-                            </button>
+      <modal name="create-task" :adaptive="true" height="auto" class="rounded-2xl">
+          <div class=" text-gray-800 p-8 bg-gray-900">
+              <div class="flex flex-col justify-between w-full overflow-y-scroll">
+                  <h2 class="text-lg font-bold text-left text-white">Edit Task</h2>
+                  <div class="w-full my-1">
+                      <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Task Name</label>
+                      <input v-model="name_task" type="text"
+                          class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                  </div>
+                  <div class="w-full my-1">
+                      <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Priority</label>
+                      <div class="inline-block relative w-full">
+                          <select v-model="priority"
+                              class="block appearance-none mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center px-3 text-sm border-gray-300 rounded border">
+                              <option :selected="priorityhigh" value="high">High</option>
+                              <option :selected="prioritymedium" value="medium">Medium</option>
+                              <option :selected="prioritylow" value="low">Low</option>
+                          </select>
+                          <div
+                              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20">
+                                  <path
+                                      d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="flex gap-2">
+                      <div class="w-1/2">
+                          <label for="" class="block text-sm text-left font-bold mb-2 text-white">Start Date</label>
+                          <input v-model="startdate" type="date"
+                              class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                      </div>
+                      <div class="w-1/2">
+                          <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Due Date</label>
+                          <input type="date" v-model="duedate" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required />
+                      </div>
+                  </div>
+                  <div class="w-full my-1">
+                      <label for="" class="block text-sm text-left font-bold ml-1 mb-2 text-white">Assigment</label>
+                      <div class="flex flex-wrap overflow-x-scroll">
+                          <span v-for="(tag, index) in taskassigment" v-bind:key="index" class=" m-1 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-indigo-500 hover:bg-indigo-300 text-white hover:text-black cursor-pointer">
+                              {{ tag }}
+                              <button
+                                  type="button"
+                                  class="flex-shrink-0 -mr-0.5 ml-1.5 inline-flex hover:bg-indigo-400 p-1 rounded-full"
+                                  v-on:click="removeTag(index)">
+                                  <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                                  <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
+                                  </svg>
+                              </button>
+                          </span>
+                      </div>
+                  </div>
+                  <div class="flex mt-1 overflow-x-scroll bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline border border-gray-300">
+                      <div class="flex-grow text-gray-700 text-center">
+                          <select class="h-full rounded-lg py-2 pl-2 w-full pr-4 block appearance-none leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 outline-none" @change="processTagsOnKeyUpEvent($event.target.value)">
+                          <option value="" >Pilih Anggota Tim</option>
+                          <option v-for="team in teams" :value="team.name" :key="team.id">{{ team.name }}</option>
+                          </select>
+                      </div>
+                  </div>
+                  <label for="email" class="block text-sm text-left font-bold ml-1 mb-2 text-white mt-5">Deskripsi</label>
+                  <div class="relative">
+                      <textarea v-model="deskripsi" type="text" height="100px" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error"></textarea>
+                  </div>
+                  <div class="flex gap-1 justify-between">
+                      <button @click="updatetasks()" :disabled="onsave" class="disabled:bg-blue-400 text-center mt-5 w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                          <i v-show="onsave" class="fa-solid fa-spinner fa-spin"></i> Update Task
+                      </button>
+                      <button @click="hidePopup" class="text-center mt-5 w-full border rounded-xl outline-none py-5  border-blue-700 text-white text-sm shadow-sm">
+                      Cancel
+                      </button>
 
-                        </div>
-                    </div>
-                </div>
-            </modal>
+                  </div>
+              </div>
+          </div>
+      </modal>
       <div v-show="chatview" class="lg:w-1/2 w-full flex-none">
         <chatroom @statusview="detailview(true)" :name="taskname" :avatar="avatar" :id_task="detail_idtask" :divisi="nameworkspace"></chatroom>
       </div>
@@ -166,7 +166,7 @@
             </div>
             <!-- todo item -->
             <div class="flex p-2 hover:bg-sky-100 text-white hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out" v-for="(item, index) in todo">
-              <input @change="todochange($event,item.name)" :checked="item.status" type="checkbox" class="w-5 rounded" name="" id="">
+              <input @change="todochange($event,item.name,item.id)" :checked="item.status" type="checkbox" class="w-5 rounded" name="" id="">
               <span :class="'break-all ml-4 rounded-md px-2 py-2 text-sm w-10/12'+ [item.status ? ' line-through' : '']">{{ item.name }}</span>
               <input hidden :value="item.name" type="text" class="ml-4 bg-transparent rounded-md text-white px-2 py-2 text-sm w-10/12" placeholder="new task">
               <!-- <input type="text" class="px-2 py-2 text-sm w-2/4" disabled :value="item.name"> -->
@@ -218,6 +218,7 @@
 
 import axios from 'axios';
 import Echo from "laravel-echo"
+import io from 'socket.io-client';
 import chatroom from '../base/chatroom.vue';
 export default {
     name : 'detailtask',
@@ -256,7 +257,9 @@ export default {
         emailDomain: '',
         emailDomains: [],
         teams : [],
-        priorityselected : '',
+        priorityhigh : false,
+        prioritymedium : false,
+        prioritylow : false,
         onsave : false,
       }
     },
@@ -267,9 +270,11 @@ export default {
       this.screenWidth = window.innerWidth
       this.setview()
       window.addEventListener('resize', this.getWindowSize)
+      
     },
     created() {
-      
+
+      // this.sendnotif("mengirimkan file",'this.me','image');
   	},
     methods: {
       updatetasks(){
@@ -401,7 +406,7 @@ export default {
                   showConfirmButton: false,
                   timer: 3000
                 });
-              this.sendnotif("mengirimkan file",this.me,'image')
+              this.sendnotif("mengirimkan file",this.me,'image',this.detail_idtask)
               // this.$router.go(this.$router.currentRoute)
           }).catch((error) => {
               this.$alert(error.message, 'Error!', 'error');
@@ -436,16 +441,23 @@ export default {
         }
       },
       getchat(){
-        let channel = 'chat-'+this.detail_idtask
-        this.$echo.channel(channel).listen('chat', (e) => {
-          // this.message.push({from : e.msg.from, msg : e.msg.message, reply : e.msg.reply,time : e.msg.time,type : e.msg.type});
+        // const socket = io(process.env.VUE_APP_WEBSOCKET, {
+        //   transportOptions: {
+        //     polling: {
+        //       extraHeaders: {
+        //         'Authorization': process.env.VUE_APP_BEARER,
+        //       },
+        //     },
+        //   },
+        // });
+
+        this.$socket.emit('join', this.detail_idtask);
+        this.$socket.on('ReceiveNotification',(data)=>{
+          console.log(JSON.parse(data))
           this.notif['status'] = true
           this.gettodos()
           this.getchatdb()
-          // this.pesan.push({
-          // 	message: e.message,
-          // });
-        });
+        })
       },
       getchatdb() {
             axios.get(process.env.VUE_APP_BASE + '/chat/' + this.detail_idtask, {
@@ -465,7 +477,7 @@ export default {
                 });
             });
         },
-        sendnotif(msg,from,type){
+        sendnotif(msg,from,type,rooms){
             let form = JSON.stringify({
                 message : msg,
                 from    : from,
@@ -473,26 +485,28 @@ export default {
                 time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
                 type    : type
             })
-            var config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: process.env.VUE_APP_BASE+'/sendNotif',
-                headers: { 
-                    "Authorization": `Bearer ${this.$cookies.get("login")}`,
-                    "Content-Type": "application/json"
-                },
-                data : form
-                };
-            axios(config).then((response) => {
+            // console.log(rooms)
+            this.$socket.emit('sendNotification',{room:rooms,msg:form})
+            // var config = {
+            //     method: 'post',
+            //     maxBodyLength: Infinity,
+            //     url: process.env.VUE_APP_BASE+'/sendNotif',
+            //     headers: { 
+            //         "Authorization": `Bearer ${this.$cookies.get("login")}`,
+            //         "Content-Type": "application/json"
+            //     },
+            //     data : form
+            //     };
+            // axios(config).then((response) => {
                 
-            }).catch((error) => {
-                this.$alert(error.message,'Error Send Notif!','error',{
-                  confirmButtonText: 'OK',
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                  timer: 3000
-                });
-            });
+            // }).catch((error) => {
+            //     this.$alert(error.message,'Error Send Notif!','error',{
+            //       confirmButtonText: 'OK',
+            //       showCancelButton: false,
+            //       showConfirmButton: false,
+            //       timer: 3000
+            //     });
+            // });
           },
       deletetask(){
         this.$confirm('are you sure to delete this task',"Are you sure?",'question').then(() => {
@@ -502,7 +516,7 @@ export default {
             },
             }).then(({data}) => {
               
-                this.sendnotif(this.me + " Menghapus Task " + this.taskname +'/'+this.me,this.me,'normal')
+                this.sendnotif(this.me + " Menghapus Task " + this.taskname +'/'+this.me,this.me,'normal',this.detail_idtask)
                 this.$alert("", 'Deleted','success',{
                   confirmButtonText: 'OK',
                   showCancelButton: false,
@@ -534,6 +548,7 @@ export default {
                 data : form
                 };
             axios(config).then((response) => {
+                this.$socket.emit('sendMessage',{room:this.detail_idtask,msg:form})
                 this.txtchat = ''
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error',{
@@ -544,10 +559,11 @@ export default {
                 });
             });
           },
-      todochange(event,name){
+      todochange(event,name,id){
         let formData = new FormData();
         formData.append("status", Number(event.target.checked));
         formData.append("name", name);
+        formData.append('id', id);
         formData.append("id_task", this.detail_idtask);
         axios.post(process.env.VUE_APP_BASE+'/todo/update',formData,{
             headers: {
@@ -562,14 +578,15 @@ export default {
                 }
                 this.nameTasks = ''
                 this.update = true;
-                this.sendmsg(msg,'system','aaa','notif')
-                this.sendnotif(msg +" di task " + this.taskname +'/Project Manager','Project Manager','normal')
-                this.$alert("", 'updated','success',{
-                  confirmButtonText: 'OK',
-                  showCancelButton: false,
-                  showConfirmButton: false,
-                  timer: 3000
-                });
+                this.sendmsg(msg,'system','aaa','notif',this.detail_idtask)
+                // 
+                this.sendnotif(msg +" di task " + this.taskname +'/Project Manager','Project Manager','normal',this.detail_idtask)
+                // this.$alert("", 'updated','success',{
+                //   confirmButtonText: 'OK',
+                //   showCancelButton: false,
+                //   showConfirmButton: false,
+                //   timer: 3000
+                // });
                 
             }).catch((error) => {
                 this.$alert(error.message,'Error!','error',{
@@ -591,7 +608,7 @@ export default {
                 this.todo.splice(index, 1)
                 let msg = this.me + ' menghapus todo ' +item
                 this.sendmsg(msg,'system','aaa','notif')
-                this.sendnotif(msg +" di task " + this.taskname +'/Project Manager','Project Manager','normal')
+                this.sendnotif(msg +" di task " + this.taskname +'/Project Manager','Project Manager','normal',this.detail_idtask)
                 this.$alert("", 'Deleted','success',{
                   confirmButtonText: 'OK',
                   showCancelButton: false,
@@ -639,16 +656,31 @@ export default {
               // this.taskassigment = data.data[0].assigment.split(',');
               this.getassigment(data.data.data[0].assigment.split(','))
               this.detailpriority = data.data.data[0].priority
-              this.priorityselected = data.data.data[0].priority
               this.detailduedate = data.data.data[0].due_date.split(' ')[0]
               this.duedate = data.data.data[0].due_date.split(' ')[0]
               this.startdate = data.data.data[0].start_date.split(' ')[0]
               this.detail_idtask = data.data.data[0].id_task
               this.taskdeskripsi = data.data.data[0].deskripsi
               this.deskripsi = data.data.data[0].deskripsi
-
+              switch (data.data.data[0].priority) {
+                case "high":
+                  this.priorityhigh = true;
+                  this.prioritylow = false;
+                  this.prioritymedium = false;
+                  break;
+                case "medium":
+                  this.priorityhigh = false;
+                  this.prioritylow = false;
+                  this.prioritymedium = true;
+                  break;
+                case "low":
+                  this.priorityhigh = false;
+                  this.prioritylow = true;
+                  this.prioritymedium = false;
+                  break;
+              }
               this.gettodos()
-              this.getchat()
+              // this.getchat()
               this.getchatdb()
               // this.assigmentdata = detaildata.assigment.split(',')
               // this.todo = data.data
@@ -700,7 +732,7 @@ export default {
           this.nameTask = ''
           this.statustask = false
           this.sendmsg(msg,'system','aaa','notif')
-          this.sendnotif(msg+'/Project Manager','Project Manager','normal')
+          this.sendnotif(msg+'/Project Manager','Project Manager','normal',this.detail_idtask)
         }).catch((error) => {
           this.$alert(error.message,'Error!','error');
         });

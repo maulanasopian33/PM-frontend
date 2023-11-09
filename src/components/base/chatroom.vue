@@ -42,9 +42,9 @@
         <!-- chat body -->
         <div ref="chatbody" class="chat-body flex-grow p-4 overflow-y-scroll scroll-smooth">
             <div v-if="showchat">
-                <div v-for="(chat, index) in message">
+                <div v-for="(chat, index) in message" :key="index">
                     <ChatTime :time="(index == new Date().toLocaleDateString()) ? 'Today' : index"></ChatTime>
-                    <div v-for="item in chat">
+                    <div v-for="(item, index) in chat" :key="index">
                         <chatLeftlike v-show="item.type === 'like'" v-if="item.from !== myname && item.from !== 'system'"
                             :from="item.from"></chatLeftlike>
                         <ChatLeftimg v-if="item.type === 'file' && item.from !== myname && item.from !== 'system'" caption="" :from="item.from" :img="url + item.message" avatar="" ></ChatLeftimg>
@@ -52,9 +52,11 @@
                         <ChatRightimg v-if="item.type === 'file' && item.from === myname" caption="" :img="url + item.message" ></ChatRightimg>
                         <ChatRightNormal v-show="item.type === 'normal'" v-if="item.from === myname" :msg="item.message">
                         </ChatRightNormal>
+                        <ChatRightMention v-show="item.type === 'mention'" v-if="item.from === myname" :msg="item.message"></ChatRightMention>
                         <ChatSystem v-if="item.from === 'system'" :msg="item.message"></ChatSystem>
                         <ChatLeftNormal v-show="item.type === 'normal'"
                             v-if="item.from !== myname && item.from !== 'system'" :msg="item.message" :from="item.from"></ChatLeftNormal>
+                        
                     </div>
                 </div>
             </div>
@@ -171,8 +173,34 @@
         </div>
         <!-- chat body -->
         <!-- chat footer -->
-        <div class="chat-footer flex-shrink-0 h-24">
-            <div class="flex flex-row items-center p-4">
+        <div class="chat-footer flex-shrink-0" :class="hchat">
+            <!-- Mention viewer -->
+            <div class=" bg-gray-800 mx-5 text-left text-xs p-3 rounded-md flex gap-3" v-show="mentionshow">
+                <div>
+                    <svg fill="currentColor" width="30px" height="30px" viewBox="-2 -2 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin" class="jam jam-task-list" stroke="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M6 0h8a6 6 0 0 1 6 6v8a6 6 0 0 1-6 6H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6zm0 2a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V6a4 4 0 0 0-4-4H6zm6 7h3a1 1 0 0 1 0 2h-3a1 1 0 0 1 0-2zm-2 4h5a1 1 0 0 1 0 2h-5a1 1 0 0 1 0-2zm0-8h5a1 1 0 0 1 0 2h-5a1 1 0 1 1 0-2zm-4.172 5.243L7.95 8.12a1 1 0 1 1 1.414 1.415l-2.828 2.828a1 1 0 0 1-1.415 0L3.707 10.95a1 1 0 0 1 1.414-1.414l.707.707z"></path></g></svg>
+                </div>
+                <div class="w-full">
+                    <span class="text-blue-600">Todo list</span>
+                    <p>{{ mentiontext }}</p>
+                </div>
+                <div class="text-right cursor-pointer">
+                    <span @click="mentionAction(false)">x</span>
+                </div>
+            </div>
+
+
+            <div class="absolute bg-gray-800 mx-20 text-left text-xs p-3 rounded-md  bottom-16 z-10 w-1/4" v-show="mentionsugest">
+                <div v-for="(item, index) in mentionitem" :key="index" class="flex gap-3 py-3 hover:bg-gray-400 hover:rounded-md px-4 hover:text-gray-900" @click="mentionclick(item)">
+                    <div>
+                        <svg fill="currentColor" width="30px" height="30px" viewBox="-2 -2 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin" class="jam jam-task-list" stroke="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M6 0h8a6 6 0 0 1 6 6v8a6 6 0 0 1-6 6H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6zm0 2a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V6a4 4 0 0 0-4-4H6zm6 7h3a1 1 0 0 1 0 2h-3a1 1 0 0 1 0-2zm-2 4h5a1 1 0 0 1 0 2h-5a1 1 0 0 1 0-2zm0-8h5a1 1 0 0 1 0 2h-5a1 1 0 1 1 0-2zm-4.172 5.243L7.95 8.12a1 1 0 1 1 1.414 1.415l-2.828 2.828a1 1 0 0 1-1.415 0L3.707 10.95a1 1 0 0 1 1.414-1.414l.707.707z"></path></g></svg>
+                    </div>
+                    <div >
+                        <span class="text-blue-600">Todo list</span>
+                        <p>{{ item.name }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row items-center pt-2 p-4">
                 <button type="button" @click="showchat = !showchat"
                     class="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-6 h-6">
                     <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
@@ -190,10 +218,10 @@
 
                 <div class="relative flex-grow">
                     <label>
-                        <input
-                            class="rounded-full py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
-                            type="text" v-on:keyup.enter="sendmsg('normal')" v-model="txtchat" placeholder="Aa" />
-                        <button type="button"
+                            <input
+                                class="rounded-full py-2 pl-3 pr-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
+                                type="text" v-on:keyup.enter="beforesendmsg()" v-model="txtchat" placeholder="Aa" @input="changetext()" />
+                            <button type="button"
                             class="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none block text-blue-600 hover:text-blue-700 w-6 h-6">
                             <svg viewBox="0 0 20 20" class="w-full h-full fill-current">
                                 <path
@@ -202,7 +230,7 @@
                         </button>
                     </label>
                 </div>
-                <button @click="sendmsg('normal')" type="button"
+                <button @click="beforesendmsg()" type="button"
                     class="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-10 h-10">
                     <svg viewBox="0 0 24 24" class="w-full h-full fill-current">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -235,17 +263,25 @@ import ChatRightNormal from '../parsial/chat/chat-rightNormal.vue';
 import chatRightlike from '@/components/parsial/chat/chat-likeright.vue'
 import ChatSystem from '../parsial/chat/chat-system.vue';
 import ChatTime from '../parsial/chat/chat-time.vue';
+import ChatRightMention from '@/components/parsial/chat/chat-rightmention.vue';
 import myfirst from '@/MyFirstPlugin.js'
-import Echo from "laravel-echo"
-import Pusher from "pusher-js"
 import axios from 'axios'
 export default {
     mixins: [myfirst],
+    // eslint-disable-next-line vue/multi-word-component-names
     name: "chatroom",
     props: ['name', 'avatar', 'divisi', 'id_task'],
-    components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem, chatLeftlike, chatRightlike },
+    components: { ChatLeftNormal, ChatTime, ChatLeftimg, ChatRightNormal, ChatRightimg, ChatSystem, chatLeftlike, chatRightlike, ChatRightMention},
     data() {
         return {
+            mentionitem: [
+            ],
+            mentiondata:[],
+            mentionBaseData: [],
+            mentionsugest : false,
+            mentionshow : false,
+            mentiontext: '',
+            hchat : 'h-24', 
             message: [],
             gettaskname : '',
             msgrender: [],
@@ -270,9 +306,59 @@ export default {
             this.getchat()
             this.listenchat()
             this.getdatatask(this.id_task)
+            this.gettodos()
         }, 3000);
     },
     methods: {
+        beforesendmsg(){
+            if(this.mentionshow){
+                this.sendmsg('mention');
+            }else{
+                this.sendmsg('normal');
+            }
+        },
+        gettodos(){
+          axios.get(process.env.VUE_APP_BASE+'/todo/'+this.id_task,{
+              headers: {
+                  "Authorization": `Bearer ${this.$cookies.get("login")}`
+              },
+              }).then(({data}) => {
+                    this.mentionitem = data
+                    this.mentionBaseData = data
+              }).catch((error) => {
+                  this.$alert(error.message,'Error!','error');
+              });
+      },
+        mentionclick(data){
+            this.mentiontext            = data.name;
+            this.mentiondata['id']      = data.id;
+            this.mentiondata['todo']    = data.name;
+            this.mentionAction(true);
+            this.txtchat = '';
+            this.mentionsugest = false;
+        },
+        changetext(){
+            let data = this.txtchat;
+            if(data.includes('#')){
+                this.mentionsugest = true;
+                const filteredData = this.mentionBaseData.filter(function(item){
+                    return item.name.includes(data.replace('#',''))  
+                })
+                this.mentionitem = filteredData;
+            }else{
+                this.mentionsugest = false;
+                return true;
+            }
+        },
+        mentionAction(show){
+            if(show){
+                this.mentionshow = true;
+                this.hchat = 'h-36';
+            }else{
+                this.mentionshow = false;
+                this.hchat = 'h-24';
+            }
+        },
         uploadfileevent(event) {
             this.showchat = false;
             const data = event.detail;
@@ -351,21 +437,7 @@ export default {
                 time    : new Date().toISOString().slice(0, 19).replace('T', ' '),
                 type    : type
             })
-            var config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: process.env.VUE_APP_BASE+'/sendNotif',
-                headers: { 
-                    "Authorization": `Bearer ${this.$cookies.get("login")}`,
-                    "Content-Type": "application/json"
-                },
-                data : form
-                };
-            axios(config).then((response) => {
-                
-            }).catch((error) => {
-                this.$alert(error.message,'Error Send Notif!','error');
-            });
+            this.$socket.emit('sendNotification',{room:this.id_task,msg:form})
           },
           getdatatask(data){
                 axios.get(process.env.VUE_APP_BASE+'/task/bytask/'+data,{
@@ -401,6 +473,24 @@ export default {
                             time: new Date().toISOString().slice(0, 19).replace('T', ' '),
                             type: type
                         })
+                        break;
+                    case 'mention':
+                        this.mentiondata['message'] = this.txtchat;
+                        this.mentionAction(false);
+                        // eslint-disable-next-line no-case-declarations
+                        let data = JSON.stringify({
+                            id : this.mentiondata['id'],
+                            todo : this.mentiondata['todo'],
+                            message : this.mentiondata['message']
+                        });
+                        form = JSON.stringify({
+                            msg: data,
+                            from: this.myname,
+                            reply: false,
+                            time: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                            type: type
+                        })
+                        break;
                 }
                 var config = {
                     method: 'post',
@@ -412,8 +502,9 @@ export default {
                     },
                     data: form
                 };
-                axios(config).then((response) => {
+                axios(config).then(() => {
                     this.sendnotif(this.myname + " Mengirimkan Pesan/"+this.gettaskname,this.myname,'normal')
+                    this.$socket.emit('sendMessage',{room:this.id_task,msg:form})
                     this.txtchat = ''
                 }).catch((error) => {
                     this.$alert(error.message, 'Error!', 'error');
@@ -436,9 +527,11 @@ export default {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${this.$cookies.get("login")}`
                 },
-            }).then((response) => {
+            }).then(() => {
                 this.showchat = true;
+                this.$socket.emit('sendMessage',{room:this.id_task,msg:formData})
                 this.sendnotif("mengirimkan file",this.myname,'image')
+                this.getchat()
                 this.$loading(false)
                 this.files = [];
                 // this.$router.go(this.$router.currentRoute)
@@ -453,14 +546,19 @@ export default {
             // console.log(this.$refs.chatbody.clientHeight)
         },
         listenchat() {
-            let channel = 'chat-' + this.id_task
-            this.$echo.channel(channel).listen('chat', (e) => {
-                this.msgrender.push({ from: e.msg.from, message: e.msg.message, reply: e.msg.reply, time: e.msg.time, type: e.msg.type });
+            // let channel = 'chat-' + this.id_task
+            this.$socket.emit('join',this.id_task)
+            this.$socket.on('receiveMessage',(data)=>{
+                let datas = JSON.parse(data)
+                this.msgrender.push({ from: datas.from, message: datas.msg, reply: datas.reply, time: datas.time, type: datas.type });
                 this.message = this.groupChatByDate(this.msgrender)
                 setTimeout(() => {
                     this.scrolltobottom()
                 }, 2000);
+                this.gettodos()
             });
+            // this.$echo.channel(channel).listen('chat', (e) => {
+            // });
         },
         getchat() {
             axios.get(process.env.VUE_APP_BASE + '/chat/' + this.id_task, {
@@ -470,7 +568,7 @@ export default {
             }).then(({ data }) => {
                 this.message = this.groupChatByDate(data.data)
                 this.msgrender = data.data
-                // console.log(this.message)
+                console.log(this.message)
                 setTimeout(() => {
                     this.scrolltobottom()
                 }, 2000);

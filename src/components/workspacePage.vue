@@ -77,10 +77,8 @@
   }
 </style>
 <script>
-import axios from 'axios';
 import ChatLeftsection from './base/chat-leftsection.vue';
 import dashboardtask from './base/dashboardTask.vue';
-import Chatroom from './base/chatroom.vue';
 import workspace from '@/plugin/workspace';
 import MobileBottomnav from './parsial/mobile-bottomnav.vue';
   export default {
@@ -95,8 +93,6 @@ import MobileBottomnav from './parsial/mobile-bottomnav.vue';
     },
     components : {
         ChatLeftsection,
-        Chatroom,
-        Chatroom,
         dashboardtask,
         MobileBottomnav
     },

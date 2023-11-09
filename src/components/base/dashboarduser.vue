@@ -17,7 +17,7 @@
             <div class="bg-gray-800 md:w-1/3 p-5 rounded-md">
                 <h2 class="font-medium text-lg my-2">Created</h2>
                 <span class="text-xs font-extralight text-gray-400">Total tasks : {{ sumcreated }} task </span>
-                <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in created">
+                <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in created" v-bind:key="index">
                     <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)">
                         <li class='flex cursor-default items-center px-4 py-2 hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
                             <i class="fa-sharp fa-solid fa-laptop-file"></i>
@@ -27,7 +27,7 @@
                             </div>
                         </li>
                     </router-link>
-                    <router-link v-for="item in data" :to="'/detail/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar+','+item.name+','+item.id_task)">
+                    <router-link v-for="(item, index) in data" v-bind:key="index" :to="'/detail/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar+','+item.name+','+item.id_task)">
                         <li class='flex cursor-pointer pl-10 items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out'>
                             <i class="fa-sharp fa-solid fa-list-check items-start"></i>
                             <div class="flex flex-col">
@@ -40,17 +40,17 @@
             <div class="bg-gray-800 md:w-1/3 p-5 rounded-md">
                 <h2 class="font-medium text-lg my-2">On Progress</h2>
                 <span class="text-xs font-extralight text-gray-400">Total tasks : {{ sumonprogress }} task </span>
-                <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in OnProgress">
-                    <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)">
+                <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in OnProgress" v-bind:key="index">
+                    <router-link :to="'/dashboard/'+encoder(filterworkspace(index,'name')+','+url+filterworkspace(index,'avatar'))">
                         <li class='flex cursor-pointer items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
                             <i class="fa-sharp fa-solid fa-laptop-file"></i>
                             <div class="flex flex-row items-center justify-between w-full">
                                 <a class="break-all px-4"><span class="font-bold text-blue-500">{{ index }}</span></a>
-                                <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)" v-show="data.length >= 3" class="bg-blue-500 text-white px-2 py-1 rounded-md">more</router-link>
+                                <router-link :to="'/dashboard/'+encoder(filterworkspace(index,'name')+','+url+filterworkspace(index,'avatar'))" v-show="data.length >= 3" class="bg-blue-500 text-white px-2 py-1 rounded-md">more</router-link>
                             </div>
                         </li>
                     </router-link>
-                    <router-link v-for="item in data" :to="'/detail/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar+','+item.name+','+item.id_task)">
+                    <router-link v-for="(item,index) in data" v-bind:key="index" :to="'/detail/'+encoder(filterworkspace(index,'name')+','+url+filterworkspace(index,'avatar')+','+item.name+','+item.id_task)">
                         <li class='flex cursor-default pl-10 items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out'>
                             <i class="fa-sharp fa-solid fa-list-check items-start"></i>
                             <div class="flex flex-col">
@@ -63,9 +63,9 @@
             <div class="bg-gray-800 md:w-1/3 p-5 rounded-md">
                 <h2 class="font-medium text-lg my-2">Finished</h2>
                 <span class="text-xs font-extralight text-gray-400">Total tasks : {{ this.sumfinished }} task </span>
-                <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in finished">
-                    <router-link :to="'/dashboard/'+encoder(filterworkspace(index).name+','+url+filterworkspace(index).avatar)">
-                        <li v-for="item in data" class='flex cursor-pointer items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
+                <ul class="border border-gray-800 rounded overflow-hidden" v-for="(data,index) in finished" v-bind:key="index">
+                    <router-link :to="'/dashboard/'+encoder(filterworkspace(index,'name')+','+url+filterworkspace(index,'avatar'))">
+                        <li v-for="item in data" v-bind:key="item.name" class='flex cursor-pointer items-center px-4 py-2  hover:bg-sky-100 hover:text-sky-900 border-b last:border-none border-gray-800 transition-all duration-300 ease-in-out' >
                             <i class="fa-sharp fa-solid fa-laptop-file"></i>
                             <div class="flex flex-row items-center justify-between w-full">
                                 <a class="break-all px-4"><span class="font-bold text-blue-500">{{ index }}</span> - {{ item.name  }}</a>
@@ -85,6 +85,7 @@
     import workspace from '@/plugin/workspace';
     export default {
         mixins : [whois,workspace],
+        // eslint-disable-next-line vue/multi-word-component-names
         name : 'dashboarduser',
         data() {
             return {
@@ -110,11 +111,25 @@
                 var encode = btoa(msg); 
                 return encode
             },
-            filterworkspace(workspace){
+            filterworkspace(workspace,jenis){
                 let data = this.wokspacedata.filter(function(el){
                                 return workspace === el.name
                             })
-                return {"name" : data[0].name, "avatar" : data[0].avatar}
+                // console.log('filter',data.length)
+                let hasil =''
+                if(data.length > 1){
+                    switch (jenis) {
+                        case 'name':
+                            // eslint-disable-next-line no-unused-vars
+                            hasil = data[0].name;
+                            break;
+                        case 'avatar':
+                            // eslint-disable-next-line no-unused-vars
+                            hasil = data[0].avatar;
+                            break;
+                    }
+                    return hasil
+                }
             },
             gettask(){
                 axios.get(process.env.VUE_APP_BASE+'/getbyassigment?order=dashboard',{
@@ -162,7 +177,7 @@
                 this.created = [];
                 this.OnProgress = [];
                 this.finished = [];
-                data.forEach((item, index) => {
+                data.forEach((item) => {
                     switch(item.status){
                         case 'created' :
                             this.created.push(item)

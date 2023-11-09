@@ -9,6 +9,7 @@ import Pusher from 'pusher-js';
 import VueJsModal from 'vue-js-modal'
 import VueLoading from 'vuejs-loading-plugin'
 import VueEasyLightbox from 'vue-easy-lightbox'
+import './plugin/socket.js';
 
 Vue.use(VueEasyLightbox)
 Vue.use(VueLoading)
